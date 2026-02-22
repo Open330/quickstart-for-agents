@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 20" role="img">
-  <defs>
-    <clipPath id="bottom-round">
-      <path d="M 0 0 H 800 V 14 Q 800 20 794 20 H 6 Q 0 20 0 14 Z" />
-    </clipPath>
-  </defs>
-  <g clip-path="url(#bottom-round)">
-    
-    <rect width="800" height="20" fill="#2a2a30" />
+  
+    <rect width="800" height="20" fill="#161b22" />
     <rect x="0" y="0" width="3" height="20" fill="#22d3ee" />
+    <line x1="0" y1="0.5" x2="800" y2="0.5" stroke="#30363d" />
     <text x="19" y="10" fill="#22d3ee" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="600" dominant-baseline="central">Sisyphus (Ultraworker)</text>
     <text x="193" y="10" fill="#c8c8cc" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">Claude Opus 4.6</text>
     <text x="323" y="10" fill="#6b6b75" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">Augment Code</text>
-  </g>
 </svg>

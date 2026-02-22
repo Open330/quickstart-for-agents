@@ -1,18 +1,15 @@
 import { resolveTheme } from "./themes.js";
 import { clamp, escapeXml } from "./render.js";
 
-// ── Accurate prompt-input-area renderers based on real app screenshots ──
+// GitHub dark mode code block bg: #161b22
+// We match this so header/footer blend with the native code block.
 
 function headerClaudeCode(theme, width, height, title, language) {
-  // Real Claude Code CLI prompt area:
-  // - Very dark background (#1e1e2e)
-  // - Small ◕ circle icon on left in muted lavender
-  // - Prompt text in light gray, monospace
-  // - Minimal, no borders, terminal-native feel
-  const bg = "#1e1e2e";
+  const bg = "#161b22";
   const iconColor = "#7b7b95";
   const textColor = "#d4d4d4";
   const mutedColor = "#6b6b80";
+  const borderColor = "#30363d";
   const midY = height / 2;
 
   let langEl = "";
@@ -24,13 +21,13 @@ function headerClaudeCode(theme, width, height, title, language) {
     <rect width="${width}" height="${height}" fill="${bg}" />
     <circle cx="18" cy="${midY}" r="4.5" fill="${iconColor}" opacity="0.7" />
     <text x="30" y="${midY}" fill="${textColor}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="13" font-weight="400" dominant-baseline="central">${escapeXml(title)}</text>
-    ${langEl}`;
+    ${langEl}
+    <line x1="0" y1="${height - 0.5}" x2="${width}" y2="${height - 0.5}" stroke="${borderColor}" />`;
 }
 
 function footerClaudeCode(theme, width, height) {
-  // Claude Code status bar: colorful segments
-  // Simplified version showing model + path info
-  const bg = "#1e1e2e";
+  const bg = "#161b22";
+  const borderColor = "#30363d";
   const barY = 1;
   const barH = height - 1;
   const segments = [
@@ -52,20 +49,17 @@ function footerClaudeCode(theme, width, height) {
 
   return `
     <rect width="${width}" height="${height}" fill="${bg}" />
+    <line x1="0" y1="0.5" x2="${width}" y2="0.5" stroke="${borderColor}" />
     ${segs}`;
 }
 
 function headerOpenCode(theme, width, height, title, language) {
-  // Real OpenCode TUI prompt area:
-  // - Dark gray panel (#2a2a30) distinct from page bg
-  // - Bright cyan left bar (3px wide, full height)
-  // - Rounded top corners on the panel
-  // - Light gray text inside, monospace
-  const panelBg = "#2a2a30";
+  const panelBg = "#161b22";
   const barColor = "#22d3ee";
   const barWidth = 3;
   const textColor = "#c8c8cc";
   const mutedColor = "#6b6b75";
+  const borderColor = "#30363d";
   const midY = height / 2;
 
   let langEl = "";
@@ -77,15 +71,15 @@ function headerOpenCode(theme, width, height, title, language) {
     <rect width="${width}" height="${height}" fill="${panelBg}" />
     <rect x="0" y="0" width="${barWidth}" height="${height}" fill="${barColor}" />
     <text x="${barWidth + 16}" y="${midY}" fill="${textColor}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="13" font-weight="400" dominant-baseline="central">${escapeXml(title)}</text>
-    ${langEl}`;
+    ${langEl}
+    <line x1="0" y1="${height - 0.5}" x2="${width}" y2="${height - 0.5}" stroke="${borderColor}" />`;
 }
 
 function footerOpenCode(theme, width, height) {
-  // OpenCode footer: continue the panel + cyan bar,
-  // show model info line like the real UI
-  const panelBg = "#2a2a30";
+  const panelBg = "#161b22";
   const barColor = "#22d3ee";
   const barWidth = 3;
+  const borderColor = "#30363d";
   const cyanText = "#22d3ee";
   const lightText = "#c8c8cc";
   const mutedText = "#6b6b75";
@@ -94,37 +88,34 @@ function footerOpenCode(theme, width, height) {
   return `
     <rect width="${width}" height="${height}" fill="${panelBg}" />
     <rect x="0" y="0" width="${barWidth}" height="${height}" fill="${barColor}" />
+    <line x1="0" y1="0.5" x2="${width}" y2="0.5" stroke="${borderColor}" />
     <text x="${barWidth + 16}" y="${midY}" fill="${cyanText}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="600" dominant-baseline="central">Sisyphus (Ultraworker)</text>
     <text x="${barWidth + 190}" y="${midY}" fill="${lightText}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">Claude Opus 4.6</text>
     <text x="${barWidth + 320}" y="${midY}" fill="${mutedText}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">Augment Code</text>`;
 }
 
 function headerGeneric(theme, width, height, title, language) {
-  // Generic fallback: clean, theme-colored header
+  const bg = "#161b22";
+  const borderColor = "#30363d";
   const midY = height / 2;
   let langEl = "";
   if (language) {
-    const langWidth = clamp(language.length * 7.5 + 16, 40, 120);
-    const langX = width - langWidth - 14;
-    const langY = (height - 18) / 2;
-    langEl = `
-      <rect x="${langX}" y="${langY}" width="${langWidth}" height="18" fill="${theme.chipBg}" rx="4" ry="4" />
-      <text x="${langX + langWidth / 2}" y="${midY}" fill="${theme.language}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="700" dominant-baseline="central" text-anchor="middle">${escapeXml(language)}</text>`;
+    langEl = `<text x="${width - 14}" y="${midY}" fill="#8b949e" font-family="'JetBrains Mono','Fira Code',monospace" font-size="11" font-weight="400" dominant-baseline="central" text-anchor="end">${escapeXml(language)}</text>`;
   }
   return `
-    <rect width="${width}" height="${height}" fill="${theme.header}" />
-    <text x="14" y="${midY}" fill="${theme.text}" font-family="-apple-system,'SF Pro Display',system-ui,sans-serif" font-size="13" font-weight="600" dominant-baseline="central">${escapeXml(title)}</text>
-    <rect x="0" y="${height - 1}" width="${width}" height="1" fill="${theme.border}" opacity="0.5" />
+    <rect width="${width}" height="${height}" fill="${bg}" />
+    <text x="14" y="${midY}" fill="#c9d1d9" font-family="-apple-system,'SF Pro Display',system-ui,sans-serif" font-size="13" font-weight="600" dominant-baseline="central">${escapeXml(title)}</text>
+    <line x1="0" y1="${height - 0.5}" x2="${width}" y2="${height - 0.5}" stroke="${borderColor}" />
     ${langEl}`;
 }
 
 function footerGeneric(theme, width, height) {
   return `
-    <rect width="${width}" height="${height}" fill="${theme.header}" />
-    <rect x="0" y="0" width="${width}" height="1" fill="${theme.border}" opacity="0.5" />`;
+    <rect width="${width}" height="${height}" fill="#161b22" />
+    <line x1="0" y1="0.5" x2="${width}" y2="0.5" stroke="#30363d" />`;
 }
 
-// ── Dispatch tables ─────────────────────────────────────────────────
+// ── Dispatch ────────────────────────────────────────────────────────
 
 const HEADER_RENDERERS = {
   "claude-code": headerClaudeCode,
@@ -146,20 +137,13 @@ export function renderHeaderSvg(options = {}) {
   const title = (options.title || theme.name).slice(0, 40);
 
   const height = 36;
-  const radius = 6;
   const renderer = HEADER_RENDERERS[themeName] || headerGeneric;
   const inner = renderer(theme, width, height, title, language);
 
+  // No rounded corners — flat edges blend better with code block gaps
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeXml(title)}">
-  <defs>
-    <clipPath id="top-round">
-      <path d="M ${radius} 0 H ${width - radius} Q ${width} 0 ${width} ${radius} V ${height} H 0 V ${radius} Q 0 0 ${radius} 0 Z" />
-    </clipPath>
-  </defs>
-  <g clip-path="url(#top-round)">
-    ${inner}
-  </g>
+  ${inner}
 </svg>`;
 }
 
@@ -168,22 +152,13 @@ export function renderFooterSvg(options = {}) {
   const theme = resolveTheme(themeName);
   const width = clamp(Number.parseInt(options.width, 10) || 800, 300, 1280);
 
-  // Claude Code gets taller footer for status bar, others get minimal
-  const height = themeName === "claude-code" ? 22 : themeName === "opencode" ? 20 : 6;
-  const radius = 6;
+  const height = themeName === "claude-code" ? 22 : themeName === "opencode" ? 20 : 4;
   const renderer = FOOTER_RENDERERS[themeName] || footerGeneric;
   const inner = renderer(theme, width, height);
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" role="img">
-  <defs>
-    <clipPath id="bottom-round">
-      <path d="M 0 0 H ${width} V ${height - radius} Q ${width} ${height} ${width - radius} ${height} H ${radius} Q 0 ${height} 0 ${height - radius} Z" />
-    </clipPath>
-  </defs>
-  <g clip-path="url(#bottom-round)">
-    ${inner}
-  </g>
+  ${inner}
 </svg>`;
 }
 
