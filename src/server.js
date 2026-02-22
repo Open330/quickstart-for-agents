@@ -46,7 +46,7 @@ const server = http.createServer((req, res) => {
 
   if (url.pathname === "/") {
     return sendJson(res, 200, {
-      name: "readme-prompt-block",
+      name: "quickstart-for-agents",
       endpoints: {
         svg: "/api/block.svg?prompt=Build%20a%20REST%20API%20for%20billing&theme=opencode&lang=prompt",
         themes: "/themes",
@@ -60,6 +60,5 @@ const server = http.createServer((req, res) => {
 
 server.listen(port, () => {
   // eslint-disable-next-line no-console
-  console.log(`readme-prompt-block server listening on http://localhost:${port}`);
+  console.log(`quickstart-for-agents server listening on http://localhost:${port}`);
 });
-

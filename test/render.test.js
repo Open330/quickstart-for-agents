@@ -8,7 +8,7 @@ test("renders default theme and title", () => {
     theme: "opencode"
   });
 
-  assert.match(svg, /README Prompt Block/);
+  assert.match(svg, /Quickstart For Agents/);
   assert.match(svg, /Generate deployment checklist/);
   assert.match(svg, /#67e8f9/);
 });

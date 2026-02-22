@@ -70,7 +70,7 @@ export function renderPromptSvg(options = {}) {
   const width = clamp(Number.parseInt(options.width, 10) || 700, 360, 1200);
   const fontSize = clamp(Number.parseInt(options.fontSize, 10) || 16, 12, 20);
   const language = (options.language || "prompt").slice(0, 16);
-  const title = (options.title || "README Prompt Block").slice(0, 40);
+  const title = (options.title || "Quickstart For Agents").slice(0, 40);
   const prompt = normalizePrompt(options.prompt);
   const lines = wrapPrompt(prompt, width, fontSize);
   const lineHeight = Math.round(fontSize * 1.5);
@@ -112,4 +112,3 @@ export function renderPromptSvg(options = {}) {
   ${body}
 </svg>`;
 }
-

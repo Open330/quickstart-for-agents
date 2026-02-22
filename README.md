@@ -1,4 +1,4 @@
-# readme-prompt-block
+# Quickstart For Agents
 
 `shields.io`처럼 URL만으로 SVG를 생성하지만, 목표는 뱃지 대신 `README에 임베드 가능한 테마형 프롬프트/코드블록`입니다.
 

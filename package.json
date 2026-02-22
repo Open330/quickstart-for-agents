@@ -1,5 +1,5 @@
 {
-  "name": "readme-prompt-block",
+  "name": "quickstart-for-agents",
   "version": "0.1.0",
   "description": "README-embeddable themed prompt/code-block SVG renderer",
   "type": "module",
@@ -11,4 +11,3 @@
   },
   "license": "MIT"
 }
-
