@@ -1,19 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="700" height="116" role="img" aria-label="Release Prompt">
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="216" role="img" aria-label="Release Prompt">
   <defs>
     <linearGradient id="bg-gradient" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#f8f5ee" />
-      <stop offset="100%" stop-color="#fffdfa" />
+      <stop offset="0%" stop-color="#f8f4ea" />
+      <stop offset="100%" stop-color="#fffaf0" />
     </linearGradient>
   </defs>
-  <rect width="700" height="116" fill="url(#bg-gradient)" rx="14" ry="14" />
-  <rect x="0.75" y="0.75" width="698.5" height="114.5" fill="none" stroke="#d6c8ad" rx="13" ry="13" />
-  <rect x="0" y="0" width="700" height="40" fill="#efe8da" rx="14" ry="14" />
-  <rect x="0" y="26" width="700" height="14" fill="#efe8da" />
-  <circle cx="26" cy="18" r="5" fill="#ff5f56" />
-  <circle cx="46" cy="18" r="5" fill="#ffbd2e" />
-  <circle cx="66" cy="18" r="5" fill="#27c93f" />
-  <text x="92" y="18" fill="#8a7d68" font-family="'JetBrains Mono','Fira Code',monospace" font-size="12" font-weight="600" dominant-baseline="middle">Release Prompt</text>
-  <text x="610" y="18" fill="#8f4a15" font-family="'JetBrains Mono','Fira Code',monospace" font-size="11" font-weight="700" dominant-baseline="middle">prompt</text>
-  <text x="22" y="52" fill="#9a8a71" font-family="'JetBrains Mono','Fira Code',monospace" font-size="14" dominant-baseline="hanging">01</text><text x="62" y="52" fill="#2d2a24" font-family="'JetBrains Mono','Fira Code',monospace" font-size="16" dominant-baseline="hanging">Write a release checklist with smoke tests, staged rollout, and</text><text x="22" y="76" fill="#9a8a71" font-family="'JetBrains Mono','Fira Code',monospace" font-size="14" dominant-baseline="hanging">02</text><text x="62" y="76" fill="#2d2a24" font-family="'JetBrains Mono','Fira Code',monospace" font-size="16" dominant-baseline="hanging">rollback steps.</text>
+  <rect width="700" height="216" fill="url(#bg-gradient)" rx="22" ry="22" />
+  <rect x="16" y="16" width="668" height="184" fill="#fffaf2" stroke="#d0bf9f" rx="16" ry="16" />
+  <text x="34" y="33" fill="#8a7d68" font-family="'JetBrains Mono','Fira Code',monospace" font-size="11" font-weight="700" dominant-baseline="middle">Claude Code Input</text>
+  <text x="34" y="48" fill="#2d2a24" font-family="'JetBrains Mono','Fira Code',monospace" font-size="13" font-weight="600" dominant-baseline="middle">Release Prompt</text>
+
+  <rect x="506" y="30" width="68" height="18" fill="#e8d7b9" rx="9" ry="9" />
+  <text x="516" y="39" fill="#6b5439" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="700" dominant-baseline="middle">prompt</text>
+
+  <a href="/api/prompt.txt?prompt=Write%20a%20release%20checklist%20with%20smoke%20tests%2C%20staged%20rollout%2C%20and%20rollback%20steps." target="_blank">
+    <rect x="584" y="26" width="86" height="26" fill="#f2e4cd" stroke="#cfb58e" rx="9" ry="9" />
+    <rect x="596" y="33" width="10" height="12" fill="none" stroke="#8f6038" rx="2" ry="2" />
+    <rect x="598" y="31" width="10" height="3" fill="#8f6038" rx="1.5" ry="1.5" />
+    <text x="616" y="40" fill="#5b4530" font-family="'JetBrains Mono','Fira Code',monospace" font-size="11" font-weight="700" dominant-baseline="middle">Copy</text>
+  </a>
+
+  <rect x="30" y="68" width="640" height="118" fill="#fff4df" stroke="#d9c39d" rx="13" ry="13" />
+  <text x="46" y="84" fill="#c26f29" font-family="'JetBrains Mono','Fira Code',monospace" font-size="15" font-weight="700" dominant-baseline="hanging">&gt;</text><text x="64" y="84" fill="#2d2a24" font-family="'JetBrains Mono','Fira Code',monospace" font-size="16" font-weight="500" dominant-baseline="hanging">Write a release checklist with smoke tests, staged rollout,</text><text x="46" y="107" fill="#c26f29" font-family="'JetBrains Mono','Fira Code',monospace" font-size="15" font-weight="700" dominant-baseline="hanging"> </text><text x="64" y="107" fill="#2d2a24" font-family="'JetBrains Mono','Fira Code',monospace" font-size="16" font-weight="500" dominant-baseline="hanging">and rollback steps.</text>
+
+  <rect x="40" y="144" width="620" height="34" fill="#f4e8d2" rx="10" ry="10" />
+  <rect x="50" y="151" width="96" height="20" fill="#e8d7b9" rx="10" ry="10" />
+  <text x="60" y="161" fill="#6b5439" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="700" dominant-baseline="middle">2 lines</text>
+  <rect x="584" y="149" width="74" height="24" fill="#c26f29" rx="9" ry="9" />
+  <text x="604" y="161" fill="#fff8ef" font-family="'JetBrains Mono','Fira Code',monospace" font-size="11" font-weight="700" dominant-baseline="middle">Send</text>
+  <path d="M 637 161 l 8 -4 l -2 4 l 2 4 z" fill="#fff8ef" />
 </svg>

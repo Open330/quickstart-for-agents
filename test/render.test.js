@@ -10,7 +10,7 @@ test("renders default theme and title", () => {
 
   assert.match(svg, /Quickstart For Agents/);
   assert.match(svg, /Generate deployment checklist/);
-  assert.match(svg, /#67e8f9/);
+  assert.match(svg, /#22d3ee/);
 });
 
 test("falls back to default theme for unknown theme", () => {
@@ -19,15 +19,16 @@ test("falls back to default theme for unknown theme", () => {
     theme: "unknown-theme"
   });
 
-  assert.match(svg, /#67e8f9/);
+  assert.match(svg, /#22d3ee/);
 });
 
-test("renders line numbers", () => {
+test("renders input-style shell with copy button", () => {
   const svg = renderPromptSvg({
     prompt: "line1\nline2",
     theme: "claude-code"
   });
 
-  assert.match(svg, />01</);
-  assert.match(svg, />02</);
+  assert.match(svg, /Claude Code Input/);
+  assert.match(svg, />Copy</);
+  assert.match(svg, /api\/prompt\.txt\?prompt=/);
 });

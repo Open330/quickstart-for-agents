@@ -1,6 +1,7 @@
 import http from "node:http";
 import { URL } from "node:url";
-import { renderPromptSvg } from "./render.js";
+import { normalizePrompt, renderPromptSvg } from "./render.js";
+import { renderPromptHtml } from "./render-html.js";
 import { THEMES } from "./themes.js";
 
 const port = Number.parseInt(process.env.PORT || "3000", 10);
@@ -19,6 +20,22 @@ function sendSvg(res, svg) {
     "Cache-Control": "public, max-age=300"
   });
   res.end(svg);
+}
+
+function sendHtml(res, html) {
+  res.writeHead(200, {
+    "Content-Type": "text/html; charset=utf-8",
+    "Cache-Control": "public, max-age=120"
+  });
+  res.end(html);
+}
+
+function sendText(res, text) {
+  res.writeHead(200, {
+    "Content-Type": "text/plain; charset=utf-8",
+    "Cache-Control": "public, max-age=120"
+  });
+  res.end(text);
 }
 
 const server = http.createServer((req, res) => {
@@ -44,11 +61,29 @@ const server = http.createServer((req, res) => {
     return sendSvg(res, svg);
   }
 
+  if (url.pathname === "/api/block.html") {
+    const html = renderPromptHtml({
+      prompt: url.searchParams.get("prompt"),
+      theme: url.searchParams.get("theme"),
+      language: url.searchParams.get("lang"),
+      title: url.searchParams.get("title"),
+      width: url.searchParams.get("width")
+    });
+    return sendHtml(res, html);
+  }
+
+  if (url.pathname === "/api/prompt.txt") {
+    const prompt = normalizePrompt(url.searchParams.get("prompt"));
+    return sendText(res, prompt);
+  }
+
   if (url.pathname === "/") {
     return sendJson(res, 200, {
       name: "quickstart-for-agents",
       endpoints: {
         svg: "/api/block.svg?prompt=Build%20a%20REST%20API%20for%20billing&theme=opencode&lang=prompt",
+        html: "/api/block.html?prompt=Build%20a%20REST%20API%20for%20billing&theme=opencode&lang=prompt",
+        prompt: "/api/prompt.txt?prompt=Build%20a%20REST%20API%20for%20billing",
         themes: "/themes",
         healthz: "/healthz"
       }
