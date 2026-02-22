@@ -260,7 +260,7 @@ export function renderPromptHtml(options = {}) {
           <span class="chip lang">${escapeHtml(language)}</span>
           <button class="copy-btn" id="copy-btn" type="button">
             <span class="copy-icon" aria-hidden="true"></span>
-            <span id="copy-label">Copy</span>
+            <span id="copy-label">Copy Prompt</span>
           </button>
         </div>
       </header>
@@ -277,7 +277,7 @@ export function renderPromptHtml(options = {}) {
             <div class="toolbar-left">
               <span class="chip model">${escapeHtml(modelChip)}</span>
               <span class="chip info">${prompt.split("\n").length} lines</span>
-              <span class="status" id="copy-status">Ready</span>
+              <span class="status" id="copy-status">Ready to copy</span>
             </div>
             <div class="send-wrap"><button class="send" type="button">Send</button></div>
           </div>
@@ -359,7 +359,7 @@ export function renderPromptHtml(options = {}) {
           manual.hidden = true;
           setTimeout(() => {
             copyLabel.textContent = previous;
-            setStatus("", "Ready");
+            setStatus("", "Ready to copy");
           }, 1200);
         } else {
           copyLabel.textContent = "Select";

@@ -2,6 +2,7 @@ import http from "node:http";
 import { URL } from "node:url";
 import { normalizePrompt, renderPromptSvg } from "./render.js";
 import { renderPromptHtml } from "./render-html.js";
+import { renderGeneratorHtml } from "./generator-html.js";
 import { THEMES } from "./themes.js";
 
 const port = Number.parseInt(process.env.PORT || "3000", 10);
@@ -91,17 +92,7 @@ const server = http.createServer((req, res) => {
   }
 
   if (url.pathname === "/") {
-    return sendJson(res, 200, {
-      name: "quickstart-for-agents",
-      endpoints: {
-        svg: "/api/block.svg?prompt=Build%20a%20REST%20API%20for%20billing&theme=opencode&lang=prompt",
-        html: "/api/block.html?prompt=Build%20a%20REST%20API%20for%20billing&theme=opencode&lang=prompt",
-        copy: "/api/copy?prompt=Build%20a%20REST%20API%20for%20billing&theme=opencode&lang=prompt",
-        prompt: "/api/prompt.txt?prompt=Build%20a%20REST%20API%20for%20billing",
-        themes: "/themes",
-        healthz: "/healthz"
-      }
-    });
+    return sendHtml(res, renderGeneratorHtml());
   }
 
   return sendJson(res, 404, { message: "Not found" });
