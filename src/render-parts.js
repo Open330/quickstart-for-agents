@@ -28,29 +28,50 @@ function headerClaudeCode(theme, width, height, title, language) {
 function footerClaudeCode(theme, width, height) {
   const bg = "#161b22";
   const borderColor = "#30363d";
-  const barY = 1;
-  const barH = height - 1;
-  const segments = [
-    { w: 0.28, color: "#3b4f7a", text: "~/quickstart-for-agents", textColor: "#c8d4e8" },
-    { w: 0.12, color: "#4a5a8a", text: "Opus 4.6", textColor: "#d8e0f0" },
-    { w: 0.08, color: "#4a7a6a", text: "0.0%", textColor: "#c8e8d8" },
-    { w: 0.06, color: "#6a4a5a", text: "0", textColor: "#e8c8d8" },
-    { w: 0.06, color: "#7a6a3a", text: "0", textColor: "#e8dcc0" },
+  const rowH = height / 2;
+
+  // Row 1 segments (top row): path, model, cpu, errors, warnings, tokens
+  const row1 = [
+    { w: 0.28, color: "#3b4f7a", next: "#4a5a8a", text: "~/quickstart-for-agents", textColor: "#c8d4e8" },
+    { w: 0.11, color: "#4a5a8a", next: "#4a7a6a", text: "Opus 4.6", textColor: "#d8e0f0" },
+    { w: 0.07, color: "#4a7a6a", next: "#6a4a5a", text: "0.0%", textColor: "#c8e8d8" },
+    { w: 0.05, color: "#6a4a5a", next: "#7a6a3a", text: "0", textColor: "#e8c8d8" },
+    { w: 0.05, color: "#7a6a3a", next: bg, text: "0", textColor: "#e8dcc0" },
   ];
 
-  let x = 0;
-  let segs = "";
-  for (const s of segments) {
-    const sw = Math.round(width * s.w);
-    segs += `<rect x="${x}" y="${barY}" width="${sw}" height="${barH}" fill="${s.color}" />`;
-    segs += `<text x="${x + sw / 2}" y="${barY + barH / 2}" fill="${s.textColor}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="9" font-weight="500" dominant-baseline="central" text-anchor="middle">${s.text}</text>`;
-    x += sw;
+  // Row 2 segments (bottom row): branch, git, changes, time, cost
+  const row2 = [
+    { w: 0.14, color: "#3b4f7a", next: "#4a5a8a", text: "⇡ main", textColor: "#c8d4e8" },
+    { w: 0.11, color: "#4a5a8a", next: "#4a7a6a", text: "main", textColor: "#d8e0f0" },
+    { w: 0.08, color: "#4a7a6a", next: "#6a4a5a", text: "(+0,-0)", textColor: "#c8e8d8" },
+    { w: 0.06, color: "#6a4a5a", next: "#7a6a3a", text: "0m", textColor: "#e8c8d8" },
+    { w: 0.07, color: "#7a6a3a", next: bg, text: "$0.00", textColor: "#e8dcc0" },
+  ];
+
+  const arrowW = 6;
+
+  function renderRow(segs, yOff) {
+    let x = 0;
+    let out = "";
+    for (const s of segs) {
+      const sw = Math.round(width * s.w);
+      // Segment rect
+      out += `<rect x="${x}" y="${yOff}" width="${sw + arrowW}" height="${rowH}" fill="${s.color}" />`;
+      // Segment text
+      out += `<text x="${x + sw / 2}" y="${yOff + rowH / 2}" fill="${s.textColor}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="9" font-weight="500" dominant-baseline="central" text-anchor="middle">${s.text}</text>`;
+      // Powerline arrow separator
+      const ax = x + sw;
+      out += `<polygon points="${ax},${yOff} ${ax + arrowW},${yOff + rowH / 2} ${ax},${yOff + rowH}" fill="${s.next}" />`;
+      x += sw;
+    }
+    return out;
   }
 
   return `
     <rect width="${width}" height="${height}" fill="${bg}" />
     <line x1="0" y1="0.5" x2="${width}" y2="0.5" stroke="${borderColor}" />
-    ${segs}`;
+    ${renderRow(row1, 1)}
+    ${renderRow(row2, rowH + 1)}`;
 }
 
 function headerOpenCode(theme, width, height, title, language) {
@@ -152,7 +173,7 @@ export function renderFooterSvg(options = {}) {
   const theme = resolveTheme(themeName);
   const width = clamp(Number.parseInt(options.width, 10) || 800, 300, 1280);
 
-  const height = themeName === "claude-code" ? 22 : themeName === "opencode" ? 20 : 4;
+  const height = themeName === "claude-code" ? 32 : themeName === "opencode" ? 20 : 4;
   const renderer = FOOTER_RENDERERS[themeName] || footerGeneric;
   const inner = renderer(theme, width, height);
 

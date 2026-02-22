@@ -1,65 +1,26 @@
 # Quickstart For Agents
 
-URL 쿼리만으로 프롬프트 카드를 SVG로 렌더링하는 서비스입니다.
+터미널 스타일 테마를 입힌 코드블록을 GitHub README에서 사용할 수 있습니다. 네이티브 복사 버튼이 그대로 작동합니다.
 
-두 가지 모드를 지원합니다:
+### Claude Code
 
-1. **Full Card SVG** — 프롬프트 전체를 하나의 SVG 카드로 렌더링
-2. **Header + Codeblock + Footer** — 테마가 적용된 헤더/푸터 SVG로 네이티브 마크다운 코드블록을 감싸서 복사 기능 유지
-
-## Header + Codeblock + Footer (NEW)
-
-GitHub README에서 **네이티브 복사 버튼이 그대로 작동**하면서, 터미널 스타일 테마를 입힐 수 있습니다.
-
-### Claude Code Theme
-
-<img src="./examples/claude-code-header.svg" width="100%" />
+<picture><img src="./examples/claude-code-header.svg" width="100%" /></picture>
 
 ```bash
 npm install -g @anthropic-ai/claude-code
 ```
 
-<img src="./examples/claude-code-footer.svg" width="100%" />
+<picture><img src="./examples/claude-code-footer.svg" width="100%" /></picture>
 
-### OpenCode Theme
+### OpenCode
 
-<img src="./examples/opencode-header.svg" width="100%" />
+<picture><img src="./examples/opencode-header.svg" width="100%" /></picture>
 
 ```bash
 npx opencode
 ```
 
-<img src="./examples/opencode-footer.svg" width="100%" />
-
-### VS Code Dark Theme
-
-<img src="./examples/vscode-dark-header.svg" width="100%" />
-
-```bash
-code --install-extension ms-python.python
-```
-
-<img src="./examples/vscode-dark-footer.svg" width="100%" />
-
-### VS Code Light Theme
-
-<img src="./examples/vscode-light-header.svg" width="100%" />
-
-```bash
-npm create vite@latest my-app
-```
-
-<img src="./examples/vscode-light-footer.svg" width="100%" />
-
-### GitHub Dark Theme
-
-<img src="./examples/github-dark-header.svg" width="100%" />
-
-```bash
-gh repo clone owner/repo
-```
-
-<img src="./examples/github-dark-footer.svg" width="100%" />
+<picture><img src="./examples/opencode-footer.svg" width="100%" /></picture>
 
 ### Usage
 
