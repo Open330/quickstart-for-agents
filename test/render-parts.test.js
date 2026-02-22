@@ -27,15 +27,15 @@ test("header falls back to opencode for unknown theme", () => {
   assert.match(svg, /#0f172a/); // opencode header color
 });
 
-test("header respects width param and clamps", () => {
-  const svg = renderHeaderSvg({ theme: "opencode", width: "800" });
-  assert.match(svg, /width="800"/);
+test("header respects width param via viewBox and clamps", () => {
+  const svg = renderHeaderSvg({ theme: "opencode", width: "900" });
+  assert.match(svg, /viewBox="0 0 900 48"/);
 
   const svgSmall = renderHeaderSvg({ theme: "opencode", width: "100" });
-  assert.match(svgSmall, /width="300"/); // clamped to min 300
+  assert.match(svgSmall, /viewBox="0 0 300 48"/); // clamped to min 300
 
   const svgLarge = renderHeaderSvg({ theme: "opencode", width: "9999" });
-  assert.match(svgLarge, /width="1280"/); // clamped to max 1280
+  assert.match(svgLarge, /viewBox="0 0 1280 48"/); // clamped to max 1280
 });
 
 test("header escapes XML special characters in title", () => {
@@ -58,9 +58,9 @@ test("footer renders valid SVG", () => {
   assert.match(svg, /#eee5d2/); // claude-code header color
 });
 
-test("footer respects width param", () => {
+test("footer respects width param via viewBox", () => {
   const svg = renderFooterSvg({ theme: "opencode", width: "700" });
-  assert.match(svg, /width="700"/);
+  assert.match(svg, /viewBox="0 0 700 8"/);
 });
 
 test("vscode-dark theme works in header", () => {
@@ -73,6 +73,20 @@ test("vscode-light theme works in header", () => {
   const svg = renderHeaderSvg({ theme: "vscode-light", title: "Editor" });
   assert.match(svg, /Editor/);
   assert.match(svg, /#e8e8e8/); // vscode-light header color
+});
+
+test("header has viewBox for responsiveness and accent line", () => {
+  const svg = renderHeaderSvg({ theme: "opencode" });
+  assert.match(svg, /viewBox="0 0 800 48"/);
+  assert.ok(!svg.match(/<svg[^>]*width="\d+"/), "should not have fixed width attr");
+  // Accent line
+  assert.match(svg, /fill="#22d3ee"/); // opencode accent color in bottom line
+});
+
+test("snippet uses width 100%", () => {
+  const snippet = renderSnippet({ host: "https://example.com", theme: "opencode", language: "bash", code: "echo hi" });
+  assert.match(snippet, /width="100%"/);
+  assert.ok(!snippet.includes('width="600"'), "should not use fixed pixel width");
 });
 
 test("renderSnippet generates valid markdown", () => {

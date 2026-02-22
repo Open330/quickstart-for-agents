@@ -13,46 +13,66 @@ GitHub README에서 **네이티브 복사 버튼이 그대로 작동**하면서,
 
 ### Claude Code Theme
 
-<img src="./examples/claude-code-header.svg" width="600" />
+<img src="./examples/claude-code-header.svg" width="100%" />
 
 ```bash
 npm install -g @anthropic-ai/claude-code
 ```
 
-<img src="./examples/claude-code-footer.svg" width="600" />
+<img src="./examples/claude-code-footer.svg" width="100%" />
 
 ### OpenCode Theme
 
-<img src="./examples/opencode-header.svg" width="600" />
+<img src="./examples/opencode-header.svg" width="100%" />
 
 ```bash
 npx opencode
 ```
 
-<img src="./examples/opencode-footer.svg" width="600" />
+<img src="./examples/opencode-footer.svg" width="100%" />
 
 ### VS Code Dark Theme
 
-<img src="./examples/vscode-dark-header.svg" width="600" />
+<img src="./examples/vscode-dark-header.svg" width="100%" />
 
 ```bash
 code --install-extension ms-python.python
 ```
 
-<img src="./examples/vscode-dark-footer.svg" width="600" />
+<img src="./examples/vscode-dark-footer.svg" width="100%" />
+
+### VS Code Light Theme
+
+<img src="./examples/vscode-light-header.svg" width="100%" />
+
+```bash
+npm create vite@latest my-app
+```
+
+<img src="./examples/vscode-light-footer.svg" width="100%" />
+
+### GitHub Dark Theme
+
+<img src="./examples/github-dark-header.svg" width="100%" />
+
+```bash
+gh repo clone owner/repo
+```
+
+<img src="./examples/github-dark-footer.svg" width="100%" />
 
 ### Usage
 
 README.md에 아래와 같이 작성합니다:
 
 ```md
-<img src="https://YOUR_DOMAIN/api/header.svg?theme=claude-code&lang=bash&title=Installation" width="600" />
+<img src="https://YOUR_DOMAIN/api/header.svg?theme=claude-code&lang=bash&title=Installation" width="100%" />
 
 ​```bash
 npm install -g @anthropic-ai/claude-code
 ​```
 
-<img src="https://YOUR_DOMAIN/api/footer.svg?theme=claude-code&width=600" width="600" />
+<img src="https://YOUR_DOMAIN/api/footer.svg?theme=claude-code" width="100%" />
 ```
 
 ## Full Card SVG
