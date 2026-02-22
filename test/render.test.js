@@ -28,7 +28,8 @@ test("renders input-style shell with copy button", () => {
     theme: "claude-code"
   });
 
-  assert.match(svg, /Claude Code Input/);
+  assert.match(svg, /Claude Code Message Composer/);
   assert.match(svg, />Copy</);
-  assert.match(svg, /api\/prompt\.txt\?prompt=/);
+  assert.match(svg, /api\/copy\?prompt=/);
+  assert.match(svg, /autocopy=1/);
 });

@@ -67,7 +67,20 @@ const server = http.createServer((req, res) => {
       theme: url.searchParams.get("theme"),
       language: url.searchParams.get("lang"),
       title: url.searchParams.get("title"),
-      width: url.searchParams.get("width")
+      width: url.searchParams.get("width"),
+      autoCopy: url.searchParams.get("autocopy")
+    });
+    return sendHtml(res, html);
+  }
+
+  if (url.pathname === "/api/copy") {
+    const html = renderPromptHtml({
+      prompt: url.searchParams.get("prompt"),
+      theme: url.searchParams.get("theme"),
+      language: url.searchParams.get("lang"),
+      title: url.searchParams.get("title"),
+      width: url.searchParams.get("width"),
+      autoCopy: url.searchParams.get("autocopy") || "1"
     });
     return sendHtml(res, html);
   }
@@ -83,6 +96,7 @@ const server = http.createServer((req, res) => {
       endpoints: {
         svg: "/api/block.svg?prompt=Build%20a%20REST%20API%20for%20billing&theme=opencode&lang=prompt",
         html: "/api/block.html?prompt=Build%20a%20REST%20API%20for%20billing&theme=opencode&lang=prompt",
+        copy: "/api/copy?prompt=Build%20a%20REST%20API%20for%20billing&theme=opencode&lang=prompt",
         prompt: "/api/prompt.txt?prompt=Build%20a%20REST%20API%20for%20billing",
         themes: "/themes",
         healthz: "/healthz"

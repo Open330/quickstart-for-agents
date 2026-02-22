@@ -11,6 +11,7 @@ test("renders interactive html copy button", () => {
 
   assert.match(html, /id="copy-btn"/);
   assert.match(html, /navigator\.clipboard\.writeText/);
+  assert.match(html, /document\.execCommand\("copy"\)/);
+  assert.match(html, /Copy failed automatically\. Use manual copy below\./);
   assert.match(html, /Plan migration for monorepo/);
 });
-

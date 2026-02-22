@@ -1,8 +1,8 @@
 # Quickstart For Agents
 
-`shields.io`처럼 URL만으로 SVG를 생성하지만, 목표는 뱃지 대신 `README에 임베드 가능한 테마형 프롬프트/코드블록`입니다.
+URL 쿼리만으로 프롬프트 카드를 SVG로 렌더링하는 서비스입니다.
 
-`opencode`, `claude-code` 등 테마를 선택해 `prompt`를 OpenCode/ClaudeCode 입력창 느낌으로 보여줄 수 있습니다.
+결과물은 일반 뱃지 대신 `README에 바로 임베드 가능한 입력창 스타일 카드`이며, 테마별로 OpenCode/ClaudeCode 계열 UI를 모사합니다.
 
 ## Preview
 
@@ -23,22 +23,23 @@ npm start
 서버 실행 후 브라우저에서:
 
 ```text
-http://localhost:3000/api/block.svg?theme=opencode&lang=prompt&title=Build+Task&prompt=Create+a+CLI+that+parses+CSV+and+prints+JSON
+http://localhost:3000/api/block.svg?theme=opencode&lang=prompt&title=Queue+Worker&prompt=Design+a+retry+policy+for+background+jobs+with+dead-letter+queue
 ```
 
 실제 복사 버튼이 동작하는 인터랙티브 뷰:
 
 ```text
-http://localhost:3000/api/block.html?theme=opencode&lang=prompt&title=Build+Task&prompt=Create+a+CLI+that+parses+CSV+and+prints+JSON
+http://localhost:3000/api/block.html?theme=opencode&lang=prompt&title=Queue+Worker&prompt=Design+a+retry+policy+for+background+jobs+with+dead-letter+queue
 ```
 
 ## README Embed Example
 
 ```md
-[![Prompt Block](https://YOUR_DEPLOYED_DOMAIN/api/block.svg?theme=claude-code&lang=prompt&title=Release+Plan&prompt=Write+a+release+plan+for+v1.0+including+testing,+rollout,+and+rollback+steps)](https://YOUR_DEPLOYED_DOMAIN/api/block.html?theme=claude-code&lang=prompt&title=Release+Plan&prompt=Write+a+release+plan+for+v1.0+including+testing,+rollout,+and+rollback+steps)
+[![Prompt Card](https://YOUR_DEPLOYED_DOMAIN/api/block.svg?theme=claude-code&lang=prompt&title=Release+Plan&prompt=Create+a+release+checklist+with+smoke+tests,+staged+rollout,+and+rollback)](https://YOUR_DEPLOYED_DOMAIN/api/copy?theme=claude-code&lang=prompt&title=Release+Plan&prompt=Create+a+release+checklist+with+smoke+tests,+staged+rollout,+and+rollback)
 ```
 
-참고: GitHub README의 SVG 이미지는 스크립트 실행이 불가능하므로 SVG 내부 Copy 버튼은 시각적 버튼입니다. 실제 복사는 링크된 `/api/block.html`에서 동작합니다.
+참고: GitHub README의 SVG는 보안 정책상 내부 스크립트/인터랙션이 동작하지 않습니다.  
+그래서 카드 클릭 시 `/api/copy`(auto-copy 시도 + fallback 제공) 페이지로 이동하도록 사용하는 방식이 가장 안정적입니다.
 
 ## Deploy
 
@@ -54,6 +55,7 @@ Vercel/Render/Fly.io 같은 환경에서 `npm start`로 바로 구동할 수 있
 
 - `GET /api/block.svg`
 - `GET /api/block.html` (실제 Copy 버튼 동작)
+- `GET /api/copy` (auto-copy 시도 + 수동 fallback)
 - `GET /api/prompt.txt` (Copy fallback 텍스트)
 - `GET /themes`
 - `GET /healthz`
@@ -64,7 +66,7 @@ Vercel/Render/Fly.io 같은 환경에서 `npm start`로 바로 구동할 수 있
 - `theme`: `opencode`, `claude-code`, `github-dark`
 - `lang`: 헤더 우측 언어/타입 라벨
 - `title`: 헤더 타이틀
-- `width`: SVG/HTML 폭 (420-1200)
+- `width`: SVG/HTML 폭 (460-1280)
 - `fontSize`: 본문 폰트 크기 (12-20)
 
 ## Why This Project
