@@ -1,8 +1,17 @@
 import { resolveTheme } from "./themes.js";
 import { clamp, escapeXml } from "./render.js";
 
-// GitHub dark mode code block bg: #161b22
-// We match this so header/footer blend with the native code block.
+// GitHub dark mode code block: bg #161b22, border #30363d, border-radius 6px
+const R = 6; // corner radius matching GitHub code blocks
+
+// Rounded-top-only path (flat bottom)
+function roundedTopPath(w, h) {
+  return `M0,${R} Q0,0 ${R},0 L${w - R},0 Q${w},0 ${w},${R} L${w},${h} L0,${h} Z`;
+}
+// Rounded-bottom-only path (flat top)
+function roundedBottomPath(w, h) {
+  return `M0,0 L${w},0 L${w},${h - R} Q${w},${h} ${w - R},${h} L${R},${h} Q0,${h} 0,${h - R} Z`;
+}
 
 function headerClaudeCode(theme, width, height, title, language) {
   const bg = "#161b22";
@@ -18,11 +27,10 @@ function headerClaudeCode(theme, width, height, title, language) {
   }
 
   return `
-    <rect width="${width}" height="${height}" fill="${bg}" />
+    <path d="${roundedTopPath(width, height)}" fill="${bg}" stroke="${borderColor}" stroke-width="1" />
     <circle cx="18" cy="${midY}" r="4.5" fill="${iconColor}" opacity="0.7" />
     <text x="30" y="${midY}" fill="${textColor}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="13" font-weight="400" dominant-baseline="central">${escapeXml(title)}</text>
-    ${langEl}
-    <line x1="0" y1="${height - 0.5}" x2="${width}" y2="${height - 0.5}" stroke="${borderColor}" />`;
+    ${langEl}`;
 }
 
 function footerClaudeCode(theme, width, height) {
@@ -55,11 +63,8 @@ function footerClaudeCode(theme, width, height) {
     let out = "";
     for (const s of segs) {
       const sw = Math.round(width * s.w);
-      // Segment rect
       out += `<rect x="${x}" y="${yOff}" width="${sw + arrowW}" height="${rowH}" fill="${s.color}" />`;
-      // Segment text
       out += `<text x="${x + sw / 2}" y="${yOff + rowH / 2}" fill="${s.textColor}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="9" font-weight="500" dominant-baseline="central" text-anchor="middle">${s.text}</text>`;
-      // Powerline arrow separator
       const ax = x + sw;
       out += `<polygon points="${ax},${yOff} ${ax + arrowW},${yOff + rowH / 2} ${ax},${yOff + rowH}" fill="${s.next}" />`;
       x += sw;
@@ -68,10 +73,12 @@ function footerClaudeCode(theme, width, height) {
   }
 
   return `
-    <rect width="${width}" height="${height}" fill="${bg}" />
-    <line x1="0" y1="0.5" x2="${width}" y2="0.5" stroke="${borderColor}" />
-    ${renderRow(row1, 1)}
-    ${renderRow(row2, rowH + 1)}`;
+    <defs><clipPath id="footer-clip"><path d="${roundedBottomPath(width, height)}" /></clipPath></defs>
+    <path d="${roundedBottomPath(width, height)}" fill="${bg}" stroke="${borderColor}" stroke-width="1" />
+    <g clip-path="url(#footer-clip)">
+    ${renderRow(row1, 0)}
+    ${renderRow(row2, rowH)}
+    </g>`;
 }
 
 function headerOpenCode(theme, width, height, title, language) {
@@ -89,11 +96,13 @@ function headerOpenCode(theme, width, height, title, language) {
   }
 
   return `
-    <rect width="${width}" height="${height}" fill="${panelBg}" />
+    <defs><clipPath id="header-clip"><path d="${roundedTopPath(width, height)}" /></clipPath></defs>
+    <path d="${roundedTopPath(width, height)}" fill="${panelBg}" stroke="${borderColor}" stroke-width="1" />
+    <g clip-path="url(#header-clip)">
     <rect x="0" y="0" width="${barWidth}" height="${height}" fill="${barColor}" />
+    </g>
     <text x="${barWidth + 16}" y="${midY}" fill="${textColor}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="13" font-weight="400" dominant-baseline="central">${escapeXml(title)}</text>
-    ${langEl}
-    <line x1="0" y1="${height - 0.5}" x2="${width}" y2="${height - 0.5}" stroke="${borderColor}" />`;
+    ${langEl}`;
 }
 
 function footerOpenCode(theme, width, height) {
@@ -107,9 +116,11 @@ function footerOpenCode(theme, width, height) {
   const midY = height / 2;
 
   return `
-    <rect width="${width}" height="${height}" fill="${panelBg}" />
+    <defs><clipPath id="footer-clip"><path d="${roundedBottomPath(width, height)}" /></clipPath></defs>
+    <path d="${roundedBottomPath(width, height)}" fill="${panelBg}" stroke="${borderColor}" stroke-width="1" />
+    <g clip-path="url(#footer-clip)">
     <rect x="0" y="0" width="${barWidth}" height="${height}" fill="${barColor}" />
-    <line x1="0" y1="0.5" x2="${width}" y2="0.5" stroke="${borderColor}" />
+    </g>
     <text x="${barWidth + 16}" y="${midY}" fill="${cyanText}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="600" dominant-baseline="central">Sisyphus (Ultraworker)</text>
     <text x="${barWidth + 190}" y="${midY}" fill="${lightText}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">Claude Opus 4.6</text>
     <text x="${barWidth + 320}" y="${midY}" fill="${mutedText}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">Augment Code</text>`;
@@ -124,16 +135,14 @@ function headerGeneric(theme, width, height, title, language) {
     langEl = `<text x="${width - 14}" y="${midY}" fill="#8b949e" font-family="'JetBrains Mono','Fira Code',monospace" font-size="11" font-weight="400" dominant-baseline="central" text-anchor="end">${escapeXml(language)}</text>`;
   }
   return `
-    <rect width="${width}" height="${height}" fill="${bg}" />
+    <path d="${roundedTopPath(width, height)}" fill="${bg}" stroke="${borderColor}" stroke-width="1" />
     <text x="14" y="${midY}" fill="#c9d1d9" font-family="-apple-system,'SF Pro Display',system-ui,sans-serif" font-size="13" font-weight="600" dominant-baseline="central">${escapeXml(title)}</text>
-    <line x1="0" y1="${height - 0.5}" x2="${width}" y2="${height - 0.5}" stroke="${borderColor}" />
     ${langEl}`;
 }
 
 function footerGeneric(theme, width, height) {
   return `
-    <rect width="${width}" height="${height}" fill="#161b22" />
-    <line x1="0" y1="0.5" x2="${width}" y2="0.5" stroke="#30363d" />`;
+    <path d="${roundedBottomPath(width, height)}" fill="#161b22" stroke="#30363d" stroke-width="1" />`;
 }
 
 // ── Dispatch ────────────────────────────────────────────────────────
@@ -161,7 +170,6 @@ export function renderHeaderSvg(options = {}) {
   const renderer = HEADER_RENDERERS[themeName] || headerGeneric;
   const inner = renderer(theme, width, height, title, language);
 
-  // No rounded corners — flat edges blend better with code block gaps
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeXml(title)}">
   ${inner}

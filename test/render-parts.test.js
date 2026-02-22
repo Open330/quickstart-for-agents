@@ -32,15 +32,15 @@ test("opencode footer: cyan bar + model info", () => {
   assert.match(svg, /Sisyphus/);
 });
 
-test("no rounded corners / clip-path in header", () => {
+test("headers have rounded top corners", () => {
   const svg = renderHeaderSvg({ theme: "claude-code" });
-  assert.ok(!svg.includes("clipPath"), "should not have clip-path");
-  assert.ok(!svg.includes("clip-path"), "should not have clip-path attr");
+  assert.ok(svg.includes("Q0,0"), "should have rounded top-left corner");
+  assert.ok(svg.includes("Q800,0"), "should have rounded top-right corner");
 });
 
-test("no rounded corners / clip-path in footer", () => {
+test("footers have rounded bottom corners", () => {
   const svg = renderFooterSvg({ theme: "opencode" });
-  assert.ok(!svg.includes("clipPath"));
+  assert.ok(svg.includes("clipPath") || svg.includes("path"), "should use path for rounded shape");
 });
 
 test("generic themes use github code block bg", () => {
