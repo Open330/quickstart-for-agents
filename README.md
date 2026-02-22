@@ -2,18 +2,62 @@
 
 URL 쿼리만으로 프롬프트 카드를 SVG로 렌더링하는 서비스입니다.
 
-결과물은 일반 뱃지 대신 `README에 바로 임베드 가능한 입력창 스타일 카드`이며, 테마별로 OpenCode/ClaudeCode 계열 UI를 모사합니다.
+두 가지 모드를 지원합니다:
 
-## Generator UI
+1. **Full Card SVG** — 프롬프트 전체를 하나의 SVG 카드로 렌더링
+2. **Header + Codeblock + Footer** — 테마가 적용된 헤더/푸터 SVG로 네이티브 마크다운 코드블록을 감싸서 복사 기능 유지
 
-서버 루트 경로(`/`)에 접속하면, 쉽고 빠르게 프롬프트 카드를 생성할 수 있는 UI를 제공합니다.
+## Header + Codeblock + Footer (NEW)
 
-1. 서버 실행 후 `http://localhost:3000` (또는 설정한 포트) 접속
-2. 프롬프트 내용 입력 및 테마 선택
-3. 실시간 미리보기 확인
-4. 생성된 Markdown 코드 복사 후 `README.md`에 붙여넣기
+GitHub README에서 **네이티브 복사 버튼이 그대로 작동**하면서, 터미널 스타일 테마를 입힐 수 있습니다.
 
-## Preview
+### Claude Code Theme
+
+<img src="./examples/claude-code-header.svg" width="600" />
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+<img src="./examples/claude-code-footer.svg" width="600" />
+
+### OpenCode Theme
+
+<img src="./examples/opencode-header.svg" width="600" />
+
+```bash
+npx opencode
+```
+
+<img src="./examples/opencode-footer.svg" width="600" />
+
+### VS Code Dark Theme
+
+<img src="./examples/vscode-dark-header.svg" width="600" />
+
+```bash
+code --install-extension ms-python.python
+```
+
+<img src="./examples/vscode-dark-footer.svg" width="600" />
+
+### Usage
+
+README.md에 아래와 같이 작성합니다:
+
+```md
+<img src="https://YOUR_DOMAIN/api/header.svg?theme=claude-code&lang=bash&title=Installation" width="600" />
+
+​```bash
+npm install -g @anthropic-ai/claude-code
+​```
+
+<img src="https://YOUR_DOMAIN/api/footer.svg?theme=claude-code&width=600" width="600" />
+```
+
+## Full Card SVG
+
+프롬프트 전체를 하나의 SVG 카드로 렌더링합니다.
 
 ### OpenCode Theme
 
@@ -23,70 +67,92 @@ URL 쿼리만으로 프롬프트 카드를 SVG로 렌더링하는 서비스입�
 
 ![Claude Code Preview](./examples/claude-code.svg)
 
+## Generator UI
+
+서버 루트 경로(`/`)에 접속하면, 두 가지 모드를 지원하는 생성기 UI를 제공합니다.
+
+1. 서버 실행 후 `http://localhost:3000` 접속
+2. **Full Card SVG** 또는 **Header + Codeblock + Footer** 모드 선택
+3. 프롬프트/코드 입력 및 테마 선택
+4. 실시간 미리보기 확인
+5. 생성된 Markdown 코드 복사 후 `README.md`에 붙여넣기
+
 ## Quick Start
 
-기본적으로 서버는 `0.0.0.0:3000`에서 리스닝합니다.
-
 ```bash
-# 기본 포트(3000) 실행
-npm start
-
-# 포트 변경 실행 (예: 8080)
-PORT=8080 npm start
+npm start        # 기본 포트 3000
+PORT=8080 npm start  # 포트 변경
 ```
 
-서버 실행 후 브라우저에서:
+## Available Themes
 
-```text
-http://localhost:3000/api/block.svg?theme=opencode&lang=prompt&title=Queue+Worker&prompt=Design+a+retry+policy+for+background+jobs+with+dead-letter+queue
-```
-
-실제 복사 버튼이 동작하는 인터랙티브 뷰:
-
-```text
-http://localhost:3000/api/block.html?theme=opencode&lang=prompt&title=Queue+Worker&prompt=Design+a+retry+policy+for+background+jobs+with+dead-letter+queue
-```
-
-## README Embed Example
-
-```md
-[![Prompt Card](https://YOUR_DEPLOYED_DOMAIN/api/block.svg?theme=claude-code&lang=prompt&title=Release+Plan&prompt=Create+a+release+checklist+with+smoke+tests,+staged+rollout,+and+rollback)](https://YOUR_DEPLOYED_DOMAIN/api/copy?theme=claude-code&lang=prompt&title=Release+Plan&prompt=Create+a+release+checklist+with+smoke+tests,+staged+rollout,+and+rollback)
-```
-
-참고: GitHub README의 SVG는 보안 정책상 내부 스크립트/인터랙션이 동작하지 않습니다.  
-그래서 카드 클릭 시 `/api/copy`(auto-copy 시도 + fallback 제공) 페이지로 이동하도록 사용하는 방식이 가장 안정적입니다.
-
-## Deploy
-
-Vercel/Render/Fly.io 같은 환경에서 `npm start`로 바로 구동할 수 있습니다.
-
-### Example: Vercel
-
-- Build Command: `npm install`
-- Output Directory: 비워둠
-- Start Command: `npm start`
+| Theme | Key | Style |
+|-------|-----|-------|
+| OpenCode | `opencode` | Dark, blue/cyan accents |
+| Claude Code | `claude-code` | Light, warm/tan accents |
+| GitHub Dark | `github-dark` | GitHub-style dark |
+| VS Code Dark | `vscode-dark` | VS Code Dark+ |
+| VS Code Light | `vscode-light` | VS Code Light+ |
 
 ## Endpoints
 
-- `GET /` (Generator UI)
-- `GET /api/block.svg`
-- `GET /api/block.html` (실제 Copy 버튼 동작)
-- `GET /api/copy` (auto-copy 시도 + 수동 fallback)
-- `GET /api/prompt.txt` (Copy fallback 텍스트)
-- `GET /themes`
-- `GET /healthz`
+### Header/Footer (NEW)
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/header.svg` | 테마가 적용된 터미널 헤더 SVG |
+| `GET /api/footer.svg` | 테마가 적용된 하단 바 SVG |
+| `GET /api/snippet` | Header + codeblock + footer 마크다운 스니펫 생성 |
+
+### Full Card
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/block.svg` | 전체 프롬프트 카드 SVG |
+| `GET /api/block.html` | 인터랙티브 HTML (Copy 버튼) |
+| `GET /api/copy` | Auto-copy 시도 + fallback |
+| `GET /api/prompt.txt` | 플레인 텍스트 |
+
+### Utility
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /` | Generator UI |
+| `GET /themes` | 사용 가능한 테마 목록 (JSON) |
+| `GET /healthz` | Health check |
 
 ## Query Params
 
-- `prompt`: 렌더링할 텍스트
-- `theme`: `opencode`, `claude-code`, `github-dark`
-- `lang`: 헤더 우측 언어/타입 라벨
-- `title`: 헤더 타이틀
-- `width`: SVG/HTML 폭 (460-1280)
-- `fontSize`: 본문 폰트 크기 (12-20)
+### Header/Footer params
 
-## Why This Project
+| Param | Description | Default |
+|-------|-------------|---------|
+| `theme` | 테마 이름 | `opencode` |
+| `title` | 헤더 타이틀 | 테마 이름 |
+| `lang` | 언어 뱃지 (header only) | — |
+| `width` | SVG 폭 (300-1280) | `600` |
 
-- README에서 실시간으로 프롬프트를 보여줄 수 있음
-- 테마를 통해 프로젝트 브랜딩 톤을 맞출 수 있음
-- GitHub Markdown 이미지 문법만으로 사용 가능
+### Full Card params
+
+| Param | Description | Default |
+|-------|-------------|---------|
+| `prompt` | 렌더링할 텍스트 | — |
+| `theme` | 테마 이름 | `opencode` |
+| `lang` | 헤더 우측 라벨 | `prompt` |
+| `title` | 헤더 타이틀 | `Quickstart For Agents` |
+| `width` | SVG 폭 (460-1280) | `760` |
+| `fontSize` | 본문 폰트 (12-20) | `16` |
+
+## Deploy
+
+### Vercel (Recommended)
+
+`vercel.json`이 포함되어 있어 바로 배포할 수 있습니다:
+
+```bash
+npx vercel
+```
+
+### Other Platforms
+
+Render, Fly.io 등에서 `npm start`로 바로 구동할 수 있습니다.

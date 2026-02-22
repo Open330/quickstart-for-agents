@@ -1,7 +1,7 @@
 import { THEMES } from "./themes.js";
 
 export function renderGeneratorHtml() {
-  const themeOptions = Object.keys(THEMES).map(key => 
+  const themeOptions = Object.keys(THEMES).map(key =>
     `<option value="${key}">${THEMES[key].name}</option>`
   ).join("");
 
@@ -95,23 +95,55 @@ export function renderGeneratorHtml() {
         outline: 2px solid var(--accent);
         border-color: transparent;
       }
+      .mode-tabs {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 16px;
+      }
+      .mode-tab {
+        padding: 8px 16px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: transparent;
+        color: var(--muted);
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .mode-tab.active {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+      }
       .preview-area {
-        margin-top: 24px;
+        margin-top: 16px;
         border: 1px dashed var(--border);
         border-radius: 8px;
         padding: 20px;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
-        background: #0b1020; /* Default preview bg */
+        background: #0b1020;
         overflow: hidden;
-        min-height: 200px;
+        min-height: 120px;
+        gap: 0;
       }
       .preview-area img {
         max-width: 100%;
         height: auto;
-        border-radius: 8px;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        display: block;
+      }
+      .preview-codeblock {
+        background: #161b22;
+        color: #c9d1d9;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        padding: 12px 16px;
+        width: 100%;
+        max-width: 600px;
+        white-space: pre-wrap;
+        word-break: break-all;
       }
       .code-block {
         background: #0f172a;
@@ -140,6 +172,15 @@ export function renderGeneratorHtml() {
         background: var(--accent);
         color: #fff;
       }
+      .snippet-fields {
+        display: none;
+      }
+      .snippet-fields.visible {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: 1fr 1fr;
+        margin-top: 16px;
+      }
     </style>
   </head>
   <body>
@@ -150,8 +191,12 @@ export function renderGeneratorHtml() {
       </header>
 
       <div class="card">
+        <div class="mode-tabs">
+          <button class="mode-tab active" data-mode="card">Full Card SVG</button>
+          <button class="mode-tab" data-mode="snippet">Header + Codeblock + Footer</button>
+        </div>
         <div class="controls">
-          <div class="full-width">
+          <div class="full-width" id="prompt-group">
             <label for="prompt">Prompt Text</label>
             <textarea id="prompt" placeholder="Enter your prompt here...">Build a REST API for billing...</textarea>
           </div>
@@ -166,12 +211,26 @@ export function renderGeneratorHtml() {
             <input type="text" id="title" value="Quickstart For Agents" placeholder="Card Title">
           </div>
         </div>
+        <div class="snippet-fields" id="snippet-fields">
+          <div class="full-width">
+            <label for="code-input">Code (for codeblock)</label>
+            <textarea id="code-input" placeholder="npm install -g @anthropic-ai/claude-code" style="min-height:80px">npm install -g @anthropic-ai/claude-code</textarea>
+          </div>
+          <div>
+            <label for="lang-input">Language</label>
+            <input type="text" id="lang-input" value="bash" placeholder="bash, python, js...">
+          </div>
+          <div>
+            <label for="width-input">Width (px)</label>
+            <input type="number" id="width-input" value="600" min="300" max="1280">
+          </div>
+        </div>
       </div>
 
       <div class="card">
         <label>Preview</label>
         <div class="preview-area" id="preview-container">
-          <!-- Image will be injected here -->
+          <!-- Preview injected here -->
         </div>
       </div>
 
@@ -186,31 +245,68 @@ export function renderGeneratorHtml() {
 
     <script>
       const promptInput = document.getElementById("prompt");
+      const promptGroup = document.getElementById("prompt-group");
       const themeInput = document.getElementById("theme");
       const titleInput = document.getElementById("title");
+      const codeInput = document.getElementById("code-input");
+      const langInput = document.getElementById("lang-input");
+      const widthInput = document.getElementById("width-input");
+      const snippetFields = document.getElementById("snippet-fields");
       const previewContainer = document.getElementById("preview-container");
       const markdownOutput = document.getElementById("markdown-output");
       const copyBtn = document.getElementById("copy-markdown");
+      const modeTabs = document.querySelectorAll(".mode-tab");
+
+      let mode = "card";
+
+      modeTabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+          mode = tab.dataset.mode;
+          modeTabs.forEach(t => t.classList.toggle("active", t === tab));
+          promptGroup.style.display = mode === "card" ? "" : "none";
+          snippetFields.classList.toggle("visible", mode === "snippet");
+          update();
+        });
+      });
 
       function update() {
-        const prompt = encodeURIComponent(promptInput.value.trim() || "Your prompt here...");
+        const host = window.location.origin;
         const theme = themeInput.value;
         const title = encodeURIComponent(titleInput.value.trim() || "Quickstart For Agents");
-        
-        const host = window.location.origin;
-        const svgUrl = \`\${host}/api/block.svg?prompt=\${prompt}&theme=\${theme}&title=\${title}\`;
-        const linkUrl = \`\${host}/api/copy?prompt=\${prompt}&theme=\${theme}&title=\${title}\`;
 
-        previewContainer.innerHTML = \`<a href="\${linkUrl}" target="_blank"><img src="\${svgUrl}" alt="Prompt Preview" /></a>\`;
+        if (mode === "card") {
+          const prompt = encodeURIComponent(promptInput.value.trim() || "Your prompt here...");
+          const svgUrl = \`\${host}/api/block.svg?prompt=\${prompt}&theme=\${theme}&title=\${title}\`;
+          const linkUrl = \`\${host}/api/copy?prompt=\${prompt}&theme=\${theme}&title=\${title}\`;
+          previewContainer.innerHTML = \`<a href="\${linkUrl}" target="_blank"><img src="\${svgUrl}" alt="Prompt Preview" /></a>\`;
+          markdownOutput.textContent = \`[![Prompt](\${svgUrl})](\${linkUrl})\`;
+        } else {
+          const lang = langInput.value.trim() || "bash";
+          const code = codeInput.value.trim() || "# your command here";
+          const width = Math.min(1280, Math.max(300, parseInt(widthInput.value) || 600));
+          const langParam = encodeURIComponent(lang);
+          const headerUrl = \`\${host}/api/header.svg?theme=\${theme}&title=\${title}&lang=\${langParam}&width=\${width}\`;
+          const footerUrl = \`\${host}/api/footer.svg?theme=\${theme}&width=\${width}\`;
 
-        const markdown = \`[![Prompt](\${svgUrl})](\${linkUrl})\`;
-        markdownOutput.textContent = markdown;
+          previewContainer.innerHTML = \`<img src="\${headerUrl}" alt="Header" style="max-width:\${width}px;width:100%" /><div class="preview-codeblock" style="max-width:\${width}px">\${escapeHtml(code)}</div><img src="\${footerUrl}" alt="Footer" style="max-width:\${width}px;width:100%" />\`;
+
+          const backticks = "\\\`\\\`\\\`";
+          const md = \`<img src="\${headerUrl}" width="\${width}" />\\n\\n\${backticks}\${lang}\\n\${code}\\n\${backticks}\\n\\n<img src="\${footerUrl}" width="\${width}" />\`;
+          markdownOutput.textContent = md;
+        }
+      }
+
+      function escapeHtml(s) {
+        return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
       }
 
       promptInput.addEventListener("input", update);
       themeInput.addEventListener("change", update);
       titleInput.addEventListener("input", update);
-      
+      codeInput.addEventListener("input", update);
+      langInput.addEventListener("input", update);
+      widthInput.addEventListener("input", update);
+
       copyBtn.addEventListener("click", () => {
         navigator.clipboard.writeText(markdownOutput.textContent).then(() => {
           const original = copyBtn.textContent;

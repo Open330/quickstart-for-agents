@@ -3,6 +3,7 @@ import { URL } from "node:url";
 import { normalizePrompt, renderPromptSvg } from "./render.js";
 import { renderPromptHtml } from "./render-html.js";
 import { renderGeneratorHtml } from "./generator-html.js";
+import { renderHeaderSvg, renderFooterSvg, renderSnippet } from "./render-parts.js";
 import { THEMES } from "./themes.js";
 
 const port = Number.parseInt(process.env.PORT || "3000", 10);
@@ -39,7 +40,7 @@ function sendText(res, text) {
   res.end(text);
 }
 
-const server = http.createServer((req, res) => {
+function handler(req, res) {
   const url = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
 
   if (url.pathname === "/healthz") {
@@ -48,6 +49,36 @@ const server = http.createServer((req, res) => {
 
   if (url.pathname === "/themes") {
     return sendJson(res, 200, { themes: Object.keys(THEMES) });
+  }
+
+  if (url.pathname === "/api/header.svg") {
+    const svg = renderHeaderSvg({
+      theme: url.searchParams.get("theme"),
+      language: url.searchParams.get("lang"),
+      title: url.searchParams.get("title"),
+      width: url.searchParams.get("width")
+    });
+    return sendSvg(res, svg);
+  }
+
+  if (url.pathname === "/api/footer.svg") {
+    const svg = renderFooterSvg({
+      theme: url.searchParams.get("theme"),
+      width: url.searchParams.get("width")
+    });
+    return sendSvg(res, svg);
+  }
+
+  if (url.pathname === "/api/snippet") {
+    const snippet = renderSnippet({
+      host: `${url.protocol}//${url.host}`,
+      theme: url.searchParams.get("theme"),
+      language: url.searchParams.get("lang"),
+      title: url.searchParams.get("title"),
+      width: url.searchParams.get("width"),
+      code: url.searchParams.get("code")
+    });
+    return sendText(res, snippet);
   }
 
   if (url.pathname === "/api/block.svg") {
@@ -96,7 +127,11 @@ const server = http.createServer((req, res) => {
   }
 
   return sendJson(res, 404, { message: "Not found" });
-});
+}
+
+export default handler;
+
+const server = http.createServer(handler);
 
 server.listen(port, "0.0.0.0", () => {
   // eslint-disable-next-line no-console

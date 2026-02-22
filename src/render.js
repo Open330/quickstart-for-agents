@@ -2,11 +2,11 @@ import { resolveTheme } from "./themes.js";
 
 const MAX_PROMPT_LENGTH = 600;
 
-function clamp(value, min, max) {
+export function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 
-function escapeXml(value) {
+export function escapeXml(value) {
   return value
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
