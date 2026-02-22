@@ -4,23 +4,21 @@
 
 ### Claude Code
 
-<picture><img src="./examples/claude-code-header.svg" width="100%" /></picture>
+<div><img src="./examples/claude-code-header.svg" width="100%" /></div>
 
 ```bash
 npm install -g @anthropic-ai/claude-code
 ```
-
-<picture><img src="./examples/claude-code-footer.svg" width="100%" /></picture>
+<div><img src="./examples/claude-code-footer.svg" width="100%" /></div>
 
 ### OpenCode
 
-<picture><img src="./examples/opencode-header.svg" width="100%" /></picture>
+<div><img src="./examples/opencode-header.svg" width="100%" /></div>
 
 ```bash
 npx opencode
 ```
-
-<picture><img src="./examples/opencode-footer.svg" width="100%" /></picture>
+<div><img src="./examples/opencode-footer.svg" width="100%" /></div>
 
 ### Usage
 
