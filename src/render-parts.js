@@ -1,81 +1,121 @@
 import { resolveTheme } from "./themes.js";
 import { clamp, escapeXml } from "./render.js";
 
-// ── Theme-specific header layouts ──────────────────────────────────
-// Each theme gets a unique prompt-input-style header that mimics the
-// actual app's UI, not a generic window title bar.
+// ── Accurate prompt-input-area renderers based on real app screenshots ──
 
 function headerClaudeCode(theme, width, height, title, language) {
-  // Claude Code CLI: dark prompt area with ❯ marker in amber,
-  // dashed-style border, minimal terminal feel
+  // Real Claude Code CLI prompt area:
+  // - Very dark background (#1e1e2e)
+  // - Small ◕ circle icon on left in muted lavender
+  // - Prompt text in light gray, monospace
+  // - Minimal, no borders, terminal-native feel
+  const bg = "#1e1e2e";
+  const iconColor = "#7b7b95";
+  const textColor = "#d4d4d4";
+  const mutedColor = "#6b6b80";
   const midY = height / 2;
-  const langBadge = renderLangBadge(language, theme, width, midY, height);
+
+  let langEl = "";
+  if (language) {
+    langEl = `<text x="${width - 14}" y="${midY}" fill="${mutedColor}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="11" font-weight="400" dominant-baseline="central" text-anchor="end">${escapeXml(language)}</text>`;
+  }
 
   return `
-    <rect width="${width}" height="${height}" fill="${theme.shell}" />
-    <rect x="0" y="0" width="${width}" height="1" fill="${theme.accent}" opacity="0.5" />
-    <text x="16" y="${midY}" fill="${theme.accent}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="15" font-weight="700" dominant-baseline="central">&#x276F;</text>
-    <text x="32" y="${midY}" fill="${theme.muted}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="12" font-weight="500" dominant-baseline="central">${escapeXml(title)}</text>
-    <rect x="0" y="${height - 1}" width="${width}" height="1" fill="${theme.border}" opacity="0.5" />
-    ${langBadge}`;
+    <rect width="${width}" height="${height}" fill="${bg}" />
+    <circle cx="18" cy="${midY}" r="4.5" fill="${iconColor}" opacity="0.7" />
+    <text x="30" y="${midY}" fill="${textColor}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="13" font-weight="400" dominant-baseline="central">${escapeXml(title)}</text>
+    ${langEl}`;
+}
+
+function footerClaudeCode(theme, width, height) {
+  // Claude Code status bar: colorful segments
+  // Simplified version showing model + path info
+  const bg = "#1e1e2e";
+  const barY = 1;
+  const barH = height - 1;
+  const segments = [
+    { w: 0.28, color: "#3b4f7a", text: "~/quickstart-for-agents", textColor: "#c8d4e8" },
+    { w: 0.12, color: "#4a5a8a", text: "Opus 4.6", textColor: "#d8e0f0" },
+    { w: 0.08, color: "#4a7a6a", text: "0.0%", textColor: "#c8e8d8" },
+    { w: 0.06, color: "#6a4a5a", text: "0", textColor: "#e8c8d8" },
+    { w: 0.06, color: "#7a6a3a", text: "0", textColor: "#e8dcc0" },
+  ];
+
+  let x = 0;
+  let segs = "";
+  for (const s of segments) {
+    const sw = Math.round(width * s.w);
+    segs += `<rect x="${x}" y="${barY}" width="${sw}" height="${barH}" fill="${s.color}" />`;
+    segs += `<text x="${x + sw / 2}" y="${barY + barH / 2}" fill="${s.textColor}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="9" font-weight="500" dominant-baseline="central" text-anchor="middle">${s.text}</text>`;
+    x += sw;
+  }
+
+  return `
+    <rect width="${width}" height="${height}" fill="${bg}" />
+    ${segs}`;
 }
 
 function headerOpenCode(theme, width, height, title, language) {
-  // OpenCode TUI: thick cyan left accent bar, dark navy panel,
-  // polished Bubble Tea / Lip Gloss style
+  // Real OpenCode TUI prompt area:
+  // - Dark gray panel (#2a2a30) distinct from page bg
+  // - Bright cyan left bar (3px wide, full height)
+  // - Rounded top corners on the panel
+  // - Light gray text inside, monospace
+  const panelBg = "#2a2a30";
+  const barColor = "#22d3ee";
+  const barWidth = 3;
+  const textColor = "#c8c8cc";
+  const mutedColor = "#6b6b75";
   const midY = height / 2;
-  const barWidth = 4;
-  const langBadge = renderLangBadge(language, theme, width, midY, height);
+
+  let langEl = "";
+  if (language) {
+    langEl = `<text x="${width - 14}" y="${midY}" fill="${mutedColor}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="11" font-weight="400" dominant-baseline="central" text-anchor="end">${escapeXml(language)}</text>`;
+  }
 
   return `
-    <rect width="${width}" height="${height}" fill="${theme.shell}" />
-    <rect x="0" y="0" width="${barWidth}" height="${height}" fill="${theme.accent}" />
-    <text x="${barWidth + 14}" y="${midY}" fill="${theme.text}" font-family="-apple-system,'SF Pro Display',system-ui,sans-serif" font-size="13" font-weight="600" dominant-baseline="central">${escapeXml(title)}</text>
-    <rect x="0" y="${height - 1}" width="${width}" height="1" fill="${theme.border}" opacity="0.4" />
-    ${langBadge}`;
-}
-
-function headerGithubDark(theme, width, height, title, language) {
-  // GitHub style: clean, flat header with subtle separator
-  const midY = height / 2;
-  const langBadge = renderLangBadge(language, theme, width, midY, height);
-
-  return `
-    <rect width="${width}" height="${height}" fill="${theme.header}" />
-    <circle cx="16" cy="${midY}" r="4" fill="${theme.accent}" opacity="0.8" />
-    <text x="28" y="${midY}" fill="${theme.text}" font-family="-apple-system,'SF Pro Display',system-ui,sans-serif" font-size="13" font-weight="600" dominant-baseline="central">${escapeXml(title)}</text>
-    <rect x="0" y="${height - 1}" width="${width}" height="1" fill="${theme.border}" />
-    ${langBadge}`;
-}
-
-function headerVSCode(theme, width, height, title, language) {
-  // VS Code: tab-style header with accent top line
-  const midY = height / 2;
-  const langBadge = renderLangBadge(language, theme, width, midY, height);
-
-  return `
-    <rect width="${width}" height="${height}" fill="${theme.header}" />
-    <rect x="0" y="0" width="${width}" height="2" fill="${theme.accent}" />
-    <text x="14" y="${midY}" fill="${theme.text}" font-family="-apple-system,'SF Pro Display',system-ui,sans-serif" font-size="12" font-weight="500" dominant-baseline="central">${escapeXml(title)}</text>
-    <rect x="0" y="${height - 1}" width="${width}" height="1" fill="${theme.border}" opacity="0.5" />
-    ${langBadge}`;
-}
-
-// ── Theme-specific footer layouts ──────────────────────────────────
-
-function footerClaudeCode(theme, width, height) {
-  return `
-    <rect width="${width}" height="${height}" fill="${theme.shell}" />
-    <rect x="0" y="0" width="${width}" height="1" fill="${theme.border}" opacity="0.5" />
-    <rect x="0" y="${height - 1}" width="${width}" height="1" fill="${theme.accent}" opacity="0.5" />`;
+    <rect width="${width}" height="${height}" fill="${panelBg}" />
+    <rect x="0" y="0" width="${barWidth}" height="${height}" fill="${barColor}" />
+    <text x="${barWidth + 16}" y="${midY}" fill="${textColor}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="13" font-weight="400" dominant-baseline="central">${escapeXml(title)}</text>
+    ${langEl}`;
 }
 
 function footerOpenCode(theme, width, height) {
-  const barWidth = 4;
+  // OpenCode footer: continue the panel + cyan bar,
+  // show model info line like the real UI
+  const panelBg = "#2a2a30";
+  const barColor = "#22d3ee";
+  const barWidth = 3;
+  const cyanText = "#22d3ee";
+  const lightText = "#c8c8cc";
+  const mutedText = "#6b6b75";
+  const midY = height / 2;
+
   return `
-    <rect width="${width}" height="${height}" fill="${theme.shell}" />
-    <rect x="0" y="0" width="${barWidth}" height="${height}" fill="${theme.accent}" />
-    <rect x="0" y="0" width="${width}" height="1" fill="${theme.border}" opacity="0.4" />`;
+    <rect width="${width}" height="${height}" fill="${panelBg}" />
+    <rect x="0" y="0" width="${barWidth}" height="${height}" fill="${barColor}" />
+    <text x="${barWidth + 16}" y="${midY}" fill="${cyanText}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="600" dominant-baseline="central">Sisyphus (Ultraworker)</text>
+    <text x="${barWidth + 190}" y="${midY}" fill="${lightText}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">Claude Opus 4.6</text>
+    <text x="${barWidth + 320}" y="${midY}" fill="${mutedText}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">Augment Code</text>`;
+}
+
+function headerGeneric(theme, width, height, title, language) {
+  // Generic fallback: clean, theme-colored header
+  const midY = height / 2;
+  let langEl = "";
+  if (language) {
+    const langWidth = clamp(language.length * 7.5 + 16, 40, 120);
+    const langX = width - langWidth - 14;
+    const langY = (height - 18) / 2;
+    langEl = `
+      <rect x="${langX}" y="${langY}" width="${langWidth}" height="18" fill="${theme.chipBg}" rx="4" ry="4" />
+      <text x="${langX + langWidth / 2}" y="${midY}" fill="${theme.language}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="700" dominant-baseline="central" text-anchor="middle">${escapeXml(language)}</text>`;
+  }
+  return `
+    <rect width="${width}" height="${height}" fill="${theme.header}" />
+    <text x="14" y="${midY}" fill="${theme.text}" font-family="-apple-system,'SF Pro Display',system-ui,sans-serif" font-size="13" font-weight="600" dominant-baseline="central">${escapeXml(title)}</text>
+    <rect x="0" y="${height - 1}" width="${width}" height="1" fill="${theme.border}" opacity="0.5" />
+    ${langEl}`;
 }
 
 function footerGeneric(theme, width, height) {
@@ -84,24 +124,11 @@ function footerGeneric(theme, width, height) {
     <rect x="0" y="0" width="${width}" height="1" fill="${theme.border}" opacity="0.5" />`;
 }
 
-// ── Shared helpers ─────────────────────────────────────────────────
-
-function renderLangBadge(language, theme, width, midY, height) {
-  if (!language) return "";
-  const langWidth = clamp(language.length * 7.5 + 16, 40, 120);
-  const langX = width - langWidth - 14;
-  const langY = (height - 18) / 2;
-  return `
-    <rect x="${langX}" y="${langY}" width="${langWidth}" height="18" fill="${theme.chipBg}" rx="4" ry="4" />
-    <text x="${langX + langWidth / 2}" y="${midY}" fill="${theme.language}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="700" dominant-baseline="central" text-anchor="middle">${escapeXml(language)}</text>`;
-}
+// ── Dispatch tables ─────────────────────────────────────────────────
 
 const HEADER_RENDERERS = {
   "claude-code": headerClaudeCode,
   "opencode": headerOpenCode,
-  "github-dark": headerGithubDark,
-  "vscode-dark": headerVSCode,
-  "vscode-light": headerVSCode,
 };
 
 const FOOTER_RENDERERS = {
@@ -118,9 +145,9 @@ export function renderHeaderSvg(options = {}) {
   const language = (options.language || "").slice(0, 16);
   const title = (options.title || theme.name).slice(0, 40);
 
-  const height = 40;
-  const radius = 8;
-  const renderer = HEADER_RENDERERS[themeName] || headerGithubDark;
+  const height = 36;
+  const radius = 6;
+  const renderer = HEADER_RENDERERS[themeName] || headerGeneric;
   const inner = renderer(theme, width, height, title, language);
 
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -141,8 +168,9 @@ export function renderFooterSvg(options = {}) {
   const theme = resolveTheme(themeName);
   const width = clamp(Number.parseInt(options.width, 10) || 800, 300, 1280);
 
-  const height = 8;
-  const radius = 8;
+  // Claude Code gets taller footer for status bar, others get minimal
+  const height = themeName === "claude-code" ? 22 : themeName === "opencode" ? 20 : 6;
+  const radius = 6;
   const renderer = FOOTER_RENDERERS[themeName] || footerGeneric;
   const inner = renderer(theme, width, height);
 

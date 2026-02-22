@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 40" role="img" aria-label="VS Code">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 36" role="img" aria-label="VS Code">
   <defs>
     <clipPath id="top-round">
-      <path d="M 8 0 H 792 Q 800 0 800 8 V 40 H 0 V 8 Q 0 0 8 0 Z" />
+      <path d="M 6 0 H 794 Q 800 0 800 6 V 36 H 0 V 6 Q 0 0 6 0 Z" />
     </clipPath>
   </defs>
   <g clip-path="url(#top-round)">
     
-    <rect width="800" height="40" fill="#e8e8e8" />
-    <rect x="0" y="0" width="800" height="2" fill="#007acc" />
-    <text x="14" y="20" fill="#333333" font-family="-apple-system,'SF Pro Display',system-ui,sans-serif" font-size="12" font-weight="500" dominant-baseline="central">VS Code</text>
-    <rect x="0" y="39" width="800" height="1" fill="#d4d4d4" opacity="0.5" />
+    <rect width="800" height="36" fill="#e8e8e8" />
+    <text x="14" y="18" fill="#333333" font-family="-apple-system,'SF Pro Display',system-ui,sans-serif" font-size="13" font-weight="600" dominant-baseline="central">VS Code</text>
+    <rect x="0" y="35" width="800" height="1" fill="#d4d4d4" opacity="0.5" />
     
-    <rect x="740" y="11" width="46" height="18" fill="#e8e8e8" rx="4" ry="4" />
-    <text x="763" y="20" fill="#0451a5" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="700" dominant-baseline="central" text-anchor="middle">bash</text>
+      <rect x="740" y="9" width="46" height="18" fill="#e8e8e8" rx="4" ry="4" />
+      <text x="763" y="18" fill="#0451a5" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="700" dominant-baseline="central" text-anchor="middle">bash</text>
   </g>
 </svg>

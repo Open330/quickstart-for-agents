@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 40" role="img" aria-label="OpenCode">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 36" role="img" aria-label="OpenCode">
   <defs>
     <clipPath id="top-round">
-      <path d="M 8 0 H 792 Q 800 0 800 8 V 40 H 0 V 8 Q 0 0 8 0 Z" />
+      <path d="M 6 0 H 794 Q 800 0 800 6 V 36 H 0 V 6 Q 0 0 6 0 Z" />
     </clipPath>
   </defs>
   <g clip-path="url(#top-round)">
     
-    <rect width="800" height="40" fill="#0d1526" />
-    <rect x="0" y="0" width="4" height="40" fill="#22d3ee" />
-    <text x="18" y="20" fill="#e5e7eb" font-family="-apple-system,'SF Pro Display',system-ui,sans-serif" font-size="13" font-weight="600" dominant-baseline="central">OpenCode</text>
-    <rect x="0" y="39" width="800" height="1" fill="#2b3a52" opacity="0.4" />
-    
-    <rect x="740" y="11" width="46" height="18" fill="#172338" rx="4" ry="4" />
-    <text x="763" y="20" fill="#67e8f9" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="700" dominant-baseline="central" text-anchor="middle">bash</text>
+    <rect width="800" height="36" fill="#2a2a30" />
+    <rect x="0" y="0" width="3" height="36" fill="#22d3ee" />
+    <text x="19" y="18" fill="#c8c8cc" font-family="'JetBrains Mono','Fira Code',monospace" font-size="13" font-weight="400" dominant-baseline="central">OpenCode</text>
+    <text x="786" y="18" fill="#6b6b75" font-family="'JetBrains Mono','Fira Code',monospace" font-size="11" font-weight="400" dominant-baseline="central" text-anchor="end">bash</text>
   </g>
 </svg>

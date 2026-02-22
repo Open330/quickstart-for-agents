@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 8" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 20" role="img">
   <defs>
     <clipPath id="bottom-round">
-      <path d="M 0 0 H 800 V 0 Q 800 8 792 8 H 8 Q 0 8 0 0 Z" />
+      <path d="M 0 0 H 800 V 14 Q 800 20 794 20 H 6 Q 0 20 0 14 Z" />
     </clipPath>
   </defs>
   <g clip-path="url(#bottom-round)">
     
-    <rect width="800" height="8" fill="#0d1526" />
-    <rect x="0" y="0" width="4" height="8" fill="#22d3ee" />
-    <rect x="0" y="0" width="800" height="1" fill="#2b3a52" opacity="0.4" />
+    <rect width="800" height="20" fill="#2a2a30" />
+    <rect x="0" y="0" width="3" height="20" fill="#22d3ee" />
+    <text x="19" y="10" fill="#22d3ee" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="600" dominant-baseline="central">Sisyphus (Ultraworker)</text>
+    <text x="193" y="10" fill="#c8c8cc" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">Claude Opus 4.6</text>
+    <text x="323" y="10" fill="#6b6b75" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">Augment Code</text>
   </g>
 </svg>

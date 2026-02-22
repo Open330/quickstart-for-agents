@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 8" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 22" role="img">
   <defs>
     <clipPath id="bottom-round">
-      <path d="M 0 0 H 800 V 0 Q 800 8 792 8 H 8 Q 0 8 0 0 Z" />
+      <path d="M 0 0 H 800 V 16 Q 800 22 794 22 H 6 Q 0 22 0 16 Z" />
     </clipPath>
   </defs>
   <g clip-path="url(#bottom-round)">
     
-    <rect width="800" height="8" fill="#fffaf2" />
-    <rect x="0" y="0" width="800" height="1" fill="#d8c8aa" opacity="0.5" />
-    <rect x="0" y="7" width="800" height="1" fill="#c26f29" opacity="0.5" />
+    <rect width="800" height="22" fill="#1e1e2e" />
+    <rect x="0" y="1" width="224" height="21" fill="#3b4f7a" /><text x="112" y="11.5" fill="#c8d4e8" font-family="'JetBrains Mono','Fira Code',monospace" font-size="9" font-weight="500" dominant-baseline="central" text-anchor="middle">~/quickstart-for-agents</text><rect x="224" y="1" width="96" height="21" fill="#4a5a8a" /><text x="272" y="11.5" fill="#d8e0f0" font-family="'JetBrains Mono','Fira Code',monospace" font-size="9" font-weight="500" dominant-baseline="central" text-anchor="middle">Opus 4.6</text><rect x="320" y="1" width="64" height="21" fill="#4a7a6a" /><text x="352" y="11.5" fill="#c8e8d8" font-family="'JetBrains Mono','Fira Code',monospace" font-size="9" font-weight="500" dominant-baseline="central" text-anchor="middle">0.0%</text><rect x="384" y="1" width="48" height="21" fill="#6a4a5a" /><text x="408" y="11.5" fill="#e8c8d8" font-family="'JetBrains Mono','Fira Code',monospace" font-size="9" font-weight="500" dominant-baseline="central" text-anchor="middle">0</text><rect x="432" y="1" width="48" height="21" fill="#7a6a3a" /><text x="456" y="11.5" fill="#e8dcc0" font-family="'JetBrains Mono','Fira Code',monospace" font-size="9" font-weight="500" dominant-baseline="central" text-anchor="middle">0</text>
   </g>
 </svg>
