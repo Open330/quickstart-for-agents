@@ -98,7 +98,7 @@ const server = http.createServer((req, res) => {
   return sendJson(res, 404, { message: "Not found" });
 });
 
-server.listen(port, () => {
+server.listen(port, "0.0.0.0", () => {
   // eslint-disable-next-line no-console
-  console.log(`quickstart-for-agents server listening on http://localhost:${port}`);
+  console.log(`quickstart-for-agents server listening on http://0.0.0.0:${port}`);
 });

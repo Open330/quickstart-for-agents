@@ -4,6 +4,15 @@ URL 쿼리만으로 프롬프트 카드를 SVG로 렌더링하는 서비스입�
 
 결과물은 일반 뱃지 대신 `README에 바로 임베드 가능한 입력창 스타일 카드`이며, 테마별로 OpenCode/ClaudeCode 계열 UI를 모사합니다.
 
+## Generator UI
+
+서버 루트 경로(`/`)에 접속하면, 쉽고 빠르게 프롬프트 카드를 생성할 수 있는 UI를 제공합니다.
+
+1. 서버 실행 후 `http://localhost:3000` (또는 설정한 포트) 접속
+2. 프롬프트 내용 입력 및 테마 선택
+3. 실시간 미리보기 확인
+4. 생성된 Markdown 코드 복사 후 `README.md`에 붙여넣기
+
 ## Preview
 
 ### OpenCode Theme
@@ -16,8 +25,14 @@ URL 쿼리만으로 프롬프트 카드를 SVG로 렌더링하는 서비스입�
 
 ## Quick Start
 
+기본적으로 서버는 `0.0.0.0:3000`에서 리스닝합니다.
+
 ```bash
+# 기본 포트(3000) 실행
 npm start
+
+# 포트 변경 실행 (예: 8080)
+PORT=8080 npm start
 ```
 
 서버 실행 후 브라우저에서:
@@ -53,6 +68,7 @@ Vercel/Render/Fly.io 같은 환경에서 `npm start`로 바로 구동할 수 있
 
 ## Endpoints
 
+- `GET /` (Generator UI)
 - `GET /api/block.svg`
 - `GET /api/block.html` (실제 Copy 버튼 동작)
 - `GET /api/copy` (auto-copy 시도 + 수동 fallback)
