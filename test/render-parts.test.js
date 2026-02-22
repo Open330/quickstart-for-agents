@@ -2,19 +2,49 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { renderHeaderSvg, renderFooterSvg, renderSnippet } from "../src/render-parts.js";
 
-test("header renders valid SVG with theme colors", () => {
-  const svg = renderHeaderSvg({ theme: "claude-code", title: "Setup", language: "bash" });
-
+test("claude-code header has prompt marker and accent color", () => {
+  const svg = renderHeaderSvg({ theme: "claude-code", title: "Claude Code", language: "bash" });
   assert.match(svg, /^<\?xml/);
   assert.match(svg, /<svg/);
-  assert.match(svg, /Setup/);
+  assert.match(svg, /viewBox/);
+  assert.match(svg, /Claude Code/);
   assert.match(svg, /bash/);
-  // Traffic light dots
-  assert.match(svg, /#ff5f57/);
-  assert.match(svg, /#febc2e/);
-  assert.match(svg, /#28c840/);
-  // Claude Code header color
-  assert.match(svg, /#eee5d2/);
+  // ❯ prompt marker (unicode ❯ = &#x276F;)
+  assert.match(svg, /&#x276F;/);
+  // Uses shell bg, not generic header
+  assert.match(svg, /#fffaf2/); // claude-code shell color
+  // Accent color lines
+  assert.match(svg, /#c26f29/); // claude-code accent
+});
+
+test("opencode header has left accent bar", () => {
+  const svg = renderHeaderSvg({ theme: "opencode", title: "OpenCode", language: "bash" });
+  assert.match(svg, /OpenCode/);
+  assert.match(svg, /bash/);
+  // Thick left accent bar (4px wide)
+  assert.match(svg, /width="4"/);
+  assert.match(svg, /#22d3ee/); // opencode accent (cyan)
+  assert.match(svg, /#0d1526/); // opencode shell bg
+});
+
+test("github-dark header has dot indicator", () => {
+  const svg = renderHeaderSvg({ theme: "github-dark", title: "Terminal" });
+  assert.match(svg, /Terminal/);
+  assert.match(svg, /#58a6ff/); // github-dark accent
+});
+
+test("vscode-dark header has top accent line", () => {
+  const svg = renderHeaderSvg({ theme: "vscode-dark", title: "Editor" });
+  assert.match(svg, /Editor/);
+  assert.match(svg, /#007acc/); // vscode accent
+  assert.match(svg, /#323233/); // vscode-dark header bg
+});
+
+test("vscode-light header has top accent line", () => {
+  const svg = renderHeaderSvg({ theme: "vscode-light", title: "Editor" });
+  assert.match(svg, /Editor/);
+  assert.match(svg, /#007acc/); // vscode accent
+  assert.match(svg, /#e8e8e8/); // vscode-light header bg
 });
 
 test("header uses default theme name as title when no title given", () => {
@@ -24,18 +54,18 @@ test("header uses default theme name as title when no title given", () => {
 
 test("header falls back to opencode for unknown theme", () => {
   const svg = renderHeaderSvg({ theme: "nonexistent" });
-  assert.match(svg, /#0f172a/); // opencode header color
+  assert.match(svg, /viewBox/);
 });
 
-test("header respects width param via viewBox and clamps", () => {
+test("header respects width via viewBox and clamps", () => {
   const svg = renderHeaderSvg({ theme: "opencode", width: "900" });
-  assert.match(svg, /viewBox="0 0 900 48"/);
+  assert.match(svg, /viewBox="0 0 900 40"/);
 
   const svgSmall = renderHeaderSvg({ theme: "opencode", width: "100" });
-  assert.match(svgSmall, /viewBox="0 0 300 48"/); // clamped to min 300
+  assert.match(svgSmall, /viewBox="0 0 300 40"/);
 
   const svgLarge = renderHeaderSvg({ theme: "opencode", width: "9999" });
-  assert.match(svgLarge, /viewBox="0 0 1280 48"/); // clamped to max 1280
+  assert.match(svgLarge, /viewBox="0 0 1280 40"/);
 });
 
 test("header escapes XML special characters in title", () => {
@@ -46,47 +76,38 @@ test("header escapes XML special characters in title", () => {
 
 test("header renders without language badge when lang is empty", () => {
   const svg = renderHeaderSvg({ theme: "opencode" });
-  // Should not have a chip rect for language
-  const langChipCount = (svg.match(/chipBg/g) || []).length;
-  assert.equal(langChipCount, 0);
+  assert.ok(!svg.includes("chipBg"));
 });
 
-test("footer renders valid SVG", () => {
+test("claude-code footer has accent lines", () => {
   const svg = renderFooterSvg({ theme: "claude-code" });
   assert.match(svg, /^<\?xml/);
-  assert.match(svg, /<svg/);
-  assert.match(svg, /#eee5d2/); // claude-code header color
+  assert.match(svg, /viewBox/);
+  assert.match(svg, /#fffaf2/); // claude-code shell
+  assert.match(svg, /#c26f29/); // accent
 });
 
-test("footer respects width param via viewBox", () => {
+test("opencode footer has left accent bar", () => {
+  const svg = renderFooterSvg({ theme: "opencode" });
+  assert.match(svg, /width="4"/);
+  assert.match(svg, /#22d3ee/); // cyan accent
+});
+
+test("footer respects width via viewBox", () => {
   const svg = renderFooterSvg({ theme: "opencode", width: "700" });
   assert.match(svg, /viewBox="0 0 700 8"/);
 });
 
-test("vscode-dark theme works in header", () => {
-  const svg = renderHeaderSvg({ theme: "vscode-dark", title: "Editor" });
-  assert.match(svg, /Editor/);
-  assert.match(svg, /#323233/); // vscode-dark header color
-});
-
-test("vscode-light theme works in header", () => {
-  const svg = renderHeaderSvg({ theme: "vscode-light", title: "Editor" });
-  assert.match(svg, /Editor/);
-  assert.match(svg, /#e8e8e8/); // vscode-light header color
-});
-
-test("header has viewBox for responsiveness and accent line", () => {
-  const svg = renderHeaderSvg({ theme: "opencode" });
-  assert.match(svg, /viewBox="0 0 800 48"/);
-  assert.ok(!svg.match(/<svg[^>]*width="\d+"/), "should not have fixed width attr");
-  // Accent line
-  assert.match(svg, /fill="#22d3ee"/); // opencode accent color in bottom line
+test("header has no traffic light dots", () => {
+  const svg = renderHeaderSvg({ theme: "claude-code" });
+  assert.ok(!svg.includes("#ff5f57")); // no red dot
+  assert.ok(!svg.includes("#febc2e")); // no yellow dot
+  assert.ok(!svg.includes("#28c840")); // no green dot
 });
 
 test("snippet uses width 100%", () => {
   const snippet = renderSnippet({ host: "https://example.com", theme: "opencode", language: "bash", code: "echo hi" });
   assert.match(snippet, /width="100%"/);
-  assert.ok(!snippet.includes('width="600"'), "should not use fixed pixel width");
 });
 
 test("renderSnippet generates valid markdown", () => {

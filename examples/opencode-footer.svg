@@ -2,11 +2,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 8" role="img">
   <defs>
     <clipPath id="bottom-round">
-      <path d="M 0 0 H 800 V -2 Q 800 8 790 8 H 10 Q 0 8 0 -2 Z" />
+      <path d="M 0 0 H 800 V 0 Q 800 8 792 8 H 8 Q 0 8 0 0 Z" />
     </clipPath>
   </defs>
   <g clip-path="url(#bottom-round)">
-    <rect width="800" height="8" fill="#0f172a" />
-    <line x1="0" y1="0.5" x2="800" y2="0.5" stroke="#2b3a52" stroke-width="0.5" />
+    
+    <rect width="800" height="8" fill="#0d1526" />
+    <rect x="0" y="0" width="4" height="8" fill="#22d3ee" />
+    <rect x="0" y="0" width="800" height="1" fill="#2b3a52" opacity="0.4" />
   </g>
 </svg>
