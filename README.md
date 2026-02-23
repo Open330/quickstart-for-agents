@@ -1,12 +1,12 @@
 <div align="center">
 
-<div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=opencode&logo=Quickstart+For+Agents&title=Add+quickstart-for-agents+to+my+README.md+so+my+agent+prompts+look+like+a+real+terminal+UI+with+a+native+copy+button." width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=opencode&logo=Quickstart+For+Agents&title=Add+quickstart-for-agents+to+my+README.md+so+my+agent+prompts+look+like+a+real+terminal+UI+with+a+native+copy+button.&font=inter" width="100%" /></div>
 
 ```
 Add quickstart-for-agents to my README.md so my agent prompts
 look like a real terminal UI with a native copy button.
 ```
-<div><img src="https://quickstart-for-agents.vercel.app/api/footer.svg?theme=opencode&text=zero+dependencies+%C2%B7+works+on+any+GitHub+README" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/footer.svg?theme=opencode&text=zero+dependencies+%C2%B7+works+on+any+GitHub+README&font=inter" width="100%" /></div>
 
 <br />
 
@@ -117,32 +117,8 @@ The hosted version is live at:
 https://quickstart-for-agents.vercel.app
 ```
 
----
-
-## Customizing the Hero Section
-
-README 상단의 히어로 섹션은 일반 API 파라미터로 구성됩니다. 원하는 텍스트로 자유롭게 수정 가능:
-
-**Header** — `?title=` 로 프롬프트 텍스트 변경, `?logo=` 로 로고 변경:
-
-```
-https://quickstart-for-agents.vercel.app/api/header.svg
-  ?theme=opencode
-  &logo=My+Project+Name          ← 로고 텍스트
-  &title=Build+something+cool    ← 프롬프트 텍스트
-  &font=inter                    ← 폰트 (선택)
-```
-
-**Footer** — `?text=` 로 태그라인 변경:
-
-```
-https://quickstart-for-agents.vercel.app/api/footer.svg
-  ?theme=opencode
-  &text=your+custom+tagline+here  ← 하단 텍스트
-```
-
 > [!TIP]
-> URL의 공백은 `+`로, 특수문자는 URL 인코딩으로 처리하세요. 예: `·` → `%C2%B7`
+> 히어로 섹션의 텍스트는 `?title=`, `?logo=`, `?text=` 파라미터로 변경 가능합니다. 폰트는 `?font=`로 설정.
 
 ---
 
