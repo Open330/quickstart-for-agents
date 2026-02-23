@@ -1,7 +1,7 @@
 <div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=opencode&logo=Quickstart+For+Agents&title=Add+an+agent+prompt+section+to+my+README+using+quickstart-for-agents&font=inter" width="100%" /></div>
 
-```
-Using https://github.com/Open330/quickstart-for-agents — 
+```prompt
+Using https://github.com/Open330/quickstart-for-agents -
 add an "Quickstart for Agents" section above my existing install guide in README.md.
 Use the header/footer SVG API to wrap a fenced code block so it looks like a real terminal UI with a native copy button.
 The code block should contain the installtion prompt for AI agents using this project.
