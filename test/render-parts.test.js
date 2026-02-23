@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { renderHeaderSvg, renderFooterSvg, renderSnippet, MASCOT_VARIANTS } from "../src/render-parts.js";
 
-test("claude-code header: tall with mascot, title bar, prompt area", () => {
+test("claude-code header: tall with pixel art mascot, title bar, prompt area", () => {
   const svg = renderHeaderSvg({ theme: "claude-code", title: "My Agent", language: "Agents" });
   assert.match(svg, /viewBox="0 0 800 150"/);
   assert.match(svg, /Claude Code/);           // title bar text
@@ -11,9 +11,9 @@ test("claude-code header: tall with mascot, title bar, prompt area", () => {
   assert.match(svg, /#161b22/);               // github code block bg
   assert.match(svg, /<circle/);               // prompt icon
   assert.match(svg, /stroke-dasharray/);      // dashed title border
-  assert.match(svg, /#e89898/);               // mascot pink body
-  assert.match(svg, /<ellipse/);              // detailed mascot shapes
-  assert.match(svg, /stroke-linecap/);        // smile curve
+  assert.match(svg, /#D77757/);               // actual Clawd body color
+  // pixel art = many small rects
+  assert.ok((svg.match(/<rect /g) || []).length > 20, "pixel art has many rects");
 });
 
 test("claude-code footer: powerline with tokens", () => {
@@ -51,11 +51,13 @@ test("opencode footer: custom text overrides", () => {
   assert.match(svg, /hello world/);
 });
 
-test("codex header: green logo, prompt area", () => {
+test("codex header: terminal prompt style", () => {
   const svg = renderHeaderSvg({ theme: "codex", title: "My Agent", language: "Agents" });
-  assert.match(svg, /viewBox="0 0 800 96"/);
-  assert.match(svg, /codex/);                  // logo
+  assert.match(svg, /viewBox="0 0 800 68"/);
+  assert.match(svg, /codex/);                  // logo text
   assert.match(svg, /#10a37f/);               // green accent
+  assert.match(svg, /&gt;/);                   // prompt cursor >
+  assert.match(svg, /full-auto/);              // mode indicator
   assert.match(svg, /My Agent/);
   assert.match(svg, /Agents/);
 });
@@ -102,37 +104,39 @@ test("header escapes XML", () => {
   assert.match(svg, /&lt;script&gt;/);
 });
 
-test("mascot variants: all render valid SVG", () => {
+test("mascot variants: all render valid SVG with Clawd color", () => {
   for (const variant of MASCOT_VARIANTS) {
     const svg = renderHeaderSvg({ theme: "claude-code", mascot: variant });
     assert.match(svg, /<svg/, `${variant} should produce SVG`);
-    assert.match(svg, /#e89898/, `${variant} should have body color`);
+    assert.match(svg, /#D77757/, `${variant} should have Clawd body color`);
   }
 });
 
-test("mascot default: no hat elements", () => {
+test("mascot default: no hat color pixels", () => {
   const svg = renderHeaderSvg({ theme: "claude-code", mascot: "default" });
-  assert.ok(!svg.includes("#8888c0"), "default mascot has no hat");
+  assert.ok(!svg.includes("#8878B8"), "default mascot has no hat pixels");
 });
 
-test("mascot hat: includes hat color", () => {
+test("mascot hat: includes hat color pixels", () => {
   const svg = renderHeaderSvg({ theme: "claude-code", mascot: "hat" });
-  assert.match(svg, /#8888c0/);   // hat color
-  assert.match(svg, /#a0a0d8/);   // hat highlight
+  assert.match(svg, /#8878B8/);   // hat color
+  assert.match(svg, /#A098D0/);   // hat highlight
 });
 
-test("mascot thinking: thought bubble", () => {
+test("mascot thinking: more rects than default (thought dots)", () => {
   const svg = renderHeaderSvg({ theme: "claude-code", mascot: "thinking" });
-  assert.match(svg, /···/);       // thought bubble dots
+  const defaultSvg = renderHeaderSvg({ theme: "claude-code", mascot: "default" });
+  const rectCount = (svg.match(/<rect /g) || []).length;
+  const defaultRectCount = (defaultSvg.match(/<rect /g) || []).length;
+  assert.ok(rectCount > defaultRectCount, "thinking has thought dots");
 });
 
-test("mascot wave: waving hand", () => {
+test("mascot wave: more rects than default (arm pixels)", () => {
   const svg = renderHeaderSvg({ theme: "claude-code", mascot: "wave" });
-  // wave variant has the extra hand path elements (more paths than default)
-  const pathCount = (svg.match(/<path/g) || []).length;
   const defaultSvg = renderHeaderSvg({ theme: "claude-code", mascot: "default" });
-  const defaultPathCount = (defaultSvg.match(/<path/g) || []).length;
-  assert.ok(pathCount > defaultPathCount, "wave has more path elements than default");
+  const rectCount = (svg.match(/<rect /g) || []).length;
+  const defaultRectCount = (defaultSvg.match(/<rect /g) || []).length;
+  assert.ok(rectCount > defaultRectCount, "wave has arm pixels");
 });
 
 test("no traffic light dots", () => {
