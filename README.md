@@ -1,12 +1,12 @@
 <div align="center">
 
-<div><img src="./examples/hero-header.svg" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=opencode&logo=Quickstart+For+Agents&title=Add+quickstart-for-agents+to+my+README.md+so+my+agent+prompts+look+like+a+real+terminal+UI+with+a+native+copy+button." width="100%" /></div>
 
 ```
 Add quickstart-for-agents to my README.md so my agent prompts
 look like a real terminal UI with a native copy button.
 ```
-<div><img src="./examples/hero-footer.svg" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/footer.svg?theme=opencode&text=zero+dependencies+%C2%B7+works+on+any+GitHub+README" width="100%" /></div>
 
 <br />
 
@@ -49,13 +49,13 @@ Your prompt for the LLM agent here.
 
 ### Claude Code
 
-<div><img src="./examples/claude-code-header.svg" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=claude-code&title=Fix+the+auth+middleware" width="100%" /></div>
 
 ```
 Design retry and dead-letter handling for asynchronous workers
 with clear failure budgets.
 ```
-<div><img src="./examples/claude-code-footer.svg" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/footer.svg?theme=claude-code&tokens=12.4k&model=Opus+4.6" width="100%" /></div>
 
 <br />
 
@@ -66,34 +66,34 @@ with clear failure budgets.
 
 | `default` | `hat` | `thinking` | `wave` |
 |:---------:|:-----:|:----------:|:------:|
-| <img src="./examples/claude-code-header.svg" width="200" /> | <img src="./examples/claude-code-hat-header.svg" width="200" /> | <img src="./examples/claude-code-thinking-header.svg" width="200" /> | <img src="./examples/claude-code-wave-header.svg" width="200" /> |
+| <img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=claude-code&title=Fix+the+auth+middleware" width="200" /> | <img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=claude-code&title=Fix+the+auth+middleware&mascot=hat" width="200" /> | <img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=claude-code&title=Fix+the+auth+middleware&mascot=thinking" width="200" /> | <img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=claude-code&title=Fix+the+auth+middleware&mascot=wave" width="200" /> |
 
-Pixel art mascot based on [Clawd](https://github.com/anthropics/claude-code/issues/24926), the Claude Code CLI mascot.
+Pixel art mascot based on [Clawd](https://github.com/anthropics/claude-code), the Claude Code CLI mascot.
 
 </details>
 
 ### OpenCode
 
-<div><img src="./examples/opencode-header.svg" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=opencode&title=Design+retry+and+dead-letter+handling" width="100%" /></div>
 
 ```
 Design retry and dead-letter handling for asynchronous workers
 with clear failure budgets.
 ```
-<div><img src="./examples/opencode-footer.svg" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/footer.svg?theme=opencode&tokens=8.2k&model=Claude+Opus+4.6" width="100%" /></div>
 
 > [!NOTE]
 > Use `?logo=YourApp` to replace the "opencode" logo with your own text.
 
 ### Codex CLI
 
-<div><img src="./examples/codex-header.svg" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=codex&title=Set+up+the+project+scaffolding" width="100%" /></div>
 
 ```
 Design retry and dead-letter handling for asynchronous workers
 with clear failure budgets.
 ```
-<div><img src="./examples/codex-footer.svg" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/footer.svg?theme=codex&tokens=5.1k&model=GPT-4.1" width="100%" /></div>
 
 ---
 
