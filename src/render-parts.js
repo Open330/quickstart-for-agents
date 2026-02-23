@@ -158,7 +158,7 @@ function headerClaudeCode(theme, width, height, title, language, mascotVariant) 
 }
 
 // ── Header: OpenCode (tall, with logo) ───────────────────────────
-function headerOpenCode(theme, width, height, title, language) {
+function headerOpenCode(theme, width, height, title, language, _mascot, logo) {
   const bg = "#161b22";
   const border = "#30363d";
   const cyan = "#22d3ee";
@@ -176,7 +176,7 @@ function headerOpenCode(theme, width, height, title, language) {
   return `
     <defs><clipPath id="oc-header-clip"><path d="${roundedTopPath(width, height)}" /></clipPath></defs>
     <path d="${roundedTopPath(width, height)}" fill="${bg}" stroke="${border}" stroke-width="1" />
-    <text x="${cx}" y="${logoY}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="28" dominant-baseline="central" text-anchor="middle" letter-spacing="2"><tspan fill="#707078" font-weight="300">open</tspan><tspan fill="#e0e0e0" font-weight="700">code</tspan></text>
+    <text x="${cx}" y="${logoY}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="28" dominant-baseline="central" text-anchor="middle" letter-spacing="2">${logo ? `<tspan fill="#e0e0e0" font-weight="700">${escapeXml(logo)}</tspan>` : `<tspan fill="#707078" font-weight="300">open</tspan><tspan fill="#e0e0e0" font-weight="700">code</tspan>`}</text>
     <line x1="0" y1="${promptY - 14}" x2="${width}" y2="${promptY - 14}" stroke="${border}" />
     <g clip-path="url(#oc-header-clip)">
       <rect x="0" y="${promptY - 14}" width="3" height="${height - promptY + 14}" fill="${cyan}" />
@@ -346,9 +346,10 @@ export function renderHeaderSvg(options = {}) {
   const title = (options.title || theme.name).slice(0, 60);
 
   const mascot = (options.mascot || "default").slice(0, 16);
+  const logo = (options.logo || "").slice(0, 30) || null;
   const height = HEADER_HEIGHTS[themeName] || 36;
   const renderer = HEADER_RENDERERS[themeName] || headerGeneric;
-  const inner = renderer(theme, width, height, title, language, mascot);
+  const inner = renderer(theme, width, height, title, language, mascot, logo);
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeXml(title)}">

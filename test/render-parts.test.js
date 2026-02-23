@@ -39,6 +39,18 @@ test("opencode header: tall with logo, cyan bar, prompt area", () => {
   assert.match(svg, /Agents/);
 });
 
+test("opencode header: custom logo replaces default", () => {
+  const svg = renderHeaderSvg({ theme: "opencode", title: "Test", logo: "myapp" });
+  assert.match(svg, /myapp/);
+  assert.ok(!svg.includes(">open</tspan>"), "default 'open' tspan should not appear");
+});
+
+test("opencode header: default logo when no logo param", () => {
+  const svg = renderHeaderSvg({ theme: "opencode", title: "Test" });
+  assert.match(svg, />open</);
+  assert.match(svg, />code</);
+});
+
 test("opencode footer: cyan bar + token info", () => {
   const svg = renderFooterSvg({ theme: "opencode", tokens: "256", model: "Opus 4.6" });
   assert.match(svg, /#22d3ee/);

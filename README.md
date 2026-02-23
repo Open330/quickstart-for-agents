@@ -1,6 +1,51 @@
-# Quickstart For Agents
+<div align="center">
 
-LLM Agent 프롬프트를 터미널 스타일 테마로 꾸며서 GitHub README에 표시할 수 있습니다. 네이티브 복사 버튼이 그대로 작동합니다.
+<div><img src="./examples/hero-header.svg" width="100%" /></div>
+
+```
+Design retry and dead-letter handling for asynchronous workers
+with clear failure budgets.
+```
+<div><img src="./examples/hero-footer.svg" width="100%" /></div>
+
+<br />
+
+**Terminal-themed SVG headers & footers for your agent prompts.**<br />
+Wrap native GitHub code blocks — copy button works out of the box.
+
+<br />
+
+<a href="#themes">Themes</a>
+&middot;
+<a href="#quick-start">Quick Start</a>
+&middot;
+<a href="#api-reference">API Reference</a>
+&middot;
+<a href="https://github.com/Open330/quickstart-for-agents/issues">Report Bug</a>
+
+<br /><br />
+
+</div>
+
+## How It Works
+
+Paste a header SVG, a fenced code block, and a footer SVG into your README. GitHub renders the SVGs as images and keeps the code block's **native copy button** intact.
+
+```md
+<div><img src="https://YOUR_HOST/api/header.svg?theme=claude-code&title=My+Agent&lang=Agents" width="100%" /></div>
+
+​```
+Your prompt for the LLM agent here.
+​```
+<div><img src="https://YOUR_HOST/api/footer.svg?theme=claude-code&tokens=42&model=Opus+4.6" width="100%" /></div>
+```
+
+> [!TIP]
+> Use `<div><img>` instead of `![]()` — the latter wraps in `<p>` tags with 16px margins, creating gaps between the header, code block, and footer.
+
+---
+
+## Themes
 
 ### Claude Code
 
@@ -12,13 +57,20 @@ with clear failure budgets.
 ```
 <div><img src="./examples/claude-code-footer.svg" width="100%" /></div>
 
-#### Mascot Variants
+<br />
 
-| default | hat | thinking | wave |
-|---------|-----|----------|------|
+<details>
+<summary><strong>Mascot variants</strong> — <code>?mascot=default|hat|thinking|wave</code></summary>
+
+<br />
+
+| `default` | `hat` | `thinking` | `wave` |
+|:---------:|:-----:|:----------:|:------:|
 | <img src="./examples/claude-code-header.svg" width="200" /> | <img src="./examples/claude-code-hat-header.svg" width="200" /> | <img src="./examples/claude-code-thinking-header.svg" width="200" /> | <img src="./examples/claude-code-wave-header.svg" width="200" /> |
 
-`?mascot=default` `?mascot=hat` `?mascot=thinking` `?mascot=wave`
+Pixel art mascot based on [Clawd](https://github.com/anthropics/claude-code/issues/24926), the Claude Code CLI mascot.
+
+</details>
 
 ### OpenCode
 
@@ -30,6 +82,9 @@ with clear failure budgets.
 ```
 <div><img src="./examples/opencode-footer.svg" width="100%" /></div>
 
+> [!NOTE]
+> Use `?logo=YourApp` to replace the "opencode" logo with your own text.
+
 ### Codex CLI
 
 <div><img src="./examples/codex-header.svg" width="100%" /></div>
@@ -40,53 +95,7 @@ with clear failure budgets.
 ```
 <div><img src="./examples/codex-footer.svg" width="100%" /></div>
 
-### Usage
-
-README.md에 아래와 같이 작성합니다:
-
-```md
-<div><img src="https://YOUR_DOMAIN/api/header.svg?theme=claude-code&lang=Agents&title=My+Agent" width="100%" /></div>
-
-​```
-Your prompt for the LLM agent here.
-​```
-<div><img src="https://YOUR_DOMAIN/api/footer.svg?theme=claude-code&tokens=42&model=Opus+4.6" width="100%" /></div>
-```
-
-## Endpoints
-
-| Endpoint | Description |
-|----------|-------------|
-| `GET /api/header.svg` | 테마가 적용된 헤더 SVG |
-| `GET /api/footer.svg` | 테마가 적용된 푸터 SVG |
-| `GET /api/snippet` | Header + codeblock + footer 마크다운 스니펫 |
-
-## Query Params
-
-### Header params
-
-| Param | Description | Default |
-|-------|-------------|---------|
-| `theme` | 테마 (`claude-code`, `opencode`, `codex`, `github-dark`, `vscode-dark`, `vscode-light`) | `opencode` |
-| `title` | 헤더 타이틀 | 테마 이름 |
-| `lang` | 우측 라벨 (e.g., `Agents`) | — |
-| `width` | SVG 폭 (300-1280) | `800` |
-| `mascot` | Claude Code 마스코트 (`default`, `hat`, `thinking`, `wave`) | `default` |
-
-### Footer params
-
-| Param | Description | Default |
-|-------|-------------|---------|
-| `theme` | 테마 | `opencode` |
-| `text` | 커스텀 텍스트 (설정 시 다른 파라미터 무시) | — |
-| `tokens` | 토큰 수 | `—` |
-| `model` | 모델 이름 | `Opus 4.6` |
-| `project` | 프로젝트 이름 (Claude Code only) | `quickstart-for-agents` |
-| `agent` | 에이전트 이름 (OpenCode only) | `Agents` |
-
-### `<div><img>` vs `![]()`
-
-`<div><img>` 를 사용하는 이유: GitHub Markdown에서 `![]()` 구문은 `<p>` 태그로 감싸지면서 상하 16px 마진이 생깁니다. `<div><img>` 를 사용하면 `<p>` 래핑 없이 헤더-코드블록-푸터 사이에 간격이 없는 깔끔한 레이아웃을 만들 수 있습니다.
+---
 
 ## Quick Start
 
@@ -94,8 +103,65 @@ Your prompt for the LLM agent here.
 npm start
 ```
 
-## Deploy
+The server starts at `http://localhost:3000`. Test it:
+
+```
+http://localhost:3000/api/header.svg?theme=claude-code&title=Hello&lang=Agents
+```
+
+### Deploy
 
 ```bash
 npx vercel
 ```
+
+---
+
+## API Reference
+
+### Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/header.svg` | Themed header SVG |
+| `GET /api/footer.svg` | Themed footer SVG |
+| `GET /api/snippet` | Ready-to-paste markdown snippet |
+
+### Header params
+
+| Param | Type | Description | Default |
+|-------|------|-------------|---------|
+| `theme` | `string` | Theme name | `opencode` |
+| `title` | `string` | Prompt title text | Theme name |
+| `lang` | `string` | Right-side label (e.g. `Agents`) | — |
+| `width` | `number` | SVG width, 300–1280 | `800` |
+| `mascot` | `string` | Clawd variant: `default` `hat` `thinking` `wave` | `default` |
+| `logo` | `string` | Custom logo text (OpenCode theme) | `opencode` |
+
+### Footer params
+
+| Param | Type | Description | Default |
+|-------|------|-------------|---------|
+| `theme` | `string` | Theme name | `opencode` |
+| `text` | `string` | Custom text (overrides all other params) | — |
+| `tokens` | `string` | Token count | `—` |
+| `model` | `string` | Model name | `Opus 4.6` |
+| `project` | `string` | Project name (Claude Code) | `quickstart-for-agents` |
+| `agent` | `string` | Agent name (OpenCode / Codex) | `Agents` |
+
+### Available themes
+
+| Theme | Style |
+|-------|-------|
+| `claude-code` | Pixel art Clawd mascot + powerline footer |
+| `opencode` | Dual-tone logo + cyan accent bar |
+| `codex` | Terminal prompt `>` + green accent |
+| `github-dark` | Minimal, matches GitHub dark code blocks |
+| `vscode-dark` | VS Code Dark+ colors |
+| `vscode-light` | VS Code Light+ colors |
+
+---
+
+<div align="center">
+<sub>Built with zero dependencies &middot; SVG generated on the fly &middot; Works on any GitHub README</sub>
+</div>

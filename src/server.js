@@ -58,6 +58,7 @@ function handler(req, res) {
       title: url.searchParams.get("title"),
       width: url.searchParams.get("width"),
       mascot: url.searchParams.get("mascot"),
+      logo: url.searchParams.get("logo"),
     });
     return sendSvg(res, svg);
   }
