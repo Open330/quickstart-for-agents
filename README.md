@@ -81,7 +81,7 @@ with clear failure budgets.
 
 ## How It Works
 
-헤더 SVG + 코드 블록 + 푸터 SVG를 README에 붙여넣으세요. GitHub이 SVG를 이미지로 렌더링하고, 코드 블록의 **복사 버튼**은 그대로 유지됩니다.
+헤더 SVG + 코드 블록을 README에 붙여넣으세요. GitHub이 SVG를 이미지로 렌더링하고, 코드 블록의 **복사 버튼**은 그대로 유지됩니다. 푸터는 선택 사항입니다.
 
 ```md
 <div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=claude-code&title=My+Agent&lang=Agents" width="100%" /></div>
@@ -89,6 +89,7 @@ with clear failure budgets.
 ​```
 Your prompt for the LLM agent here.
 ​```
+<!-- footer is optional -->
 <div><img src="https://quickstart-for-agents.vercel.app/api/footer.svg?theme=claude-code&tokens=42&model=Opus+4.6" width="100%" /></div>
 ```
 
