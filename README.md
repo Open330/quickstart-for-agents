@@ -3,8 +3,8 @@
 <div><img src="./examples/hero-header.svg" width="100%" /></div>
 
 ```
-Design retry and dead-letter handling for asynchronous workers
-with clear failure budgets.
+Add quickstart-for-agents to my README.md so my agent prompts
+look like a real terminal UI with a native copy button.
 ```
 <div><img src="./examples/hero-footer.svg" width="100%" /></div>
 
