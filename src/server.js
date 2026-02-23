@@ -59,6 +59,7 @@ function handler(req, res) {
       width: url.searchParams.get("width"),
       mascot: url.searchParams.get("mascot"),
       logo: url.searchParams.get("logo"),
+      font: url.searchParams.get("font"),
     });
     return sendSvg(res, svg);
   }
@@ -72,6 +73,7 @@ function handler(req, res) {
       model: url.searchParams.get("model"),
       project: url.searchParams.get("project"),
       agent: url.searchParams.get("agent"),
+      font: url.searchParams.get("font"),
     });
     return sendSvg(res, svg);
   }

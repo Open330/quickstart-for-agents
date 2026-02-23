@@ -4,6 +4,28 @@ import { clamp, escapeXml } from "./render.js";
 // GitHub dark mode code block: bg #161b22, border #30363d, border-radius 6px
 const R = 6;
 
+// ── Font presets ─────────────────────────────────────────────────
+// SVGs rendered on GitHub go through camo proxy; fonts must exist on viewer's machine.
+const FONT_PRESETS = {
+  mono:    "'JetBrains Mono','Fira Code','Cascadia Code','SF Mono',monospace",
+  sans:    "-apple-system,'SF Pro Display','Segoe UI','Helvetica Neue',system-ui,sans-serif",
+  serif:   "Georgia,'Noto Serif','Times New Roman',serif",
+  fira:    "'Fira Code','JetBrains Mono',monospace",
+  cascadia:"'Cascadia Code','Fira Code',monospace",
+  iosevka: "'Iosevka','Fira Code',monospace",
+};
+const DEFAULT_FONT = FONT_PRESETS.mono;
+
+function resolveFont(font) {
+  if (!font) return DEFAULT_FONT;
+  // preset name match
+  if (FONT_PRESETS[font.toLowerCase()]) return FONT_PRESETS[font.toLowerCase()];
+  // custom font-family string (pass through)
+  return font;
+}
+
+export { FONT_PRESETS };
+
 function roundedTopPath(w, h) {
   return `M0,${R} Q0,0 ${R},0 L${w - R},0 Q${w},0 ${w},${R} L${w},${h} L0,${h} Z`;
 }
@@ -129,7 +151,7 @@ function claudeMascot(cx, y0, variant = "default") {
 export const MASCOT_VARIANTS = ["default", "hat", "thinking", "wave"];
 
 // ── Header: Claude Code (tall, with mascot) ──────────────────────
-function headerClaudeCode(theme, width, height, title, language, mascotVariant) {
+function headerClaudeCode(theme, width, height, title, language, mascotVariant, _logo, f) {
   const bg = "#161b22";
   const border = "#30363d";
   const dashed = "#4a3040";
@@ -145,24 +167,24 @@ function headerClaudeCode(theme, width, height, title, language, mascotVariant) 
 
   let langEl = "";
   if (language) {
-    langEl = `<text x="${width - 14}" y="${promptY}" fill="${muted}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="11" font-weight="400" dominant-baseline="central" text-anchor="end">${escapeXml(language)}</text>`;
+    langEl = `<text x="${width - 14}" y="${promptY}" fill="${muted}" font-family="${f}" font-size="11" font-weight="400" dominant-baseline="central" text-anchor="end">${escapeXml(language)}</text>`;
   }
 
   return `
     <path d="${roundedTopPath(width, height)}" fill="${bg}" stroke="${border}" stroke-width="1" />
     <line x1="14" y1="14" x2="${cx - 62}" y2="14" stroke="${dashed}" stroke-dasharray="4,3" />
-    <text x="${cx}" y="14" fill="${titleClr}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="11" font-weight="400" dominant-baseline="central" text-anchor="middle">Claude Code</text>
+    <text x="${cx}" y="14" fill="${titleClr}" font-family="${f}" font-size="11" font-weight="400" dominant-baseline="central" text-anchor="middle">Claude Code</text>
     <line x1="${cx + 62}" y1="14" x2="${width - 14}" y2="14" stroke="${dashed}" stroke-dasharray="4,3" />
     ${mascot}
-    <text x="${cx}" y="${infoY}" fill="${info}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central" text-anchor="middle">Opus 4.6 · Claude Team</text>
+    <text x="${cx}" y="${infoY}" fill="${info}" font-family="${f}" font-size="10" font-weight="400" dominant-baseline="central" text-anchor="middle">Opus 4.6 · Claude Team</text>
     <line x1="0" y1="${promptY - 14}" x2="${width}" y2="${promptY - 14}" stroke="${border}" />
     <circle cx="18" cy="${promptY}" r="4.5" fill="#7b7b95" opacity="0.7" />
-    <text x="30" y="${promptY}" fill="${text}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="13" font-weight="400" dominant-baseline="central">${escapeXml(title)}</text>
+    <text x="30" y="${promptY}" fill="${text}" font-family="${f}" font-size="13" font-weight="400" dominant-baseline="central">${escapeXml(title)}</text>
     ${langEl}`;
 }
 
 // ── Header: OpenCode (tall, with logo) ───────────────────────────
-function headerOpenCode(theme, width, height, title, language, _mascot, logo) {
+function headerOpenCode(theme, width, height, title, language, _mascot, logo, f) {
   const bg = "#161b22";
   const border = "#30363d";
   const cyan = "#22d3ee";
@@ -174,23 +196,23 @@ function headerOpenCode(theme, width, height, title, language, _mascot, logo) {
 
   let langEl = "";
   if (language) {
-    langEl = `<text x="${width - 14}" y="${promptY}" fill="${muted}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="11" font-weight="400" dominant-baseline="central" text-anchor="end">${escapeXml(language)}</text>`;
+    langEl = `<text x="${width - 14}" y="${promptY}" fill="${muted}" font-family="${f}" font-size="11" font-weight="400" dominant-baseline="central" text-anchor="end">${escapeXml(language)}</text>`;
   }
 
   return `
     <defs><clipPath id="oc-header-clip"><path d="${roundedTopPath(width, height)}" /></clipPath></defs>
     <path d="${roundedTopPath(width, height)}" fill="${bg}" stroke="${border}" stroke-width="1" />
-    <text x="${cx}" y="${logoY}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="28" dominant-baseline="central" text-anchor="middle" letter-spacing="2">${logo ? `<tspan fill="#e0e0e0" font-weight="700">${escapeXml(logo)}</tspan>` : `<tspan fill="#707078" font-weight="300">open</tspan><tspan fill="#e0e0e0" font-weight="700">code</tspan>`}</text>
+    <text x="${cx}" y="${logoY}" font-family="${f}" font-size="28" dominant-baseline="central" text-anchor="middle" letter-spacing="2">${logo ? `<tspan fill="#e0e0e0" font-weight="700">${escapeXml(logo)}</tspan>` : `<tspan fill="#707078" font-weight="300">open</tspan><tspan fill="#e0e0e0" font-weight="700">code</tspan>`}</text>
     <line x1="0" y1="${promptY - 14}" x2="${width}" y2="${promptY - 14}" stroke="${border}" />
     <g clip-path="url(#oc-header-clip)">
       <rect x="0" y="${promptY - 14}" width="3" height="${height - promptY + 14}" fill="${cyan}" />
     </g>
-    <text x="22" y="${promptY}" fill="${textClr}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="13" font-weight="400" dominant-baseline="central">${escapeXml(title)}</text>
+    <text x="22" y="${promptY}" fill="${textClr}" font-family="${f}" font-size="13" font-weight="400" dominant-baseline="central">${escapeXml(title)}</text>
     ${langEl}`;
 }
 
 // ── Header: Codex CLI (terminal prompt style) ───────────────────
-function headerCodex(theme, width, height, title, language) {
+function headerCodex(theme, width, height, title, language, _mascot, _logo, f) {
   const bg = "#161b22";
   const border = "#30363d";
   const green = "#10a37f";
@@ -200,38 +222,38 @@ function headerCodex(theme, width, height, title, language) {
 
   let langEl = "";
   if (language) {
-    langEl = `<text x="${width - 14}" y="${promptY}" fill="${muted}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="11" font-weight="400" dominant-baseline="central" text-anchor="end">${escapeXml(language)}</text>`;
+    langEl = `<text x="${width - 14}" y="${promptY}" fill="${muted}" font-family="${f}" font-size="11" font-weight="400" dominant-baseline="central" text-anchor="end">${escapeXml(language)}</text>`;
   }
 
   // Codex CLI style: terminal header bar + prompt with > cursor
   return `
     <path d="${roundedTopPath(width, height)}" fill="${bg}" stroke="${border}" stroke-width="1" />
     <rect x="14" y="12" width="8" height="14" rx="2" fill="${green}" opacity="0.9" />
-    <text x="30" y="19" fill="${green}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="14" font-weight="700" dominant-baseline="central">codex</text>
-    <text x="96" y="19" fill="${muted}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">full-auto</text>
+    <text x="30" y="19" fill="${green}" font-family="${f}" font-size="14" font-weight="700" dominant-baseline="central">codex</text>
+    <text x="96" y="19" fill="${muted}" font-family="${f}" font-size="10" font-weight="400" dominant-baseline="central">full-auto</text>
     <line x1="0" y1="${promptY - 14}" x2="${width}" y2="${promptY - 14}" stroke="${border}" />
-    <text x="14" y="${promptY}" fill="${green}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="14" font-weight="700" dominant-baseline="central">&gt;</text>
-    <text x="30" y="${promptY}" fill="${textClr}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="13" font-weight="400" dominant-baseline="central">${escapeXml(title)}</text>
+    <text x="14" y="${promptY}" fill="${green}" font-family="${f}" font-size="14" font-weight="700" dominant-baseline="central">&gt;</text>
+    <text x="30" y="${promptY}" fill="${textClr}" font-family="${f}" font-size="13" font-weight="400" dominant-baseline="central">${escapeXml(title)}</text>
     ${langEl}`;
 }
 
 // ── Header: Generic ──────────────────────────────────────────────
-function headerGeneric(theme, width, height, title, language) {
+function headerGeneric(theme, width, height, title, language, _mascot, _logo, f) {
   const bg = "#161b22";
   const border = "#30363d";
   const midY = height / 2;
   let langEl = "";
   if (language) {
-    langEl = `<text x="${width - 14}" y="${midY}" fill="#8b949e" font-family="'JetBrains Mono','Fira Code',monospace" font-size="11" font-weight="400" dominant-baseline="central" text-anchor="end">${escapeXml(language)}</text>`;
+    langEl = `<text x="${width - 14}" y="${midY}" fill="#8b949e" font-family="${f}" font-size="11" font-weight="400" dominant-baseline="central" text-anchor="end">${escapeXml(language)}</text>`;
   }
   return `
     <path d="${roundedTopPath(width, height)}" fill="${bg}" stroke="${border}" stroke-width="1" />
-    <text x="14" y="${midY}" fill="#c9d1d9" font-family="-apple-system,'SF Pro Display',system-ui,sans-serif" font-size="13" font-weight="600" dominant-baseline="central">${escapeXml(title)}</text>
+    <text x="14" y="${midY}" fill="#c9d1d9" font-family="${f}" font-size="13" font-weight="600" dominant-baseline="central">${escapeXml(title)}</text>
     ${langEl}`;
 }
 
 // ── Footer: Claude Code (powerline) ──────────────────────────────
-function footerClaudeCode(theme, width, height, opts) {
+function footerClaudeCode(theme, width, height, opts, f) {
   const bg = "#161b22";
   const border = "#30363d";
   const arrowW = 6;
@@ -240,7 +262,7 @@ function footerClaudeCode(theme, width, height, opts) {
     return `
     <defs><clipPath id="cc-footer-clip"><path d="${roundedBottomPath(width, height)}" /></clipPath></defs>
     <path d="${roundedBottomPath(width, height)}" fill="${bg}" stroke="${border}" stroke-width="1" />
-    <text x="14" y="${height / 2}" fill="#c8d4e8" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">${escapeXml(opts.text)}</text>`;
+    <text x="14" y="${height / 2}" fill="#c8d4e8" font-family="${f}" font-size="10" font-weight="400" dominant-baseline="central">${escapeXml(opts.text)}</text>`;
   }
 
   const tokens = opts.tokens || "—";
@@ -259,7 +281,7 @@ function footerClaudeCode(theme, width, height, opts) {
   for (const s of segs) {
     const sw = Math.round(width * s.w);
     segSvg += `<rect x="${x}" y="0" width="${sw + arrowW}" height="${height}" fill="${s.color}" />`;
-    segSvg += `<text x="${x + sw / 2}" y="${height / 2}" fill="${s.textColor}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="9" font-weight="500" dominant-baseline="central" text-anchor="middle">${escapeXml(s.text)}</text>`;
+    segSvg += `<text x="${x + sw / 2}" y="${height / 2}" fill="${s.textColor}" font-family="${f}" font-size="9" font-weight="500" dominant-baseline="central" text-anchor="middle">${escapeXml(s.text)}</text>`;
     const ax = x + sw;
     segSvg += `<polygon points="${ax},0 ${ax + arrowW},${height / 2} ${ax},${height}" fill="${s.next}" />`;
     x += sw;
@@ -272,7 +294,7 @@ function footerClaudeCode(theme, width, height, opts) {
 }
 
 // ── Footer: OpenCode ─────────────────────────────────────────────
-function footerOpenCode(theme, width, height, opts) {
+function footerOpenCode(theme, width, height, opts, f) {
   const bg = "#161b22";
   const cyan = "#22d3ee";
   const border = "#30363d";
@@ -283,7 +305,7 @@ function footerOpenCode(theme, width, height, opts) {
     <defs><clipPath id="oc-footer-clip"><path d="${roundedBottomPath(width, height)}" /></clipPath></defs>
     <path d="${roundedBottomPath(width, height)}" fill="${bg}" stroke="${border}" stroke-width="1" />
     <g clip-path="url(#oc-footer-clip)"><rect x="0" y="0" width="3" height="${height}" fill="${cyan}" /></g>
-    <text x="19" y="${midY}" fill="#c8c8cc" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">${escapeXml(opts.text)}</text>`;
+    <text x="19" y="${midY}" fill="#c8c8cc" font-family="${f}" font-size="10" font-weight="400" dominant-baseline="central">${escapeXml(opts.text)}</text>`;
   }
 
   const tokens = opts.tokens || "—";
@@ -294,13 +316,13 @@ function footerOpenCode(theme, width, height, opts) {
     <defs><clipPath id="oc-footer-clip"><path d="${roundedBottomPath(width, height)}" /></clipPath></defs>
     <path d="${roundedBottomPath(width, height)}" fill="${bg}" stroke="${border}" stroke-width="1" />
     <g clip-path="url(#oc-footer-clip)"><rect x="0" y="0" width="3" height="${height}" fill="${cyan}" /></g>
-    <text x="19" y="${midY}" fill="${cyan}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="600" dominant-baseline="central">${escapeXml(tokens)} tokens</text>
-    <text x="130" y="${midY}" fill="#c8c8cc" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">${escapeXml(model)}</text>
-    <text x="290" y="${midY}" fill="#6b6b75" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">${escapeXml(agent)}</text>`;
+    <text x="19" y="${midY}" fill="${cyan}" font-family="${f}" font-size="10" font-weight="600" dominant-baseline="central">${escapeXml(tokens)} tokens</text>
+    <text x="130" y="${midY}" fill="#c8c8cc" font-family="${f}" font-size="10" font-weight="400" dominant-baseline="central">${escapeXml(model)}</text>
+    <text x="290" y="${midY}" fill="#6b6b75" font-family="${f}" font-size="10" font-weight="400" dominant-baseline="central">${escapeXml(agent)}</text>`;
 }
 
 // ── Footer: Codex CLI (terminal status line) ────────────────────
-function footerCodex(theme, width, height, opts) {
+function footerCodex(theme, width, height, opts, f) {
   const bg = "#161b22";
   const green = "#10a37f";
   const border = "#30363d";
@@ -309,7 +331,7 @@ function footerCodex(theme, width, height, opts) {
   if (opts.text) {
     return `
     <path d="${roundedBottomPath(width, height)}" fill="${bg}" stroke="${border}" stroke-width="1" />
-    <text x="14" y="${midY}" fill="#e0e0e0" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">${escapeXml(opts.text)}</text>`;
+    <text x="14" y="${midY}" fill="#e0e0e0" font-family="${f}" font-size="10" font-weight="400" dominant-baseline="central">${escapeXml(opts.text)}</text>`;
   }
 
   const tokens = opts.tokens || "—";
@@ -317,18 +339,18 @@ function footerCodex(theme, width, height, opts) {
 
   return `
     <path d="${roundedBottomPath(width, height)}" fill="${bg}" stroke="${border}" stroke-width="1" />
-    <text x="14" y="${midY}" fill="${green}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="9" font-weight="600" dominant-baseline="central">${escapeXml(model)}</text>
-    <text x="${width - 14}" y="${midY}" fill="#555555" font-family="'JetBrains Mono','Fira Code',monospace" font-size="9" font-weight="400" dominant-baseline="central" text-anchor="end">${escapeXml(tokens)} tokens</text>`;
+    <text x="14" y="${midY}" fill="${green}" font-family="${f}" font-size="9" font-weight="600" dominant-baseline="central">${escapeXml(model)}</text>
+    <text x="${width - 14}" y="${midY}" fill="#555555" font-family="${f}" font-size="9" font-weight="400" dominant-baseline="central" text-anchor="end">${escapeXml(tokens)} tokens</text>`;
 }
 
 // ── Footer: Generic ──────────────────────────────────────────────
-function footerGeneric(theme, width, height, opts) {
+function footerGeneric(theme, width, height, opts, f) {
   const bg = "#161b22";
   const border = "#30363d";
   if (opts.text) {
     return `
     <path d="${roundedBottomPath(width, height)}" fill="${bg}" stroke="${border}" stroke-width="1" />
-    <text x="14" y="${height / 2}" fill="#8b949e" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">${escapeXml(opts.text)}</text>`;
+    <text x="14" y="${height / 2}" fill="#8b949e" font-family="${f}" font-size="10" font-weight="400" dominant-baseline="central">${escapeXml(opts.text)}</text>`;
   }
   return `
     <path d="${roundedBottomPath(width, height)}" fill="${bg}" stroke="${border}" stroke-width="1" />`;
@@ -351,9 +373,10 @@ export function renderHeaderSvg(options = {}) {
 
   const mascot = (options.mascot || "default").slice(0, 16);
   const logo = (options.logo || "").slice(0, 30) || null;
+  const f = resolveFont((options.font || "").slice(0, 80));
   const height = HEADER_HEIGHTS[themeName] || 36;
   const renderer = HEADER_RENDERERS[themeName] || headerGeneric;
-  const inner = renderer(theme, width, height, title, language, mascot, logo);
+  const inner = renderer(theme, width, height, title, language, mascot, logo, f);
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeXml(title)}">
@@ -366,6 +389,7 @@ export function renderFooterSvg(options = {}) {
   const theme = resolveTheme(themeName);
   const width = clamp(Number.parseInt(options.width, 10) || 800, 300, 1280);
 
+  const f = resolveFont((options.font || "").slice(0, 80));
   const height = FOOTER_HEIGHTS[themeName] || 4;
   const renderer = FOOTER_RENDERERS[themeName] || footerGeneric;
   const footerOpts = {
@@ -375,7 +399,7 @@ export function renderFooterSvg(options = {}) {
     project: (options.project || "").slice(0, 60),
     agent: (options.agent || "").slice(0, 30),
   };
-  const inner = renderer(theme, width, height, footerOpts);
+  const inner = renderer(theme, width, height, footerOpts, f);
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" role="img">

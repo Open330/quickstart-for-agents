@@ -123,44 +123,62 @@ https://quickstart-for-agents.vercel.app
 
 ### Endpoints
 
-| Endpoint | Description |
-|----------|-------------|
-| `GET /api/header.svg` | Themed header SVG |
-| `GET /api/footer.svg` | Themed footer SVG |
-| `GET /api/snippet` | Ready-to-paste markdown snippet |
+| Endpoint | Description | 설명 |
+|----------|-------------|------|
+| `GET /api/header.svg` | Themed header SVG | 코드 블록 위에 배치하는 테마별 헤더 이미지 |
+| `GET /api/footer.svg` | Themed footer SVG | 코드 블록 아래에 배치하는 테마별 푸터 이미지 |
+| `GET /api/snippet` | Ready-to-paste markdown snippet | 복사해서 바로 붙여넣기 가능한 마크다운 코드 조각 |
 
-### Header params
+### Header params — `GET /api/header.svg`
 
-| Param | Type | Description | Default |
-|-------|------|-------------|---------|
-| `theme` | `string` | Theme name | `opencode` |
-| `title` | `string` | Prompt title text | Theme name |
-| `lang` | `string` | Right-side label (e.g. `Agents`) | — |
-| `width` | `number` | SVG width, 300–1280 | `800` |
-| `mascot` | `string` | Clawd variant: `default` `hat` `thinking` `wave` | `default` |
-| `logo` | `string` | Custom logo text (OpenCode theme) | `opencode` |
+| Param | Type | Default | Description | 설명 |
+|-------|------|---------|-------------|------|
+| `theme` | `string` | `opencode` | Visual theme to apply | 적용할 테마. `claude-code`, `opencode`, `codex` 등 선택 |
+| `title` | `string` | Theme name | Prompt text shown in the header | 헤더에 표시되는 프롬프트 텍스트 (최대 60자) |
+| `lang` | `string` | — | Language label on the right side | 우측에 표시되는 언어/태그 라벨 (예: `Agents`, `TypeScript`) |
+| `width` | `number` | `800` | SVG width in pixels (300–1280) | SVG 이미지 너비. 300~1280px 범위 |
+| `mascot` | `string` | `default` | Clawd mascot variant | 마스코트 변형: `default` `hat` `thinking` `wave` (claude-code 테마 전용) |
+| `logo` | `string` | `opencode` | Custom logo text replacing "opencode" | 로고 텍스트 커스터마이즈 (opencode 테마 전용, 최대 30자) |
+| `font` | `string` | `mono` | Font preset or custom font-family | 폰트 변경. 프리셋: `mono` `sans` `serif` `fira` `cascadia` `iosevka`. 또는 직접 font-family 문자열 입력 |
 
-### Footer params
+### Footer params — `GET /api/footer.svg`
 
-| Param | Type | Description | Default |
-|-------|------|-------------|---------|
-| `theme` | `string` | Theme name | `opencode` |
-| `text` | `string` | Custom text (overrides all other params) | — |
-| `tokens` | `string` | Token count | `—` |
-| `model` | `string` | Model name | `Opus 4.6` |
-| `project` | `string` | Project name (Claude Code) | `quickstart-for-agents` |
-| `agent` | `string` | Agent name (OpenCode / Codex) | `Agents` |
+| Param | Type | Default | Description | 설명 |
+|-------|------|---------|-------------|------|
+| `theme` | `string` | `opencode` | Visual theme (must match header) | 테마 (헤더와 동일하게 맞춰야 함) |
+| `text` | `string` | — | Custom text (overrides all below) | 커스텀 텍스트. 설정 시 아래 파라미터 모두 무시됨 |
+| `tokens` | `string` | `—` | Token count display | 토큰 사용량 표시 (예: `12.4k`) |
+| `model` | `string` | `Opus 4.6` | Model name display | 모델 이름 표시 (예: `Claude Opus 4.6`, `GPT-4.1`) |
+| `project` | `string` | `quickstart-for-agents` | Project name in powerline | 프로젝트 이름 (claude-code 테마의 powerline 영역) |
+| `agent` | `string` | `Agents` | Agent name label | 에이전트 이름 표시 (opencode/codex 테마) |
+| `font` | `string` | `mono` | Font preset or custom font-family | 폰트 변경 (헤더와 동일한 값 권장) |
+
+### Font presets — `?font=`
+
+| Preset | Font stack | 설명 |
+|--------|-----------|------|
+| `mono` | JetBrains Mono → Fira Code → Cascadia Code → SF Mono | 기본값. 터미널/코딩 느낌의 모노스페이스 |
+| `sans` | SF Pro → Segoe UI → Helvetica Neue → system-ui | 깔끔한 산세리프. UI/대시보드 느낌 |
+| `serif` | Georgia → Noto Serif → Times New Roman | 클래식한 세리프. 문서/논문 느낌 |
+| `fira` | Fira Code → JetBrains Mono | Mozilla의 코딩 폰트. 리가처 지원 |
+| `cascadia` | Cascadia Code → Fira Code | Microsoft의 터미널 폰트 |
+| `iosevka` | Iosevka → Fira Code | 좁은 폭의 코딩 폰트 |
+| *(custom)* | Your own font-family string | 직접 CSS font-family 문자열 입력 가능 |
+
+> [!NOTE]
+> SVG는 뷰어의 로컬 폰트를 사용합니다. 지정한 폰트가 없으면 fallback 폰트가 적용됩니다.
+> GitHub에서는 system font만 사용 가능하므로 `mono`나 `sans`를 권장합니다.
 
 ### Available themes
 
-| Theme | Style |
-|-------|-------|
-| `claude-code` | Pixel art Clawd mascot + powerline footer |
-| `opencode` | Dual-tone logo + cyan accent bar |
-| `codex` | Terminal prompt `>` + green accent |
-| `github-dark` | Minimal, matches GitHub dark code blocks |
-| `vscode-dark` | VS Code Dark+ colors |
-| `vscode-light` | VS Code Light+ colors |
+| Theme | Style | 설명 |
+|-------|-------|------|
+| `claude-code` | Pixel art Clawd mascot + powerline footer | Claude Code CLI 스타일. Clawd 마스코트 + powerline 상태바 |
+| `opencode` | Dual-tone logo + cyan accent bar | OpenCode TUI 스타일. 시안 액센트 + 커스텀 로고 지원 |
+| `codex` | Terminal prompt `>` + green accent | Codex CLI 스타일. 그린 터미널 프롬프트 |
+| `github-dark` | Minimal, matches GitHub dark code blocks | GitHub 다크모드 코드 블록과 동일한 미니멀 스타일 |
+| `vscode-dark` | VS Code Dark+ colors | VS Code Dark+ 테마 색상 |
+| `vscode-light` | VS Code Light+ colors | VS Code Light+ 테마 색상 |
 
 ---
 
