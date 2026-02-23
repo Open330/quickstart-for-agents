@@ -388,7 +388,7 @@ export function renderHeaderSvg(options = {}) {
   const theme = resolveTheme(themeName);
   const width = clamp(Number.parseInt(options.width, 10) || 800, 300, 1280);
   const language = (options.language || "").slice(0, 16);
-  const title = (options.title || theme.name).slice(0, 60);
+  const title = (options.title || theme.name).slice(0, 120);
 
   const mascot = (options.mascot || "default").slice(0, 16);
   const logo = (options.logo || "").slice(0, 30) || null;
