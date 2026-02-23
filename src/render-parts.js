@@ -12,15 +12,23 @@ function roundedBottomPath(w, h) {
 }
 
 // ── Clawd pixel art mascot (dot graphic style) ──────────────────
-// Based on the actual Claude Code CLI mascot "Clawd"
-// Body color: rgb(215,119,87) = #D77757 (the real Clawd orange)
-// Rendered as pixel grid using SVG rects for retro 8-bit feel
+// Based on the REAL Claude Code CLI mascot "Clawd" from cli.js source:
+//
+//   Large (with eyes):       Large (no eyes):
+//     ▗ ▗     ▖ ▖              █████████
+//      █████████              ██▄█████▄██  (shoulder bumps)
+//      █ █   █ █               █████████
+//                              █ █   █ █
+//
+// Body: rgb(215,119,87) = #D77757
+// Eyes: rgb(0,0,0) = black cutouts on body
+// Hat:  rgb(135,0,255) = #8700FF (auto-accept purple)
 
-const B = "#D77757";  // body (actual Clawd color)
-const D = "#B85E3E";  // body dark/shadow
-const E = "#2D1B14";  // eyes
-const H = "#8878B8";  // hat/halo
-const HL = "#A098D0"; // hat light
+const B = "#D77757";  // body (actual Clawd orange)
+const D = "#B85E3E";  // body shadow (shoulder bumps)
+const E = "#000000";  // eyes (black cutouts, from clawd_background)
+const H = "#8700FF";  // hat (real auto-accept purple)
+const HL = "#9B33FF"; // hat highlight
 const S = "#F0D8A0";  // sparkle
 
 // Pixel grids: each row is an array of [colOffset, color] for filled pixels
@@ -35,79 +43,75 @@ function renderPixelGrid(cx, y0, grid, s) {
   return rects.join("\n    ");
 }
 
-// Default Clawd: simple blob with eyes (no hat) — matches real ASCII art shape
+// Real Clawd shape — compact blob matching the CLI source:
+//   eyes: ▗ ▗     ▖ ▖  (quarter-blocks far apart, ~3 spaces between pairs)
+//   body: █████████     (9-wide solid block)
+//  wider: ██▄█████▄██  (11-wide with shadow bumps at shoulders)
+//   body: █████████     (9-wide)
+//   feet: █ █   █ █    (4 individual feet in 2 pairs, wide gap between)
+
+// Default Clawd: blob with eyes — matches real CLI large mascot
 const GRID_DEFAULT = [
-  /* sparkle */
-  [[-1,S],[0,S],[1,S]],
-  [[0,S]],
-  [],
-  /* head */
-  [[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B]],
+  /* eyes — quarter-block style, wide apart: ▗ ▗     ▖ ▖ */
+  [[-4,E],[-3,E],[3,E],[4,E]],
+  /* body top — 9-wide: █████████ */
   [[-4,B],[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B],[4,B]],
-  /* body with eyes */
-  [[-5,B],[-4,B],[-3,B],[-2,E],[-1,B],[0,B],[1,B],[2,E],[3,B],[4,B],[5,B]],
-  [[-5,B],[-4,B],[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B],[4,B],[5,B]],
-  [[-5,B],[-4,B],[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B],[4,B],[5,B]],
-  /* bottom */
+  /* shoulders — 11-wide with shadow bumps: ██▄█████▄██ */
+  [[-5,D],[-4,B],[-3,D],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,D],[4,B],[5,D]],
+  /* body — 9-wide */
   [[-4,B],[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B],[4,B]],
-  /* feet */
-  [[-3,B],[-2,B],[2,B],[3,B]],
+  /* feet — 4 individual: █ █   █ █ */
+  [[-4,B],[-2,B],[2,B],[4,B]],
 ];
 
-// Hat variant: sparkle + stem + hat + body
+// Hat variant: purple ▟█▙ hat on top of body
 const GRID_HAT = [
-  /* sparkle */
-  [[-1,S],[0,S],[1,S]],
-  [[0,S]],
-  /* stem */
-  [[0,H]],
-  [[0,H]],
-  /* hat */
-  [[-3,H],[-2,H],[-1,HL],[0,HL],[1,HL],[2,H],[3,H]],
-  [[-4,H],[-3,H],[-2,H],[-1,H],[0,H],[1,H],[2,H],[3,H],[4,H]],
-  /* head */
+  /* hat — ▟█▙ shape (3-wide with base wider) */
+  [[-1,H],[0,H],[1,H]],
+  [[-2,H],[-1,HL],[0,HL],[1,HL],[2,H]],
+  /* eyes */
+  [[-4,E],[-3,E],[3,E],[4,E]],
+  /* body top — 9-wide */
   [[-4,B],[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B],[4,B]],
-  /* body with eyes */
-  [[-5,B],[-4,B],[-3,B],[-2,E],[-1,B],[0,B],[1,B],[2,E],[3,B],[4,B],[5,B]],
-  [[-5,B],[-4,B],[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B],[4,B],[5,B]],
-  [[-5,B],[-4,B],[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B],[4,B],[5,B]],
-  /* bottom */
+  /* shoulders — 11-wide with shadow bumps */
+  [[-5,D],[-4,B],[-3,D],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,D],[4,B],[5,D]],
+  /* body — 9-wide */
   [[-4,B],[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B],[4,B]],
   /* feet */
-  [[-3,B],[-2,B],[2,B],[3,B]],
+  [[-4,B],[-2,B],[2,B],[4,B]],
 ];
 
-// Thinking: closed eyes (horizontal line) + thought dots
+// Thinking: closed eyes (—) + thought dots
 const T = "#808090";
 const GRID_THINKING = [
-  [[-1,S],[0,S],[1,S]],
-  [[0,S]],
+  /* closed eyes — horizontal lines instead of dots */
+  [[-4,E],[-3,E],[3,E],[4,E]],
+  /* body top */
+  [[-4,B],[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B],[4,B]],
+  /* shoulders */
+  [[-5,D],[-4,B],[-3,D],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,D],[4,B],[5,D]],
+  /* body */
+  [[-4,B],[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B],[4,B]],
+  /* feet */
+  [[-4,B],[-2,B],[2,B],[4,B]],
+  /* thought bubble dots — ascending to upper right */
   [],
-  [[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B]],
-  [[-4,B],[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B],[4,B]],
-  /* closed eyes = darker pixels as line */
-  [[-5,B],[-4,B],[-3,E],[-2,E],[-1,B],[0,B],[1,B],[2,E],[3,E],[4,B],[5,B]],
-  [[-5,B],[-4,B],[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B],[4,B],[5,B]],
-  [[-5,B],[-4,B],[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B],[4,B],[5,B]],
-  [[-4,B],[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B],[4,B]],
-  [[-3,B],[-2,B],[2,B],[3,B]],
-  /* thought bubble dots */
   [[7,T]],
   [[9,T],[10,T]],
 ];
 
-// Wave: one arm raised
+// Wave: one arm/foot raised to the right
 const GRID_WAVE = [
-  [[-1,S],[0,S],[1,S]],
-  [[0,S]],
-  [],
-  [[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B]],
+  /* eyes */
+  [[-4,E],[-3,E],[3,E],[4,E]],
+  /* body top */
   [[-4,B],[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B],[4,B]],
-  [[-5,B],[-4,B],[-3,B],[-2,E],[-1,B],[0,B],[1,B],[2,E],[3,B],[4,B],[5,B]],
-  [[-5,B],[-4,B],[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B],[4,B],[5,B],[6,B]],
-  [[-5,B],[-4,B],[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B],[4,B],[5,B],[7,B]],
-  [[-4,B],[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B],[4,B],[8,B]],
-  [[-3,B],[-2,B],[2,B],[3,B]],
+  /* shoulders */
+  [[-5,D],[-4,B],[-3,D],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,D],[4,B],[5,D]],
+  /* body — with raised arm pixel extending right */
+  [[-4,B],[-3,B],[-2,B],[-1,B],[0,B],[1,B],[2,B],[3,B],[4,B],[6,B]],
+  /* feet — right foot raised higher */
+  [[-4,B],[-2,B],[2,B],[5,B],[7,B]],
 ];
 
 const MASCOT_GRIDS = {
@@ -135,8 +139,8 @@ function headerClaudeCode(theme, width, height, title, language, mascotVariant) 
   const info = "#808090";
   const cx = width / 2;
 
-  const mascot = claudeMascot(cx, 20, mascotVariant);
-  const infoY = 96;
+  const mascot = claudeMascot(cx, 22, mascotVariant);
+  const infoY = 58;
   const promptY = height - 22;
 
   let langEl = "";
@@ -334,7 +338,7 @@ function footerGeneric(theme, width, height, opts) {
 const HEADER_RENDERERS = { "claude-code": headerClaudeCode, "opencode": headerOpenCode, "codex": headerCodex };
 const FOOTER_RENDERERS = { "claude-code": footerClaudeCode, "opencode": footerOpenCode, "codex": footerCodex };
 
-const HEADER_HEIGHTS = { "claude-code": 150, "opencode": 100, "codex": 68 };
+const HEADER_HEIGHTS = { "claude-code": 110, "opencode": 100, "codex": 68 };
 const FOOTER_HEIGHTS = { "claude-code": 22, "opencode": 22, "codex": 22 };
 
 // ── Public API ───────────────────────────────────────────────────

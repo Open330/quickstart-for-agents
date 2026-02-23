@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 68" role="img" aria-label="Quickstart For Agents">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 68" role="img" aria-label="Design retry and dead-letter handling for asynchronous worke">
   
     <path d="M0,6 Q0,0 6,0 L794,0 Q800,0 800,6 L800,68 L0,68 Z" fill="#161b22" stroke="#30363d" stroke-width="1" />
     <rect x="14" y="12" width="8" height="14" rx="2" fill="#10a37f" opacity="0.9" />
@@ -7,6 +7,6 @@
     <text x="96" y="19" fill="#555555" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">full-auto</text>
     <line x1="0" y1="32" x2="800" y2="32" stroke="#30363d" />
     <text x="14" y="46" fill="#10a37f" font-family="'JetBrains Mono','Fira Code',monospace" font-size="14" font-weight="700" dominant-baseline="central">&gt;</text>
-    <text x="30" y="46" fill="#e0e0e0" font-family="'JetBrains Mono','Fira Code',monospace" font-size="13" font-weight="400" dominant-baseline="central">Quickstart For Agents</text>
+    <text x="30" y="46" fill="#e0e0e0" font-family="'JetBrains Mono','Fira Code',monospace" font-size="13" font-weight="400" dominant-baseline="central">Design retry and dead-letter handling for asynchronous worke</text>
     <text x="786" y="46" fill="#555555" font-family="'JetBrains Mono','Fira Code',monospace" font-size="11" font-weight="400" dominant-baseline="central" text-anchor="end">Agents</text>
 </svg>

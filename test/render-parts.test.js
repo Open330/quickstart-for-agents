@@ -4,7 +4,7 @@ import { renderHeaderSvg, renderFooterSvg, renderSnippet, MASCOT_VARIANTS } from
 
 test("claude-code header: tall with pixel art mascot, title bar, prompt area", () => {
   const svg = renderHeaderSvg({ theme: "claude-code", title: "My Agent", language: "Agents" });
-  assert.match(svg, /viewBox="0 0 800 150"/);
+  assert.match(svg, /viewBox="0 0 800 110"/);
   assert.match(svg, /Claude Code/);           // title bar text
   assert.match(svg, /My Agent/);              // prompt title
   assert.match(svg, /Agents/);                // language label
@@ -12,8 +12,8 @@ test("claude-code header: tall with pixel art mascot, title bar, prompt area", (
   assert.match(svg, /<circle/);               // prompt icon
   assert.match(svg, /stroke-dasharray/);      // dashed title border
   assert.match(svg, /#D77757/);               // actual Clawd body color
-  // pixel art = many small rects
-  assert.ok((svg.match(/<rect /g) || []).length > 20, "pixel art has many rects");
+  // pixel art = many small rects (compact blob ~30+ rects)
+  assert.ok((svg.match(/<rect /g) || []).length > 15, "pixel art has rects");
 });
 
 test("claude-code footer: powerline with tokens", () => {
@@ -126,13 +126,13 @@ test("mascot variants: all render valid SVG with Clawd color", () => {
 
 test("mascot default: no hat color pixels", () => {
   const svg = renderHeaderSvg({ theme: "claude-code", mascot: "default" });
-  assert.ok(!svg.includes("#8878B8"), "default mascot has no hat pixels");
+  assert.ok(!svg.includes("#8700FF"), "default mascot has no hat pixels");
 });
 
 test("mascot hat: includes hat color pixels", () => {
   const svg = renderHeaderSvg({ theme: "claude-code", mascot: "hat" });
-  assert.match(svg, /#8878B8/);   // hat color
-  assert.match(svg, /#A098D0/);   // hat highlight
+  assert.match(svg, /#8700FF/);   // hat color (real auto-accept purple)
+  assert.match(svg, /#9B33FF/);   // hat highlight
 });
 
 test("mascot thinking: more rects than default (thought dots)", () => {
