@@ -8,15 +8,16 @@
     <path d="M400,14 L402,18 L406,20 L402,22 L400,26 L398,22 L394,20 L398,18 Z" fill="#c8c0f0" opacity="0.9" />
     <rect x="381" y="36" width="38" height="26" rx="8" fill="#e89898" />
     <rect x="384" y="38" width="32" height="8" rx="4" fill="#d08080" opacity="0.15" />
-    <ellipse cx="393" cy="46" rx="2.5" ry="3" fill="#504050" />
-    <ellipse cx="407" cy="46" rx="2.5" ry="3" fill="#504050" />
-    <circle cx="394" cy="45" r="1" fill="#ffffff" opacity="0.7" />
-    <circle cx="408" cy="45" r="1" fill="#ffffff" opacity="0.7" />
+    <path d="M391,46 Q393,48 395,46" fill="none" stroke="#504050" stroke-width="1.5" stroke-linecap="round" />
+    <path d="M405,46 Q407,48 409,46" fill="none" stroke="#504050" stroke-width="1.5" stroke-linecap="round" />
     <ellipse cx="388" cy="51" rx="4" ry="2.5" fill="#d07878" opacity="0.45" />
     <ellipse cx="412" cy="51" rx="4" ry="2.5" fill="#d07878" opacity="0.45" />
-    <path d="M396,53 Q400,56 404,53" fill="none" stroke="#504050" stroke-width="1.2" stroke-linecap="round" />
     <ellipse cx="392" cy="65" rx="5" ry="3.5" fill="#e89898" />
     <ellipse cx="408" cy="65" rx="5" ry="3.5" fill="#e89898" />
+    <circle cx="416" cy="44" r="2" fill="#808090" opacity="0.5" />
+    <circle cx="420" cy="38" r="2.5" fill="#808090" opacity="0.5" />
+    <rect x="424" y="34" width="28" height="14" rx="7" fill="#808090" opacity="0.25" />
+    <text x="438" y="41" fill="#c0c0d0" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="400" dominant-baseline="central" text-anchor="middle">···</text>
     <text x="400" y="96" fill="#808090" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central" text-anchor="middle">Opus 4.6 · Claude Team</text>
     <line x1="0" y1="114" x2="800" y2="114" stroke="#30363d" />
     <circle cx="18" cy="128" r="4.5" fill="#7b7b95" opacity="0.7" />

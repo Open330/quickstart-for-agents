@@ -11,25 +11,134 @@ function roundedBottomPath(w, h) {
   return `M0,0 L${w},0 L${w},${h - R} Q${w},${h} ${w - R},${h} L${R},${h} Q0,${h} 0,${h - R} Z`;
 }
 
-// ── Claude mascot pixel art ───────────────────────────────────────
-function claudeMascot(cx, y0, s = 4) {
-  const P = "#e89898", H = "#8888c0", S = "#c8c0f0", A = "#a0a0c0", E = "#604040";
-  // [colOffset, rowOffset, width, height, color]
-  const px = [
-    [0,0,1,1,S], [-1,1,3,1,S], [0,2,1,1,S],       // sparkle
-    [0,3,1,2,A],                                      // antenna
-    [-2,5,5,1,H], [-3,6,7,1,H],                      // hat
-    [-5,7,11,6,P],                                    // body
-    [-3,9,1,1,E], [3,9,1,1,E],                       // eyes
-    [-5,13,2,2,P], [4,13,2,2,P],                     // legs
-  ];
-  return px.map(([c,r,w,h,f]) =>
-    `<rect x="${cx+c*s}" y="${y0+r*s}" width="${w*s}" height="${h*s}" fill="${f}" />`
-  ).join("\n    ");
+// ── Claude mascot variants ───────────────────────────────────────
+const C = {
+  body: "#e89898", bodyDark: "#d08080", hat: "#8888c0", hatLight: "#a0a0d8",
+  sparkle: "#c8c0f0", eye: "#504050", blush: "#d07878", stem: "#a0a0c0",
+};
+
+function mascotParts(cx, y0) {
+  const sparkle = (() => {
+    const sx = cx, sy = y0;
+    return `<path d="M${sx},${sy-6} L${sx+2},${sy-2} L${sx+6},${sy} L${sx+2},${sy+2} L${sx},${sy+6} L${sx-2},${sy+2} L${sx-6},${sy} L${sx-2},${sy-2} Z" fill="${C.sparkle}" opacity="0.9" />`;
+  })();
+  const stem = `<rect x="${cx-1}" y="${y0+8}" width="2" height="8" rx="1" fill="${C.stem}" />`;
+  const hatY = y0 + 16;
+  const hat = [
+    `<rect x="${cx-14}" y="${hatY}" width="28" height="7" rx="3.5" fill="${C.hat}" />`,
+    `<rect x="${cx-10}" y="${hatY+1}" width="20" height="3" rx="1.5" fill="${C.hatLight}" opacity="0.5" />`,
+  ].join("\n    ");
+  const bodyY = hatY + 7;
+  const bodyW = 38, bodyH = 26;
+  const bodyEl = [
+    `<rect x="${cx-bodyW/2}" y="${bodyY}" width="${bodyW}" height="${bodyH}" rx="8" fill="${C.body}" />`,
+    `<rect x="${cx-bodyW/2+3}" y="${bodyY+2}" width="${bodyW-6}" height="8" rx="4" fill="${C.bodyDark}" opacity="0.15" />`,
+  ].join("\n    ");
+  const eyeY = bodyY + 10;
+  const eyes = [
+    `<ellipse cx="${cx-7}" cy="${eyeY}" rx="2.5" ry="3" fill="${C.eye}" />`,
+    `<ellipse cx="${cx+7}" cy="${eyeY}" rx="2.5" ry="3" fill="${C.eye}" />`,
+    `<circle cx="${cx-6}" cy="${eyeY-1}" r="1" fill="#ffffff" opacity="0.7" />`,
+    `<circle cx="${cx+8}" cy="${eyeY-1}" r="1" fill="#ffffff" opacity="0.7" />`,
+  ].join("\n    ");
+  const blushY = eyeY + 5;
+  const blushMarks = [
+    `<ellipse cx="${cx-12}" cy="${blushY}" rx="4" ry="2.5" fill="${C.blush}" opacity="0.45" />`,
+    `<ellipse cx="${cx+12}" cy="${blushY}" rx="4" ry="2.5" fill="${C.blush}" opacity="0.45" />`,
+  ].join("\n    ");
+  const smileY = eyeY + 7;
+  const smile = `<path d="M${cx-4},${smileY} Q${cx},${smileY+3} ${cx+4},${smileY}" fill="none" stroke="${C.eye}" stroke-width="1.2" stroke-linecap="round" />`;
+  const feetY = bodyY + bodyH;
+  const feet = [
+    `<ellipse cx="${cx-8}" cy="${feetY+3}" rx="5" ry="3.5" fill="${C.body}" />`,
+    `<ellipse cx="${cx+8}" cy="${feetY+3}" rx="5" ry="3.5" fill="${C.body}" />`,
+  ].join("\n    ");
+
+  // Closed eyes (for thinking variant)
+  const closedEyes = [
+    `<path d="M${cx-9},${eyeY} Q${cx-7},${eyeY+2} ${cx-5},${eyeY}" fill="none" stroke="${C.eye}" stroke-width="1.5" stroke-linecap="round" />`,
+    `<path d="M${cx+5},${eyeY} Q${cx+7},${eyeY+2} ${cx+9},${eyeY}" fill="none" stroke="${C.eye}" stroke-width="1.5" stroke-linecap="round" />`,
+  ].join("\n    ");
+
+  // Thought bubble (for thinking variant)
+  const tbx = cx + 24, tby = bodyY - 2;
+  const thought = [
+    `<circle cx="${cx+16}" cy="${bodyY+8}" r="2" fill="#808090" opacity="0.5" />`,
+    `<circle cx="${cx+20}" cy="${bodyY+2}" r="2.5" fill="#808090" opacity="0.5" />`,
+    `<rect x="${tbx}" y="${tby}" width="28" height="14" rx="7" fill="#808090" opacity="0.25" />`,
+    `<text x="${tbx+14}" y="${tby+7}" fill="#c0c0d0" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="400" dominant-baseline="central" text-anchor="middle">···</text>`,
+  ].join("\n    ");
+
+  // Waving hand (for wave variant)
+  const handX = cx + 22, handY = bodyY + 6;
+  const wave = [
+    `<path d="M${cx+19},${bodyY+14} Q${handX},${handY} ${handX+4},${handY-6}" fill="none" stroke="${C.body}" stroke-width="3" stroke-linecap="round" />`,
+    `<circle cx="${handX+4}" cy="${handY-8}" r="3.5" fill="${C.body}" />`,
+  ].join("\n    ");
+
+  // No-hat body starts higher
+  const noHatBodyY = y0 + 16;
+  const noHatBodyEl = [
+    `<rect x="${cx-bodyW/2}" y="${noHatBodyY}" width="${bodyW}" height="${bodyH}" rx="8" fill="${C.body}" />`,
+    `<rect x="${cx-bodyW/2+3}" y="${noHatBodyY+2}" width="${bodyW-6}" height="8" rx="4" fill="${C.bodyDark}" opacity="0.15" />`,
+  ].join("\n    ");
+  const noHatEyeY = noHatBodyY + 10;
+  const noHatEyes = [
+    `<ellipse cx="${cx-7}" cy="${noHatEyeY}" rx="2.5" ry="3" fill="${C.eye}" />`,
+    `<ellipse cx="${cx+7}" cy="${noHatEyeY}" rx="2.5" ry="3" fill="${C.eye}" />`,
+    `<circle cx="${cx-6}" cy="${noHatEyeY-1}" r="1" fill="#ffffff" opacity="0.7" />`,
+    `<circle cx="${cx+8}" cy="${noHatEyeY-1}" r="1" fill="#ffffff" opacity="0.7" />`,
+  ].join("\n    ");
+  const noHatBlushY = noHatEyeY + 5;
+  const noHatBlush = [
+    `<ellipse cx="${cx-12}" cy="${noHatBlushY}" rx="4" ry="2.5" fill="${C.blush}" opacity="0.45" />`,
+    `<ellipse cx="${cx+12}" cy="${noHatBlushY}" rx="4" ry="2.5" fill="${C.blush}" opacity="0.45" />`,
+  ].join("\n    ");
+  const noHatSmileY = noHatEyeY + 7;
+  const noHatSmile = `<path d="M${cx-4},${noHatSmileY} Q${cx},${noHatSmileY+3} ${cx+4},${noHatSmileY}" fill="none" stroke="${C.eye}" stroke-width="1.2" stroke-linecap="round" />`;
+  const noHatFeetY = noHatBodyY + bodyH;
+  const noHatFeet = [
+    `<ellipse cx="${cx-8}" cy="${noHatFeetY+3}" rx="5" ry="3.5" fill="${C.body}" />`,
+    `<ellipse cx="${cx+8}" cy="${noHatFeetY+3}" rx="5" ry="3.5" fill="${C.body}" />`,
+  ].join("\n    ");
+
+  // Closed eyes for no-hat thinking
+  const noHatClosedEyes = [
+    `<path d="M${cx-9},${noHatEyeY} Q${cx-7},${noHatEyeY+2} ${cx-5},${noHatEyeY}" fill="none" stroke="${C.eye}" stroke-width="1.5" stroke-linecap="round" />`,
+    `<path d="M${cx+5},${noHatEyeY} Q${cx+7},${noHatEyeY+2} ${cx+9},${noHatEyeY}" fill="none" stroke="${C.eye}" stroke-width="1.5" stroke-linecap="round" />`,
+  ].join("\n    ");
+  const noHatThought = [
+    `<circle cx="${cx+16}" cy="${noHatBodyY+8}" r="2" fill="#808090" opacity="0.5" />`,
+    `<circle cx="${cx+20}" cy="${noHatBodyY+2}" r="2.5" fill="#808090" opacity="0.5" />`,
+    `<rect x="${cx+24}" y="${noHatBodyY-2}" width="28" height="14" rx="7" fill="#808090" opacity="0.25" />`,
+    `<text x="${cx+38}" y="${noHatBodyY+5}" fill="#c0c0d0" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="400" dominant-baseline="central" text-anchor="middle">···</text>`,
+  ].join("\n    ");
+
+  return {
+    sparkle, stem, hat, bodyEl, eyes, blushMarks, smile, feet, closedEyes, thought, wave,
+    noHatBodyEl, noHatEyes, noHatBlush, noHatSmile, noHatFeet, noHatClosedEyes, noHatThought,
+  };
 }
 
+// variant: "default" (no hat), "hat", "thinking", "wave"
+function claudeMascot(cx, y0, variant = "default") {
+  const p = mascotParts(cx, y0);
+  switch (variant) {
+    case "hat":
+      return [p.sparkle, p.stem, p.hat, p.bodyEl, p.eyes, p.blushMarks, p.smile, p.feet].join("\n    ");
+    case "thinking":
+      return [p.sparkle, p.noHatBodyEl, p.noHatClosedEyes, p.noHatBlush, p.noHatFeet, p.noHatThought].join("\n    ");
+    case "wave":
+      return [p.sparkle, p.noHatBodyEl, p.noHatEyes, p.noHatBlush, p.noHatSmile, p.noHatFeet, p.wave].join("\n    ");
+    default: // "default" — no hat, standard smile
+      return [p.sparkle, p.noHatBodyEl, p.noHatEyes, p.noHatBlush, p.noHatSmile, p.noHatFeet].join("\n    ");
+  }
+}
+
+export const MASCOT_VARIANTS = ["default", "hat", "thinking", "wave"];
+
 // ── Header: Claude Code (tall, with mascot) ──────────────────────
-function headerClaudeCode(theme, width, height, title, language) {
+function headerClaudeCode(theme, width, height, title, language, mascotVariant) {
   const bg = "#161b22";
   const border = "#30363d";
   const dashed = "#4a3040";
@@ -39,8 +148,8 @@ function headerClaudeCode(theme, width, height, title, language) {
   const info = "#808090";
   const cx = width / 2;
 
-  const mascot = claudeMascot(cx, 22);
-  const infoY = 88;
+  const mascot = claudeMascot(cx, 20, mascotVariant);
+  const infoY = 96;
   const promptY = height - 22;
 
   let langEl = "";
@@ -84,6 +193,35 @@ function headerOpenCode(theme, width, height, title, language) {
     <line x1="0" y1="${promptY - 14}" x2="${width}" y2="${promptY - 14}" stroke="${border}" />
     <g clip-path="url(#oc-header-clip)">
       <rect x="0" y="${promptY - 14}" width="3" height="${height - promptY + 14}" fill="${cyan}" />
+    </g>
+    <text x="22" y="${promptY}" fill="${textClr}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="13" font-weight="400" dominant-baseline="central">${escapeXml(title)}</text>
+    ${langEl}`;
+}
+
+// ── Header: Codex CLI ────────────────────────────────────────────
+function headerCodex(theme, width, height, title, language) {
+  const bg = "#161b22";
+  const border = "#30363d";
+  const green = "#10a37f";
+  const textClr = "#e0e0e0";
+  const muted = "#666666";
+  const cx = width / 2;
+  const logoY = 38;
+  const promptY = height - 22;
+
+  let langEl = "";
+  if (language) {
+    langEl = `<text x="${width - 14}" y="${promptY}" fill="${muted}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="11" font-weight="400" dominant-baseline="central" text-anchor="end">${escapeXml(language)}</text>`;
+  }
+
+  return `
+    <defs><clipPath id="cx-header-clip"><path d="${roundedTopPath(width, height)}" /></clipPath></defs>
+    <path d="${roundedTopPath(width, height)}" fill="${bg}" stroke="${border}" stroke-width="1" />
+    <text x="${cx}" y="${logoY}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="22" dominant-baseline="central" text-anchor="middle" letter-spacing="1"><tspan fill="${green}" font-weight="700">codex</tspan></text>
+    <text x="${cx}" y="${logoY + 18}" fill="${muted}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="9" font-weight="400" dominant-baseline="central" text-anchor="middle">OpenAI Codex CLI</text>
+    <line x1="0" y1="${promptY - 14}" x2="${width}" y2="${promptY - 14}" stroke="${border}" />
+    <g clip-path="url(#cx-header-clip)">
+      <rect x="0" y="${promptY - 14}" width="3" height="${height - promptY + 14}" fill="${green}" />
     </g>
     <text x="22" y="${promptY}" fill="${textClr}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="13" font-weight="400" dominant-baseline="central">${escapeXml(title)}</text>
     ${langEl}`;
@@ -173,6 +311,34 @@ function footerOpenCode(theme, width, height, opts) {
     <text x="290" y="${midY}" fill="#6b6b75" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">${escapeXml(agent)}</text>`;
 }
 
+// ── Footer: Codex CLI ────────────────────────────────────────────
+function footerCodex(theme, width, height, opts) {
+  const bg = "#161b22";
+  const green = "#10a37f";
+  const border = "#30363d";
+  const midY = height / 2;
+
+  if (opts.text) {
+    return `
+    <defs><clipPath id="cx-footer-clip"><path d="${roundedBottomPath(width, height)}" /></clipPath></defs>
+    <path d="${roundedBottomPath(width, height)}" fill="${bg}" stroke="${border}" stroke-width="1" />
+    <g clip-path="url(#cx-footer-clip)"><rect x="0" y="0" width="3" height="${height}" fill="${green}" /></g>
+    <text x="19" y="${midY}" fill="#e0e0e0" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">${escapeXml(opts.text)}</text>`;
+  }
+
+  const tokens = opts.tokens || "—";
+  const model = opts.model || "GPT-4.1";
+  const agent = opts.agent || "Agents";
+
+  return `
+    <defs><clipPath id="cx-footer-clip"><path d="${roundedBottomPath(width, height)}" /></clipPath></defs>
+    <path d="${roundedBottomPath(width, height)}" fill="${bg}" stroke="${border}" stroke-width="1" />
+    <g clip-path="url(#cx-footer-clip)"><rect x="0" y="0" width="3" height="${height}" fill="${green}" /></g>
+    <text x="19" y="${midY}" fill="${green}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="600" dominant-baseline="central">${escapeXml(tokens)} tokens</text>
+    <text x="130" y="${midY}" fill="#e0e0e0" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">${escapeXml(model)}</text>
+    <text x="290" y="${midY}" fill="#666666" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central">${escapeXml(agent)}</text>`;
+}
+
 // ── Footer: Generic ──────────────────────────────────────────────
 function footerGeneric(theme, width, height, opts) {
   const bg = "#161b22";
@@ -187,11 +353,11 @@ function footerGeneric(theme, width, height, opts) {
 }
 
 // ── Dispatch ─────────────────────────────────────────────────────
-const HEADER_RENDERERS = { "claude-code": headerClaudeCode, "opencode": headerOpenCode };
-const FOOTER_RENDERERS = { "claude-code": footerClaudeCode, "opencode": footerOpenCode };
+const HEADER_RENDERERS = { "claude-code": headerClaudeCode, "opencode": headerOpenCode, "codex": headerCodex };
+const FOOTER_RENDERERS = { "claude-code": footerClaudeCode, "opencode": footerOpenCode, "codex": footerCodex };
 
-const HEADER_HEIGHTS = { "claude-code": 140, "opencode": 100 };
-const FOOTER_HEIGHTS = { "claude-code": 22, "opencode": 22 };
+const HEADER_HEIGHTS = { "claude-code": 150, "opencode": 100, "codex": 96 };
+const FOOTER_HEIGHTS = { "claude-code": 22, "opencode": 22, "codex": 22 };
 
 // ── Public API ───────────────────────────────────────────────────
 export function renderHeaderSvg(options = {}) {
@@ -201,9 +367,10 @@ export function renderHeaderSvg(options = {}) {
   const language = (options.language || "").slice(0, 16);
   const title = (options.title || theme.name).slice(0, 60);
 
+  const mascot = (options.mascot || "default").slice(0, 16);
   const height = HEADER_HEIGHTS[themeName] || 36;
   const renderer = HEADER_RENDERERS[themeName] || headerGeneric;
-  const inner = renderer(theme, width, height, title, language);
+  const inner = renderer(theme, width, height, title, language, mascot);
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeXml(title)}">

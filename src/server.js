@@ -56,7 +56,8 @@ function handler(req, res) {
       theme: url.searchParams.get("theme"),
       language: url.searchParams.get("lang"),
       title: url.searchParams.get("title"),
-      width: url.searchParams.get("width")
+      width: url.searchParams.get("width"),
+      mascot: url.searchParams.get("mascot"),
     });
     return sendSvg(res, svg);
   }

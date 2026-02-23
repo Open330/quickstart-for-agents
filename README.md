@@ -12,6 +12,14 @@ with clear failure budgets.
 ```
 <div><img src="./examples/claude-code-footer.svg" width="100%" /></div>
 
+#### Mascot Variants
+
+| default | hat | thinking | wave |
+|---------|-----|----------|------|
+| <img src="./examples/claude-code-header.svg" width="200" /> | <img src="./examples/claude-code-hat-header.svg" width="200" /> | <img src="./examples/claude-code-thinking-header.svg" width="200" /> | <img src="./examples/claude-code-wave-header.svg" width="200" /> |
+
+`?mascot=default` `?mascot=hat` `?mascot=thinking` `?mascot=wave`
+
 ### OpenCode
 
 <div><img src="./examples/opencode-header.svg" width="100%" /></div>
@@ -21,6 +29,16 @@ Design retry and dead-letter handling for asynchronous workers
 with clear failure budgets.
 ```
 <div><img src="./examples/opencode-footer.svg" width="100%" /></div>
+
+### Codex CLI
+
+<div><img src="./examples/codex-header.svg" width="100%" /></div>
+
+```
+Design retry and dead-letter handling for asynchronous workers
+with clear failure budgets.
+```
+<div><img src="./examples/codex-footer.svg" width="100%" /></div>
 
 ### Usage
 
@@ -49,10 +67,11 @@ Your prompt for the LLM agent here.
 
 | Param | Description | Default |
 |-------|-------------|---------|
-| `theme` | 테마 (`claude-code`, `opencode`, `github-dark`, `vscode-dark`, `vscode-light`) | `opencode` |
+| `theme` | 테마 (`claude-code`, `opencode`, `codex`, `github-dark`, `vscode-dark`, `vscode-light`) | `opencode` |
 | `title` | 헤더 타이틀 | 테마 이름 |
 | `lang` | 우측 라벨 (e.g., `Agents`) | — |
 | `width` | SVG 폭 (300-1280) | `800` |
+| `mascot` | Claude Code 마스코트 (`default`, `hat`, `thinking`, `wave`) | `default` |
 
 ### Footer params
 
@@ -64,6 +83,10 @@ Your prompt for the LLM agent here.
 | `model` | 모델 이름 | `Opus 4.6` |
 | `project` | 프로젝트 이름 (Claude Code only) | `quickstart-for-agents` |
 | `agent` | 에이전트 이름 (OpenCode only) | `Agents` |
+
+### `<div><img>` vs `![]()`
+
+`<div><img>` 를 사용하는 이유: GitHub Markdown에서 `![]()` 구문은 `<p>` 태그로 감싸지면서 상하 16px 마진이 생깁니다. `<div><img>` 를 사용하면 `<p>` 래핑 없이 헤더-코드블록-푸터 사이에 간격이 없는 깔끔한 레이아웃을 만들 수 있습니다.
 
 ## Quick Start
 

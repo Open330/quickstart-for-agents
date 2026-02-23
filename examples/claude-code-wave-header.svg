@@ -17,6 +17,8 @@
     <path d="M396,53 Q400,56 404,53" fill="none" stroke="#504050" stroke-width="1.2" stroke-linecap="round" />
     <ellipse cx="392" cy="65" rx="5" ry="3.5" fill="#e89898" />
     <ellipse cx="408" cy="65" rx="5" ry="3.5" fill="#e89898" />
+    <path d="M419,57 Q422,49 426,43" fill="none" stroke="#e89898" stroke-width="3" stroke-linecap="round" />
+    <circle cx="426" cy="41" r="3.5" fill="#e89898" />
     <text x="400" y="96" fill="#808090" font-family="'JetBrains Mono','Fira Code',monospace" font-size="10" font-weight="400" dominant-baseline="central" text-anchor="middle">Opus 4.6 · Claude Team</text>
     <line x1="0" y1="114" x2="800" y2="114" stroke="#30363d" />
     <circle cx="18" cy="128" r="4.5" fill="#7b7b95" opacity="0.7" />
