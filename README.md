@@ -32,12 +32,12 @@ Wrap native GitHub code blocks — copy button works out of the box.
 Paste a header SVG, a fenced code block, and a footer SVG into your README. GitHub renders the SVGs as images and keeps the code block's **native copy button** intact.
 
 ```md
-<div><img src="https://YOUR_HOST/api/header.svg?theme=claude-code&title=My+Agent&lang=Agents" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=claude-code&title=My+Agent&lang=Agents" width="100%" /></div>
 
 ​```
 Your prompt for the LLM agent here.
 ​```
-<div><img src="https://YOUR_HOST/api/footer.svg?theme=claude-code&tokens=42&model=Opus+4.6" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/footer.svg?theme=claude-code&tokens=42&model=Opus+4.6" width="100%" /></div>
 ```
 
 > [!TIP]
@@ -109,10 +109,12 @@ The server starts at `http://localhost:3000`. Test it:
 http://localhost:3000/api/header.svg?theme=claude-code&title=Hello&lang=Agents
 ```
 
-### Deploy
+### Live Service
 
-```bash
-npx vercel
+The hosted version is live at:
+
+```
+https://quickstart-for-agents.vercel.app
 ```
 
 ---
