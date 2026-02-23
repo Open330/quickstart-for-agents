@@ -1,13 +1,14 @@
 # Quickstart For Agents
 
-터미널 스타일 테마를 입힌 코드블록을 GitHub README에서 사용할 수 있습니다. 네이티브 복사 버튼이 그대로 작동합니다.
+LLM Agent 프롬프트를 터미널 스타일 테마로 꾸며서 GitHub README에 표시할 수 있습니다. 네이티브 복사 버튼이 그대로 작동합니다.
 
 ### Claude Code
 
 <div><img src="./examples/claude-code-header.svg" width="100%" /></div>
 
-```bash
-npm install -g @anthropic-ai/claude-code
+```
+Design retry and dead-letter handling for asynchronous workers
+with clear failure budgets.
 ```
 <div><img src="./examples/claude-code-footer.svg" width="100%" /></div>
 
@@ -15,8 +16,9 @@ npm install -g @anthropic-ai/claude-code
 
 <div><img src="./examples/opencode-header.svg" width="100%" /></div>
 
-```bash
-npx opencode
+```
+Design retry and dead-letter handling for asynchronous workers
+with clear failure budgets.
 ```
 <div><img src="./examples/opencode-footer.svg" width="100%" /></div>
 
@@ -25,113 +27,52 @@ npx opencode
 README.md에 아래와 같이 작성합니다:
 
 ```md
-<img src="https://YOUR_DOMAIN/api/header.svg?theme=claude-code&lang=bash&title=Installation" width="100%" />
+<div><img src="https://YOUR_DOMAIN/api/header.svg?theme=claude-code&lang=Agents&title=My+Agent" width="100%" /></div>
 
-​```bash
-npm install -g @anthropic-ai/claude-code
 ​```
-
-<img src="https://YOUR_DOMAIN/api/footer.svg?theme=claude-code" width="100%" />
+Your prompt for the LLM agent here.
+​```
+<div><img src="https://YOUR_DOMAIN/api/footer.svg?theme=claude-code&tokens=42&model=Opus+4.6" width="100%" /></div>
 ```
 
-## Full Card SVG
+## Endpoints
 
-프롬프트 전체를 하나의 SVG 카드로 렌더링합니다.
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/header.svg` | 테마가 적용된 헤더 SVG |
+| `GET /api/footer.svg` | 테마가 적용된 푸터 SVG |
+| `GET /api/snippet` | Header + codeblock + footer 마크다운 스니펫 |
 
-### OpenCode Theme
+## Query Params
 
-![OpenCode Preview](./examples/opencode.svg)
+### Header params
 
-### Claude Code Theme
+| Param | Description | Default |
+|-------|-------------|---------|
+| `theme` | 테마 (`claude-code`, `opencode`, `github-dark`, `vscode-dark`, `vscode-light`) | `opencode` |
+| `title` | 헤더 타이틀 | 테마 이름 |
+| `lang` | 우측 라벨 (e.g., `Agents`) | — |
+| `width` | SVG 폭 (300-1280) | `800` |
 
-![Claude Code Preview](./examples/claude-code.svg)
+### Footer params
 
-## Generator UI
-
-서버 루트 경로(`/`)에 접속하면, 두 가지 모드를 지원하는 생성기 UI를 제공합니다.
-
-1. 서버 실행 후 `http://localhost:3000` 접속
-2. **Full Card SVG** 또는 **Header + Codeblock + Footer** 모드 선택
-3. 프롬프트/코드 입력 및 테마 선택
-4. 실시간 미리보기 확인
-5. 생성된 Markdown 코드 복사 후 `README.md`에 붙여넣기
+| Param | Description | Default |
+|-------|-------------|---------|
+| `theme` | 테마 | `opencode` |
+| `text` | 커스텀 텍스트 (설정 시 다른 파라미터 무시) | — |
+| `tokens` | 토큰 수 | `—` |
+| `model` | 모델 이름 | `Opus 4.6` |
+| `project` | 프로젝트 이름 (Claude Code only) | `quickstart-for-agents` |
+| `agent` | 에이전트 이름 (OpenCode only) | `Agents` |
 
 ## Quick Start
 
 ```bash
-npm start        # 기본 포트 3000
-PORT=8080 npm start  # 포트 변경
+npm start
 ```
 
-## Available Themes
-
-| Theme | Key | Style |
-|-------|-----|-------|
-| OpenCode | `opencode` | Dark, blue/cyan accents |
-| Claude Code | `claude-code` | Light, warm/tan accents |
-| GitHub Dark | `github-dark` | GitHub-style dark |
-| VS Code Dark | `vscode-dark` | VS Code Dark+ |
-| VS Code Light | `vscode-light` | VS Code Light+ |
-
-## Endpoints
-
-### Header/Footer (NEW)
-
-| Endpoint | Description |
-|----------|-------------|
-| `GET /api/header.svg` | 테마가 적용된 터미널 헤더 SVG |
-| `GET /api/footer.svg` | 테마가 적용된 하단 바 SVG |
-| `GET /api/snippet` | Header + codeblock + footer 마크다운 스니펫 생성 |
-
-### Full Card
-
-| Endpoint | Description |
-|----------|-------------|
-| `GET /api/block.svg` | 전체 프롬프트 카드 SVG |
-| `GET /api/block.html` | 인터랙티브 HTML (Copy 버튼) |
-| `GET /api/copy` | Auto-copy 시도 + fallback |
-| `GET /api/prompt.txt` | 플레인 텍스트 |
-
-### Utility
-
-| Endpoint | Description |
-|----------|-------------|
-| `GET /` | Generator UI |
-| `GET /themes` | 사용 가능한 테마 목록 (JSON) |
-| `GET /healthz` | Health check |
-
-## Query Params
-
-### Header/Footer params
-
-| Param | Description | Default |
-|-------|-------------|---------|
-| `theme` | 테마 이름 | `opencode` |
-| `title` | 헤더 타이틀 | 테마 이름 |
-| `lang` | 언어 뱃지 (header only) | — |
-| `width` | SVG 폭 (300-1280) | `600` |
-
-### Full Card params
-
-| Param | Description | Default |
-|-------|-------------|---------|
-| `prompt` | 렌더링할 텍스트 | — |
-| `theme` | 테마 이름 | `opencode` |
-| `lang` | 헤더 우측 라벨 | `prompt` |
-| `title` | 헤더 타이틀 | `Quickstart For Agents` |
-| `width` | SVG 폭 (460-1280) | `760` |
-| `fontSize` | 본문 폰트 (12-20) | `16` |
-
 ## Deploy
-
-### Vercel (Recommended)
-
-`vercel.json`이 포함되어 있어 바로 배포할 수 있습니다:
 
 ```bash
 npx vercel
 ```
-
-### Other Platforms
-
-Render, Fly.io 등에서 `npm start`로 바로 구동할 수 있습니다.

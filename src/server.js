@@ -64,7 +64,12 @@ function handler(req, res) {
   if (url.pathname === "/api/footer.svg") {
     const svg = renderFooterSvg({
       theme: url.searchParams.get("theme"),
-      width: url.searchParams.get("width")
+      width: url.searchParams.get("width"),
+      text: url.searchParams.get("text"),
+      tokens: url.searchParams.get("tokens"),
+      model: url.searchParams.get("model"),
+      project: url.searchParams.get("project"),
+      agent: url.searchParams.get("agent"),
     });
     return sendSvg(res, svg);
   }

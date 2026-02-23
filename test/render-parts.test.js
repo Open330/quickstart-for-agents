@@ -2,45 +2,62 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { renderHeaderSvg, renderFooterSvg, renderSnippet } from "../src/render-parts.js";
 
-test("claude-code header: github-matching bg, icon, monospace", () => {
-  const svg = renderHeaderSvg({ theme: "claude-code", title: "Claude Code", language: "bash" });
-  assert.match(svg, /viewBox/);
-  assert.match(svg, /Claude Code/);
-  assert.match(svg, /bash/);
-  assert.match(svg, /#161b22/); // matches github code block bg
-  assert.match(svg, /<circle/); // icon
-  assert.match(svg, /JetBrains Mono/);
+test("claude-code header: tall with mascot, title bar, prompt area", () => {
+  const svg = renderHeaderSvg({ theme: "claude-code", title: "My Agent", language: "Agents" });
+  assert.match(svg, /viewBox="0 0 800 130"/);
+  assert.match(svg, /Claude Code/);           // title bar text
+  assert.match(svg, /My Agent/);              // prompt title
+  assert.match(svg, /Agents/);                // language label
+  assert.match(svg, /#161b22/);               // github code block bg
+  assert.match(svg, /<circle/);               // prompt icon
+  assert.match(svg, /stroke-dasharray/);      // dashed title border
+  assert.match(svg, /#e89898/);               // mascot pink body
 });
 
-test("claude-code footer: status bar with model info", () => {
-  const svg = renderFooterSvg({ theme: "claude-code" });
-  assert.match(svg, /#161b22/);
+test("claude-code footer: powerline with tokens", () => {
+  const svg = renderFooterSvg({ theme: "claude-code", tokens: "128", model: "Sonnet 4.5" });
+  assert.match(svg, /128 tokens/);
+  assert.match(svg, /Sonnet 4.5/);
+  assert.match(svg, /polygon/);               // powerline arrows
+});
+
+test("claude-code footer: custom text overrides default", () => {
+  const svg = renderFooterSvg({ theme: "claude-code", text: "Custom footer" });
+  assert.match(svg, /Custom footer/);
+  assert.ok(!svg.includes("polygon"), "no powerline segments when custom text");
+});
+
+test("opencode header: tall with logo, cyan bar, prompt area", () => {
+  const svg = renderHeaderSvg({ theme: "opencode", title: "My Agent", language: "Agents" });
+  assert.match(svg, /viewBox="0 0 800 100"/);
+  assert.match(svg, /open/);                  // logo part 1
+  assert.match(svg, /code/);                  // logo part 2
+  assert.match(svg, /#22d3ee/);               // cyan accent
+  assert.match(svg, /My Agent/);
+  assert.match(svg, /Agents/);
+});
+
+test("opencode footer: cyan bar + token info", () => {
+  const svg = renderFooterSvg({ theme: "opencode", tokens: "256", model: "Opus 4.6" });
+  assert.match(svg, /#22d3ee/);
+  assert.match(svg, /256 tokens/);
   assert.match(svg, /Opus 4.6/);
 });
 
-test("opencode header: cyan left bar, matching bg", () => {
-  const svg = renderHeaderSvg({ theme: "opencode", title: "OpenCode", language: "bash" });
-  assert.match(svg, /OpenCode/);
-  assert.match(svg, /#161b22/); // matching bg
-  assert.match(svg, /#22d3ee/); // cyan bar
-  assert.match(svg, /width="3"/);
-});
-
-test("opencode footer: cyan bar + model info", () => {
-  const svg = renderFooterSvg({ theme: "opencode" });
-  assert.match(svg, /#22d3ee/);
-  assert.match(svg, /Sisyphus/);
+test("opencode footer: custom text overrides", () => {
+  const svg = renderFooterSvg({ theme: "opencode", text: "hello world" });
+  assert.match(svg, /hello world/);
 });
 
 test("headers have rounded top corners", () => {
   const svg = renderHeaderSvg({ theme: "claude-code" });
-  assert.ok(svg.includes("Q0,0"), "should have rounded top-left corner");
-  assert.ok(svg.includes("Q800,0"), "should have rounded top-right corner");
+  assert.ok(svg.includes("Q0,0"), "rounded top-left");
+  assert.ok(svg.includes("Q800,0"), "rounded top-right");
 });
 
 test("footers have rounded bottom corners", () => {
   const svg = renderFooterSvg({ theme: "opencode" });
-  assert.ok(svg.includes("clipPath") || svg.includes("path"), "should use path for rounded shape");
+  assert.ok(svg.includes("path"), "uses path for rounded shape");
 });
 
 test("generic themes use github code block bg", () => {
@@ -50,14 +67,14 @@ test("generic themes use github code block bg", () => {
   }
 });
 
-test("header width via viewBox and clamps", () => {
-  assert.match(renderHeaderSvg({ theme: "opencode", width: "900" }), /viewBox="0 0 900 36"/);
-  assert.match(renderHeaderSvg({ theme: "opencode", width: "100" }), /viewBox="0 0 300 36"/);
-  assert.match(renderHeaderSvg({ theme: "opencode", width: "9999" }), /viewBox="0 0 1280 36"/);
+test("header width clamps correctly", () => {
+  assert.match(renderHeaderSvg({ theme: "opencode", width: "900" }), /viewBox="0 0 900 100"/);
+  assert.match(renderHeaderSvg({ theme: "opencode", width: "100" }), /viewBox="0 0 300 100"/);
+  assert.match(renderHeaderSvg({ theme: "opencode", width: "9999" }), /viewBox="0 0 1280 100"/);
 });
 
 test("header escapes XML", () => {
-  const svg = renderHeaderSvg({ theme: "opencode", title: '<script>' });
+  const svg = renderHeaderSvg({ theme: "opencode", title: "<script>" });
   assert.ok(!svg.includes("<script>"));
   assert.match(svg, /&lt;script&gt;/);
 });
@@ -67,15 +84,10 @@ test("no traffic light dots", () => {
   assert.ok(!svg.includes("#ff5f57"));
 });
 
-test("snippet uses width 100%", () => {
-  const snippet = renderSnippet({ host: "https://ex.com", theme: "opencode", language: "bash", code: "echo" });
-  assert.match(snippet, /width="100%"/);
-});
-
-test("renderSnippet generates valid markdown", () => {
-  const snippet = renderSnippet({ host: "https://ex.com", theme: "claude-code", language: "bash", title: "S", code: "npm i" });
+test("snippet generates valid markdown", () => {
+  const snippet = renderSnippet({ host: "https://ex.com", theme: "claude-code", title: "S", code: "do stuff" });
   assert.match(snippet, /header\.svg/);
   assert.match(snippet, /footer\.svg/);
-  assert.match(snippet, /```bash/);
-  assert.match(snippet, /npm i/);
+  assert.match(snippet, /do stuff/);
+  assert.match(snippet, /width="100%"/);
 });
