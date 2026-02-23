@@ -1,5 +1,3 @@
-<div align="center">
-
 <div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=opencode&logo=Quickstart+For+Agents&title=Add+an+agent+prompt+section+to+my+README+using+quickstart-for-agents&font=inter" width="100%" /></div>
 
 ```
