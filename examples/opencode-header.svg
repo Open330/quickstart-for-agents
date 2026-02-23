@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 100" role="img" aria-label="Design retry and dead-letter handling for asynchronous worke">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 100" role="img" aria-label="Design retry and dead-letter handling">
   
     <defs><clipPath id="oc-header-clip"><path d="M0,6 Q0,0 6,0 L794,0 Q800,0 800,6 L800,100 L0,100 Z" /></clipPath></defs>
     <path d="M0,6 Q0,0 6,0 L794,0 Q800,0 800,6 L800,100 L0,100 Z" fill="#161b22" stroke="#30363d" stroke-width="1" />
@@ -8,6 +8,6 @@
     <g clip-path="url(#oc-header-clip)">
       <rect x="0" y="64" width="3" height="36" fill="#22d3ee" />
     </g>
-    <text x="22" y="78" fill="#c8c8cc" font-family="'JetBrains Mono','Fira Code',monospace" font-size="13" font-weight="400" dominant-baseline="central">Design retry and dead-letter handling for asynchronous worke</text>
-    <text x="786" y="78" fill="#6b6b75" font-family="'JetBrains Mono','Fira Code',monospace" font-size="11" font-weight="400" dominant-baseline="central" text-anchor="end">Agents</text>
+    <text x="22" y="78" fill="#c8c8cc" font-family="'JetBrains Mono','Fira Code',monospace" font-size="13" font-weight="400" dominant-baseline="central">Design retry and dead-letter handling</text>
+    
 </svg>
