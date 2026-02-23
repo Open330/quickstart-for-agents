@@ -8,6 +8,7 @@ add an "Quickstart for Agents" section above my existing install guide in README
 Use the header/footer SVG API to wrap a fenced code block so it looks like a real terminal UI with a native copy button.
 The code block should contain the installtion prompt for AI agents using this project.
 Keep the existing human-readable docs below it.
+You can ask me which theme to use or just pick one you like!
 ```
 <div><img src="https://quickstart-for-agents.vercel.app/api/footer.svg?theme=opencode&text=copy+this+prompt+%C2%B7+paste+into+your+agent+%C2%B7+get+a+styled+README&font=inter" width="100%" /></div>
 
