@@ -12,7 +12,7 @@ function roundedBottomPath(w, h) {
 }
 
 // ── Claude mascot pixel art ───────────────────────────────────────
-function claudeMascot(cx, y0, s = 3.5) {
+function claudeMascot(cx, y0, s = 4) {
   const P = "#e89898", H = "#8888c0", S = "#c8c0f0", A = "#a0a0c0", E = "#604040";
   // [colOffset, rowOffset, width, height, color]
   const px = [
@@ -39,8 +39,8 @@ function headerClaudeCode(theme, width, height, title, language) {
   const info = "#808090";
   const cx = width / 2;
 
-  const mascot = claudeMascot(cx, 24);
-  const infoY = 82;
+  const mascot = claudeMascot(cx, 22);
+  const infoY = 88;
   const promptY = height - 22;
 
   let langEl = "";
@@ -80,8 +80,7 @@ function headerOpenCode(theme, width, height, title, language) {
   return `
     <defs><clipPath id="oc-header-clip"><path d="${roundedTopPath(width, height)}" /></clipPath></defs>
     <path d="${roundedTopPath(width, height)}" fill="${bg}" stroke="${border}" stroke-width="1" />
-    <text x="${cx}" y="${logoY}" fill="#707078" font-family="'JetBrains Mono','Fira Code',monospace" font-size="28" font-weight="300" dominant-baseline="central" text-anchor="middle" letter-spacing="2">open</text>
-    <text x="${cx + 74}" y="${logoY}" fill="#e0e0e0" font-family="'JetBrains Mono','Fira Code',monospace" font-size="28" font-weight="700" dominant-baseline="central" text-anchor="middle" letter-spacing="2">code</text>
+    <text x="${cx}" y="${logoY}" font-family="'JetBrains Mono','Fira Code',monospace" font-size="28" dominant-baseline="central" text-anchor="middle" letter-spacing="2"><tspan fill="#707078" font-weight="300">open</tspan><tspan fill="#e0e0e0" font-weight="700">code</tspan></text>
     <line x1="0" y1="${promptY - 14}" x2="${width}" y2="${promptY - 14}" stroke="${border}" />
     <g clip-path="url(#oc-header-clip)">
       <rect x="0" y="${promptY - 14}" width="3" height="${height - promptY + 14}" fill="${cyan}" />
@@ -191,7 +190,7 @@ function footerGeneric(theme, width, height, opts) {
 const HEADER_RENDERERS = { "claude-code": headerClaudeCode, "opencode": headerOpenCode };
 const FOOTER_RENDERERS = { "claude-code": footerClaudeCode, "opencode": footerOpenCode };
 
-const HEADER_HEIGHTS = { "claude-code": 130, "opencode": 100 };
+const HEADER_HEIGHTS = { "claude-code": 140, "opencode": 100 };
 const FOOTER_HEIGHTS = { "claude-code": 22, "opencode": 22 };
 
 // ── Public API ───────────────────────────────────────────────────

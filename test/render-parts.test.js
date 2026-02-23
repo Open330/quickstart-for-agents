@@ -4,7 +4,7 @@ import { renderHeaderSvg, renderFooterSvg, renderSnippet } from "../src/render-p
 
 test("claude-code header: tall with mascot, title bar, prompt area", () => {
   const svg = renderHeaderSvg({ theme: "claude-code", title: "My Agent", language: "Agents" });
-  assert.match(svg, /viewBox="0 0 800 130"/);
+  assert.match(svg, /viewBox="0 0 800 140"/);
   assert.match(svg, /Claude Code/);           // title bar text
   assert.match(svg, /My Agent/);              // prompt title
   assert.match(svg, /Agents/);                // language label
