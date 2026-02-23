@@ -179,7 +179,8 @@ function headerClaudeCode(theme, width, height, title, language, mascotVariant, 
 
   const mascot = claudeMascot(cx, 22, mascotVariant);
   const infoY = 58;
-  const promptY = height - 22;
+  const separator = 74;
+  const promptY = separator + (height - separator) / 2;  // vertically centered in bottom zone
 
   let langEl = "";
   if (language) {
@@ -193,7 +194,7 @@ function headerClaudeCode(theme, width, height, title, language, mascotVariant, 
     <line x1="${cx + 62}" y1="14" x2="${width - 14}" y2="14" stroke="${dashed}" stroke-dasharray="4,3" />
     ${mascot}
     <text x="${cx}" y="${infoY}" fill="${info}" font-family="${f}" font-size="10" font-weight="400" dominant-baseline="central" text-anchor="middle">Opus 4.6 · Claude Team</text>
-    <line x1="0" y1="${promptY - 14}" x2="${width}" y2="${promptY - 14}" stroke="${border}" />
+    <line x1="0" y1="${separator}" x2="${width}" y2="${separator}" stroke="${border}" />
     <circle cx="18" cy="${promptY}" r="4.5" fill="#7b7b95" opacity="0.7" />
     <text x="30" y="${promptY}" fill="${text}" font-family="${f}" font-size="13" font-weight="400" dominant-baseline="central">${escapeXml(title)}</text>
     ${langEl}`;
@@ -207,8 +208,9 @@ function headerOpenCode(theme, width, height, title, language, _mascot, logo, f)
   const textClr = "#c8c8cc";
   const muted = "#6b6b75";
   const cx = width / 2;
-  const logoY = 42;
-  const promptY = height - 22;
+  const separator = 64;
+  const logoY = separator / 2;              // logo: vertically centered in top zone
+  const promptY = separator + (height - separator) / 2;  // title: vertically centered in bottom zone
 
   let langEl = "";
   if (language) {
@@ -219,9 +221,9 @@ function headerOpenCode(theme, width, height, title, language, _mascot, logo, f)
     <defs><clipPath id="oc-header-clip"><path d="${roundedTopPath(width, height)}" /></clipPath></defs>
     <path d="${roundedTopPath(width, height)}" fill="${bg}" stroke="${border}" stroke-width="1" />
     <text x="${cx}" y="${logoY}" font-family="${f}" font-size="28" dominant-baseline="central" text-anchor="middle" letter-spacing="2">${logo ? `<tspan fill="#e0e0e0" font-weight="700">${escapeXml(logo)}</tspan>` : `<tspan fill="#707078" font-weight="300">open</tspan><tspan fill="#e0e0e0" font-weight="700">code</tspan>`}</text>
-    <line x1="0" y1="${promptY - 14}" x2="${width}" y2="${promptY - 14}" stroke="${border}" />
+    <line x1="0" y1="${separator}" x2="${width}" y2="${separator}" stroke="${border}" />
     <g clip-path="url(#oc-header-clip)">
-      <rect x="0" y="${promptY - 14}" width="3" height="${height - promptY + 14}" fill="${cyan}" />
+      <rect x="0" y="${separator}" width="3" height="${height - separator}" fill="${cyan}" />
     </g>
     <text x="22" y="${promptY}" fill="${textClr}" font-family="${f}" font-size="13" font-weight="400" dominant-baseline="central">${escapeXml(title)}</text>
     ${langEl}`;
@@ -234,7 +236,8 @@ function headerCodex(theme, width, height, title, language, _mascot, _logo, f) {
   const green = "#10a37f";
   const textClr = "#e0e0e0";
   const muted = "#555555";
-  const promptY = height - 22;
+  const separator = 38;
+  const promptY = separator + (height - separator) / 2;  // vertically centered in bottom zone
 
   let langEl = "";
   if (language) {
@@ -247,7 +250,7 @@ function headerCodex(theme, width, height, title, language, _mascot, _logo, f) {
     <rect x="14" y="12" width="8" height="14" rx="2" fill="${green}" opacity="0.9" />
     <text x="30" y="19" fill="${green}" font-family="${f}" font-size="14" font-weight="700" dominant-baseline="central">codex</text>
     <text x="96" y="19" fill="${muted}" font-family="${f}" font-size="10" font-weight="400" dominant-baseline="central">full-auto</text>
-    <line x1="0" y1="${promptY - 14}" x2="${width}" y2="${promptY - 14}" stroke="${border}" />
+    <line x1="0" y1="${separator}" x2="${width}" y2="${separator}" stroke="${border}" />
     <text x="14" y="${promptY}" fill="${green}" font-family="${f}" font-size="14" font-weight="700" dominant-baseline="central">&gt;</text>
     <text x="30" y="${promptY}" fill="${textClr}" font-family="${f}" font-size="13" font-weight="400" dominant-baseline="central">${escapeXml(title)}</text>
     ${langEl}`;
