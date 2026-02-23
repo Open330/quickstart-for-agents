@@ -31,6 +31,27 @@ Wrap native GitHub code blocks — copy button works out of the box.
 
 Paste a header SVG, a fenced code block, and a footer SVG into your README. GitHub renders the SVGs as images and keeps the code block's **native copy button** intact.
 
+```
+header.svg ← SVG 이미지 (logo, title, lang 등이 이미지 안에 렌더링됨)
+  ?theme    = claude-code         테마
+  &title    = My+Agent            로고 아래 프롬프트 텍스트 (SVG 안에 표시)
+  &lang     = Agents              우측 라벨
+  &logo     = My+App              로고 텍스트 (opencode 테마)
+  &font     = inter               폰트
+  &mascot   = hat                 마스코트 변형 (claude-code 테마)
+
+code block ← GitHub 네이티브 마크다운 코드 블록 (복사 버튼 자동 생성)
+
+footer.svg ← SVG 이미지 (tokens, model 등이 이미지 안에 렌더링됨)
+  ?theme    = claude-code         테마 (헤더와 동일)
+  &tokens   = 42                  토큰 수
+  &model    = Opus+4.6            모델 이름
+  &text     = custom+message      커스텀 텍스트 (설정 시 다른 옵션 무시)
+  &font     = inter               폰트
+```
+
+Example:
+
 ```md
 <div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=claude-code&title=My+Agent&lang=Agents" width="100%" /></div>
 
@@ -41,7 +62,8 @@ Your prompt for the LLM agent here.
 ```
 
 > [!TIP]
-> Use `<div><img>` instead of `![]()` — the latter wraps in `<p>` tags with 16px margins, creating gaps between the header, code block, and footer.
+> `?title=`은 SVG 이미지 안에 렌더링되는 프롬프트 텍스트입니다 (코드 블록과 별개).
+> `<div><img>` 를 사용하세요 — `![]()` 는 `<p>` 태그로 감싸져 16px 여백이 생깁니다.
 
 ---
 
@@ -137,7 +159,7 @@ https://quickstart-for-agents.vercel.app
 | Param | Type | Default | Description | 설명 |
 |-------|------|---------|-------------|------|
 | `theme` | `string` | `opencode` | Visual theme to apply | 적용할 테마. `claude-code`, `opencode`, `codex` 등 선택 |
-| `title` | `string` | Theme name | Prompt text shown in the header | 헤더에 표시되는 프롬프트 텍스트 (최대 60자) |
+| `title` | `string` | Theme name | Prompt text rendered inside the SVG, below the logo | SVG 이미지 안에 로고 아래 렌더링되는 프롬프트 텍스트 (최대 60자) |
 | `lang` | `string` | — | Language label on the right side | 우측에 표시되는 언어/태그 라벨 (예: `Agents`, `TypeScript`) |
 | `width` | `number` | `800` | SVG width in pixels (300–1280) | SVG 이미지 너비. 300~1280px 범위 |
 | `mascot` | `string` | `default` | Clawd mascot variant | 마스코트 변형: `default` `hat` `thinking` `wave` (claude-code 테마 전용) |
