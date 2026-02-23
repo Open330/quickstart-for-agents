@@ -119,6 +119,33 @@ https://quickstart-for-agents.vercel.app
 
 ---
 
+## Customizing the Hero Section
+
+README 상단의 히어로 섹션은 일반 API 파라미터로 구성됩니다. 원하는 텍스트로 자유롭게 수정 가능:
+
+**Header** — `?title=` 로 프롬프트 텍스트 변경, `?logo=` 로 로고 변경:
+
+```
+https://quickstart-for-agents.vercel.app/api/header.svg
+  ?theme=opencode
+  &logo=My+Project+Name          ← 로고 텍스트
+  &title=Build+something+cool    ← 프롬프트 텍스트
+  &font=inter                    ← 폰트 (선택)
+```
+
+**Footer** — `?text=` 로 태그라인 변경:
+
+```
+https://quickstart-for-agents.vercel.app/api/footer.svg
+  ?theme=opencode
+  &text=your+custom+tagline+here  ← 하단 텍스트
+```
+
+> [!TIP]
+> URL의 공백은 `+`로, 특수문자는 URL 인코딩으로 처리하세요. 예: `·` → `%C2%B7`
+
+---
+
 ## API Reference
 
 ### Endpoints
@@ -139,7 +166,7 @@ https://quickstart-for-agents.vercel.app
 | `width` | `number` | `800` | SVG width in pixels (300–1280) | SVG 이미지 너비. 300~1280px 범위 |
 | `mascot` | `string` | `default` | Clawd mascot variant | 마스코트 변형: `default` `hat` `thinking` `wave` (claude-code 테마 전용) |
 | `logo` | `string` | `opencode` | Custom logo text replacing "opencode" | 로고 텍스트 커스터마이즈 (opencode 테마 전용, 최대 30자) |
-| `font` | `string` | `mono` | Font preset or custom font-family | 폰트 변경. 프리셋: `mono` `sans` `serif` `fira` `cascadia` `iosevka`. 또는 직접 font-family 문자열 입력 |
+| `font` | `string` | `mono` | Font preset or custom font-family | 폰트 변경. 아래 프리셋 표 참조. 또는 직접 font-family 문자열 입력 |
 
 ### Footer params — `GET /api/footer.svg`
 
@@ -155,19 +182,52 @@ https://quickstart-for-agents.vercel.app
 
 ### Font presets — `?font=`
 
+#### Monospace (코딩/터미널)
+
 | Preset | Font stack | 설명 |
 |--------|-----------|------|
-| `mono` | JetBrains Mono → Fira Code → Cascadia Code → SF Mono | 기본값. 터미널/코딩 느낌의 모노스페이스 |
-| `sans` | SF Pro → Segoe UI → Helvetica Neue → system-ui | 깔끔한 산세리프. UI/대시보드 느낌 |
+| `mono` | JetBrains Mono → Fira Code → Cascadia Code → SF Mono | **기본값.** 범용 코딩 폰트 스택 |
+| `fira` | Fira Code → JetBrains Mono | Mozilla 제작. 리가처(`=>`, `!=`) 지원 |
+| `cascadia` | Cascadia Code → Fira Code | Microsoft 제작. Windows Terminal 기본 폰트 |
+| `iosevka` | Iosevka → Fira Code | 좁은 폭. 정보 밀도 높은 레이아웃에 적합 |
+| `hack` | Hack → Fira Code | 가독성 최적화된 오픈소스 코딩 폰트 |
+| `inconsolata` | Inconsolata → Consolas | 깔끔한 클래식 모노스페이스 |
+| `source` | Source Code Pro → SF Mono | Adobe 제작. 깨끗하고 균형 잡힌 디자인 |
+| `ibm` | IBM Plex Mono → SF Mono | IBM 제작. 기업/엔터프라이즈 느낌 |
+| `ubuntu` | Ubuntu Mono → Consolas | Ubuntu 터미널 기본 폰트 |
+| `roboto` | Roboto Mono → Consolas | Google 제작. Android/Material 느낌 |
+| `space` | Space Mono → Consolas | Google Fonts. 레트로/타이포그래피 느낌 |
+| `menlo` | Menlo → Monaco → SF Mono | macOS 터미널 기본 폰트 |
+| `consolas` | Consolas → Courier New | Windows 기본 코딩 폰트 |
+| `courier` | Courier New → Courier | 클래식 타자기 스타일 |
+
+#### Sans-serif (UI/모던)
+
+| Preset | Font stack | 설명 |
+|--------|-----------|------|
+| `sans` | SF Pro → Segoe UI → Helvetica Neue → system-ui | 시스템 기본 산세리프. UI/대시보드 느낌 |
+| `inter` | Inter → system-ui | 웹/UI 디자인에서 가장 많이 쓰이는 폰트 |
+| `pretendard` | Pretendard → Noto Sans KR | 한국어 지원 최적화. 한글 프로젝트 추천 |
+| `noto` | Noto Sans → Noto Sans KR → system-ui | Google 제작. 다국어 지원 |
+
+#### Serif
+
+| Preset | Font stack | 설명 |
+|--------|-----------|------|
 | `serif` | Georgia → Noto Serif → Times New Roman | 클래식한 세리프. 문서/논문 느낌 |
-| `fira` | Fira Code → JetBrains Mono | Mozilla의 코딩 폰트. 리가처 지원 |
-| `cascadia` | Cascadia Code → Fira Code | Microsoft의 터미널 폰트 |
-| `iosevka` | Iosevka → Fira Code | 좁은 폭의 코딩 폰트 |
-| *(custom)* | Your own font-family string | 직접 CSS font-family 문자열 입력 가능 |
+
+#### Custom (직접 입력)
+
+프리셋에 없는 폰트도 CSS `font-family` 문자열로 직접 전달 가능:
+
+```
+?font=Comic+Sans+MS,cursive
+?font='Maple Mono','Fira Code',monospace
+```
 
 > [!NOTE]
-> SVG는 뷰어의 로컬 폰트를 사용합니다. 지정한 폰트가 없으면 fallback 폰트가 적용됩니다.
-> GitHub에서는 system font만 사용 가능하므로 `mono`나 `sans`를 권장합니다.
+> SVG는 뷰어의 로컬 폰트를 사용합니다. 설치되지 않은 폰트는 fallback으로 대체됩니다.
+> GitHub에서는 system font만 확실히 렌더링되므로 `mono`, `sans`, `menlo`, `consolas`를 권장합니다.
 
 ### Available themes
 

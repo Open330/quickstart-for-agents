@@ -7,12 +7,28 @@ const R = 6;
 // ── Font presets ─────────────────────────────────────────────────
 // SVGs rendered on GitHub go through camo proxy; fonts must exist on viewer's machine.
 const FONT_PRESETS = {
-  mono:    "'JetBrains Mono','Fira Code','Cascadia Code','SF Mono',monospace",
-  sans:    "-apple-system,'SF Pro Display','Segoe UI','Helvetica Neue',system-ui,sans-serif",
-  serif:   "Georgia,'Noto Serif','Times New Roman',serif",
-  fira:    "'Fira Code','JetBrains Mono',monospace",
-  cascadia:"'Cascadia Code','Fira Code',monospace",
-  iosevka: "'Iosevka','Fira Code',monospace",
+  // ── Monospace (coding/terminal) ──
+  mono:      "'JetBrains Mono','Fira Code','Cascadia Code','SF Mono',monospace",
+  fira:      "'Fira Code','JetBrains Mono',monospace",
+  cascadia:  "'Cascadia Code','Fira Code',monospace",
+  iosevka:   "'Iosevka','Fira Code',monospace",
+  hack:      "'Hack','Fira Code',monospace",
+  inconsolata:"'Inconsolata','Consolas',monospace",
+  source:    "'Source Code Pro','SF Mono',monospace",
+  ibm:       "'IBM Plex Mono','SF Mono',monospace",
+  ubuntu:    "'Ubuntu Mono','Consolas',monospace",
+  roboto:    "'Roboto Mono','Consolas',monospace",
+  space:     "'Space Mono','Consolas',monospace",
+  menlo:     "Menlo,Monaco,'SF Mono',monospace",
+  consolas:  "Consolas,'Courier New',monospace",
+  courier:   "'Courier New',Courier,monospace",
+  // ── Sans-serif (UI/modern) ──
+  sans:      "-apple-system,'SF Pro Display','Segoe UI','Helvetica Neue',system-ui,sans-serif",
+  inter:     "'Inter',-apple-system,system-ui,sans-serif",
+  pretendard:"'Pretendard',-apple-system,'Noto Sans KR',sans-serif",
+  noto:      "'Noto Sans','Noto Sans KR',system-ui,sans-serif",
+  // ── Serif ──
+  serif:     "Georgia,'Noto Serif','Times New Roman',serif",
 };
 const DEFAULT_FONT = FONT_PRESETS.mono;
 
