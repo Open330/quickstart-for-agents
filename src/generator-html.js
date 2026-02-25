@@ -95,27 +95,6 @@ export function renderGeneratorHtml() {
         outline: 2px solid var(--accent);
         border-color: transparent;
       }
-      .mode-tabs {
-        display: flex;
-        gap: 4px;
-        margin-bottom: 16px;
-      }
-      .mode-tab {
-        padding: 8px 16px;
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        background: transparent;
-        color: var(--muted);
-        font-size: 0.85rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.15s;
-      }
-      .mode-tab.active {
-        background: var(--accent);
-        color: #fff;
-        border-color: var(--accent);
-      }
       .preview-area {
         margin-top: 16px;
         border: 1px dashed var(--border);
@@ -172,15 +151,6 @@ export function renderGeneratorHtml() {
         background: var(--accent);
         color: #fff;
       }
-      .snippet-fields {
-        display: none;
-      }
-      .snippet-fields.visible {
-        display: grid;
-        gap: 16px;
-        grid-template-columns: 1fr 1fr;
-        margin-top: 16px;
-      }
     </style>
   </head>
   <body>
@@ -191,15 +161,7 @@ export function renderGeneratorHtml() {
       </header>
 
       <div class="card">
-        <div class="mode-tabs">
-          <button class="mode-tab active" data-mode="snippet">Header + Codeblock + Footer</button>
-          <button class="mode-tab" data-mode="card">Full Card SVG</button>
-        </div>
         <div class="controls">
-          <div class="full-width" id="prompt-group" style="display:none">
-            <label for="prompt">Prompt Text</label>
-            <textarea id="prompt" placeholder="Enter your prompt here...">Build a REST API for billing...</textarea>
-          </div>
           <div>
             <label for="theme">Theme</label>
             <select id="theme">
@@ -208,10 +170,8 @@ export function renderGeneratorHtml() {
           </div>
           <div>
             <label for="title">Title</label>
-            <input type="text" id="title" value="Quickstart For Agents" placeholder="Card Title">
+            <input type="text" id="title" value="Quickstart For Agents" placeholder="Header title">
           </div>
-        </div>
-        <div class="snippet-fields visible" id="snippet-fields">
           <div class="full-width">
             <label for="code-input">Code (for codeblock)</label>
             <textarea id="code-input" placeholder="npm install -g @anthropic-ai/claude-code" style="min-height:80px">npm install -g @anthropic-ai/claude-code</textarea>
@@ -244,63 +204,37 @@ export function renderGeneratorHtml() {
     </div>
 
     <script>
-      const promptInput = document.getElementById("prompt");
-      const promptGroup = document.getElementById("prompt-group");
       const themeInput = document.getElementById("theme");
       const titleInput = document.getElementById("title");
       const codeInput = document.getElementById("code-input");
       const langInput = document.getElementById("lang-input");
       const widthInput = document.getElementById("width-input");
-      const snippetFields = document.getElementById("snippet-fields");
       const previewContainer = document.getElementById("preview-container");
       const markdownOutput = document.getElementById("markdown-output");
       const copyBtn = document.getElementById("copy-markdown");
-      const modeTabs = document.querySelectorAll(".mode-tab");
-
-      let mode = "snippet";
-
-      modeTabs.forEach(tab => {
-        tab.addEventListener("click", () => {
-          mode = tab.dataset.mode;
-          modeTabs.forEach(t => t.classList.toggle("active", t === tab));
-          promptGroup.style.display = mode === "card" ? "" : "none";
-          snippetFields.classList.toggle("visible", mode === "snippet");
-          update();
-        });
-      });
 
       function update() {
         const host = window.location.origin;
         const theme = themeInput.value;
         const title = encodeURIComponent(titleInput.value.trim() || "Quickstart For Agents");
+        const lang = langInput.value.trim() || "bash";
+        const code = codeInput.value.trim() || "# your command here";
+        const width = Math.min(1280, Math.max(300, parseInt(widthInput.value) || 600));
+        const langParam = encodeURIComponent(lang);
+        const headerUrl = \`\${host}/api/header.svg?theme=\${theme}&title=\${title}&lang=\${langParam}&width=\${width}\`;
+        const footerUrl = \`\${host}/api/footer.svg?theme=\${theme}&width=\${width}\`;
 
-        if (mode === "card") {
-          const prompt = encodeURIComponent(promptInput.value.trim() || "Your prompt here...");
-          const svgUrl = \`\${host}/api/block.svg?prompt=\${prompt}&theme=\${theme}&title=\${title}\`;
-          const linkUrl = \`\${host}/api/copy?prompt=\${prompt}&theme=\${theme}&title=\${title}\`;
-          previewContainer.innerHTML = \`<a href="\${linkUrl}" target="_blank"><img src="\${svgUrl}" alt="Prompt Preview" /></a>\`;
-          markdownOutput.textContent = \`[![Prompt](\${svgUrl})](\${linkUrl})\`;
-        } else {
-          const lang = langInput.value.trim() || "bash";
-          const code = codeInput.value.trim() || "# your command here";
-          const width = Math.min(1280, Math.max(300, parseInt(widthInput.value) || 600));
-          const langParam = encodeURIComponent(lang);
-          const headerUrl = \`\${host}/api/header.svg?theme=\${theme}&title=\${title}&lang=\${langParam}&width=\${width}\`;
-          const footerUrl = \`\${host}/api/footer.svg?theme=\${theme}&width=\${width}\`;
+        previewContainer.innerHTML = \`<img src="\${headerUrl}" alt="Header" style="max-width:\${width}px;width:100%" /><div class="preview-codeblock" style="max-width:\${width}px">\${escapeHtml(code)}</div><img src="\${footerUrl}" alt="Footer" style="max-width:\${width}px;width:100%" />\`;
 
-          previewContainer.innerHTML = \`<img src="\${headerUrl}" alt="Header" style="max-width:\${width}px;width:100%" /><div class="preview-codeblock" style="max-width:\${width}px">\${escapeHtml(code)}</div><img src="\${footerUrl}" alt="Footer" style="max-width:\${width}px;width:100%" />\`;
-
-          const backticks = "\\\`\\\`\\\`";
-          const md = \`<img src="\${headerUrl}" width="\${width}" />\\n\\n\${backticks}\${lang}\\n\${code}\\n\${backticks}\\n\\n<img src="\${footerUrl}" width="\${width}" />\`;
-          markdownOutput.textContent = md;
-        }
+        const backticks = "\\\`\\\`\\\`";
+        const md = \`<div><img src="\${headerUrl}" width="100%" /></div>\\n\\n\${backticks}\${lang}\\n\${code}\\n\${backticks}\\n\\n<div><img src="\${footerUrl}" width="100%" /></div>\`;
+        markdownOutput.textContent = md;
       }
 
       function escapeHtml(s) {
         return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
       }
 
-      promptInput.addEventListener("input", update);
       themeInput.addEventListener("change", update);
       titleInput.addEventListener("input", update);
       codeInput.addEventListener("input", update);
