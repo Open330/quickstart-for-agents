@@ -184,6 +184,18 @@ export function renderGeneratorHtml() {
             <label for="width-input">Width (px)</label>
             <input type="number" id="width-input" value="600" min="300" max="1280">
           </div>
+          <div class="full-width">
+            <label for="footer-text">Footer Text <span style="color:var(--border);font-weight:400">(overrides tokens/model if set)</span></label>
+            <input type="text" id="footer-text" placeholder="copy this prompt · paste into your agent · get a styled README">
+          </div>
+          <div>
+            <label for="tokens-input">Tokens</label>
+            <input type="text" id="tokens-input" placeholder="12.4k">
+          </div>
+          <div>
+            <label for="model-input">Model</label>
+            <input type="text" id="model-input" placeholder="Opus 4.6">
+          </div>
         </div>
       </div>
 
@@ -209,6 +221,9 @@ export function renderGeneratorHtml() {
       const codeInput = document.getElementById("code-input");
       const langInput = document.getElementById("lang-input");
       const widthInput = document.getElementById("width-input");
+      const footerTextInput = document.getElementById("footer-text");
+      const tokensInput = document.getElementById("tokens-input");
+      const modelInput = document.getElementById("model-input");
       const previewContainer = document.getElementById("preview-container");
       const markdownOutput = document.getElementById("markdown-output");
       const copyBtn = document.getElementById("copy-markdown");
@@ -221,8 +236,17 @@ export function renderGeneratorHtml() {
         const code = codeInput.value.trim() || "# your command here";
         const width = Math.min(1280, Math.max(300, parseInt(widthInput.value) || 600));
         const langParam = encodeURIComponent(lang);
+        const footerText = footerTextInput.value.trim();
+        const tokens = tokensInput.value.trim();
+        const model = modelInput.value.trim();
         const headerUrl = \`\${host}/api/header.svg?theme=\${theme}&title=\${title}&lang=\${langParam}&width=\${width}\`;
-        const footerUrl = \`\${host}/api/footer.svg?theme=\${theme}&width=\${width}\`;
+        let footerUrl = \`\${host}/api/footer.svg?theme=\${theme}&width=\${width}\`;
+        if (footerText) {
+          footerUrl += \`&text=\${encodeURIComponent(footerText)}\`;
+        } else {
+          if (tokens) footerUrl += \`&tokens=\${encodeURIComponent(tokens)}\`;
+          if (model) footerUrl += \`&model=\${encodeURIComponent(model)}\`;
+        }
 
         previewContainer.innerHTML = \`<img src="\${headerUrl}" alt="Header" style="max-width:\${width}px;width:100%" /><div class="preview-codeblock" style="max-width:\${width}px">\${escapeHtml(code)}</div><img src="\${footerUrl}" alt="Footer" style="max-width:\${width}px;width:100%" />\`;
 
@@ -240,6 +264,9 @@ export function renderGeneratorHtml() {
       codeInput.addEventListener("input", update);
       langInput.addEventListener("input", update);
       widthInput.addEventListener("input", update);
+      footerTextInput.addEventListener("input", update);
+      tokensInput.addEventListener("input", update);
+      modelInput.addEventListener("input", update);
 
       copyBtn.addEventListener("click", () => {
         navigator.clipboard.writeText(markdownOutput.textContent).then(() => {
