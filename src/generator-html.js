@@ -192,11 +192,11 @@ export function renderGeneratorHtml() {
 
       <div class="card">
         <div class="mode-tabs">
-          <button class="mode-tab active" data-mode="card">Full Card SVG</button>
-          <button class="mode-tab" data-mode="snippet">Header + Codeblock + Footer</button>
+          <button class="mode-tab active" data-mode="snippet">Header + Codeblock + Footer</button>
+          <button class="mode-tab" data-mode="card">Full Card SVG</button>
         </div>
         <div class="controls">
-          <div class="full-width" id="prompt-group">
+          <div class="full-width" id="prompt-group" style="display:none">
             <label for="prompt">Prompt Text</label>
             <textarea id="prompt" placeholder="Enter your prompt here...">Build a REST API for billing...</textarea>
           </div>
@@ -211,7 +211,7 @@ export function renderGeneratorHtml() {
             <input type="text" id="title" value="Quickstart For Agents" placeholder="Card Title">
           </div>
         </div>
-        <div class="snippet-fields" id="snippet-fields">
+        <div class="snippet-fields visible" id="snippet-fields">
           <div class="full-width">
             <label for="code-input">Code (for codeblock)</label>
             <textarea id="code-input" placeholder="npm install -g @anthropic-ai/claude-code" style="min-height:80px">npm install -g @anthropic-ai/claude-code</textarea>
@@ -257,7 +257,7 @@ export function renderGeneratorHtml() {
       const copyBtn = document.getElementById("copy-markdown");
       const modeTabs = document.querySelectorAll(".mode-tab");
 
-      let mode = "card";
+      let mode = "snippet";
 
       modeTabs.forEach(tab => {
         tab.addEventListener("click", () => {
