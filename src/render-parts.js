@@ -1,5 +1,10 @@
 import { resolveTheme } from "./themes.js";
 import { clamp, escapeXml } from "./render.js";
+import {
+  DEFAULT_AGENT_LANGUAGE,
+  DEFAULT_AGENT_PROMPT,
+  DEFAULT_AGENT_TITLE,
+} from "./prompt-defaults.js";
 
 // GitHub dark mode code block: bg #161b22, border #30363d, border-radius 6px
 const R = 6;
@@ -193,7 +198,7 @@ function headerClaudeCode(theme, width, height, title, language, mascotVariant, 
     <text x="${cx}" y="14" fill="${titleClr}" font-family="${f}" font-size="11" font-weight="400" dominant-baseline="central" text-anchor="middle">Claude Code</text>
     <line x1="${cx + 62}" y1="14" x2="${width - 14}" y2="14" stroke="${dashed}" stroke-dasharray="4,3" />
     ${mascot}
-    <text x="${cx}" y="${infoY}" fill="${info}" font-family="${f}" font-size="10" font-weight="400" dominant-baseline="central" text-anchor="middle">Opus 4.6 · Claude Team</text>
+    <text x="${cx}" y="${infoY}" fill="${info}" font-family="${f}" font-size="10" font-weight="400" dominant-baseline="central" text-anchor="middle">Claude Code · Agent</text>
     <line x1="0" y1="${separator}" x2="${width}" y2="${separator}" stroke="${border}" />
     <circle cx="18" cy="${promptY}" r="4.5" fill="#7b7b95" opacity="0.7" />
     <text x="30" y="${promptY}" fill="${text}" font-family="${f}" font-size="13" font-weight="400" dominant-baseline="central">${escapeXml(title)}</text>
@@ -285,7 +290,7 @@ function footerClaudeCode(theme, width, height, opts, f) {
   }
 
   const tokens = opts.tokens || "—";
-  const model = opts.model || "Opus 4.6";
+  const model = opts.model || "Agent";
   const project = opts.project || "quickstart-for-agents";
 
   const segs = [
@@ -328,7 +333,7 @@ function footerOpenCode(theme, width, height, opts, f) {
   }
 
   const tokens = opts.tokens || "—";
-  const model = opts.model || "Claude Opus 4.6";
+  const model = opts.model || "Agent";
   const agent = opts.agent || "Agents";
 
   return `
@@ -354,7 +359,7 @@ function footerCodex(theme, width, height, opts, f) {
   }
 
   const tokens = opts.tokens || "—";
-  const model = opts.model || "GPT-4.1";
+  const model = opts.model || "Agent";
 
   return `
     <path d="${roundedBottomPath(width, height)}" fill="${bg}" stroke="${border}" stroke-width="1" />
@@ -429,24 +434,27 @@ export function renderFooterSvg(options = {}) {
 export function renderSnippet(options = {}) {
   const host = (options.host || "https://quickstart-for-agents.vercel.app").replace(/\/$/, "");
   const theme = (options.theme || "opencode").slice(0, 32);
-  const language = (options.language || "").slice(0, 16);
-  const title = (options.title || "").slice(0, 60);
-  const code = options.code || "Design retry and dead-letter handling for asynchronous workers\nwith clear failure budgets.";
+  const language = (options.language || DEFAULT_AGENT_LANGUAGE).slice(0, 16);
+  const title = (options.title || DEFAULT_AGENT_TITLE).slice(0, 120);
+  const code = options.code || DEFAULT_AGENT_PROMPT;
+  const width = clamp(Number.parseInt(options.width, 10) || 800, 300, 1280);
 
   const headerParams = new URLSearchParams();
   headerParams.set("theme", theme);
-  if (title) headerParams.set("title", title);
-  if (language) headerParams.set("lang", language);
+  headerParams.set("title", title);
+  headerParams.set("lang", language);
+  headerParams.set("width", String(width));
 
   const footerParams = new URLSearchParams();
   footerParams.set("theme", theme);
+  footerParams.set("width", String(width));
 
   const headerUrl = `${host}/api/header.svg?${headerParams}`;
   const footerUrl = `${host}/api/footer.svg?${footerParams}`;
 
   return `<div><img src="${headerUrl}" width="100%" /></div>
 
-\`\`\`${language || "text"}
+\`\`\`${language}
 ${code}
 \`\`\`
 <div><img src="${footerUrl}" width="100%" /></div>`;

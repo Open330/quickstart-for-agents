@@ -1,4 +1,5 @@
 import { resolveTheme } from "./themes.js";
+import { DEFAULT_AGENT_PROMPT } from "./prompt-defaults.js";
 
 const MAX_PROMPT_LENGTH = 600;
 
@@ -18,7 +19,7 @@ export function escapeXml(value) {
 export function normalizePrompt(prompt) {
   const cleaned = (prompt || "").replaceAll("\r\n", "\n").trim();
   if (!cleaned) {
-    return "Write a concise implementation plan for this task.";
+    return DEFAULT_AGENT_PROMPT;
   }
   return cleaned.slice(0, MAX_PROMPT_LENGTH);
 }
@@ -138,7 +139,7 @@ export function renderPromptSvg(options = {}) {
   const sendHeight = 28;
   const sendX = promptPanelX + promptPanelWidth - sendWidth - 12;
   const sendY = toolbarY + 5;
-  const modelChip = themeName === "claude-code" ? "claude-3.7" : themeName === "github-dark" ? "gpt-4.1" : "opencode";
+  const modelChip = themeName === "claude-code" ? "Claude Code" : themeName === "github-dark" ? "Coding Agent" : "OpenCode";
   const infoChip = `${lines.length} lines`;
   const subtitle = themeName === "claude-code" ? "Message Composer" : "Prompt Composer";
 

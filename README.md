@@ -1,19 +1,18 @@
-<div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=opencode&logo=Quickstart+For+Agents&title=Add+an+agent+prompt+section+to+my+README+using+quickstart-for-agents&font=inter" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=opencode&logo=Quickstart+For+Agents&title=Add+a+concise+agent+setup+prompt+to+my+README&font=inter" width="100%" /></div>
 
 ```prompt
-Using https://github.com/Open330/quickstart-for-agents -
-add an "Quickstart for Agents" section above my existing install guide in README.md.
-Use the header/footer SVG API to wrap a fenced code block so it looks like a real terminal UI with a native copy button.
-The code block should contain the installtion prompt for AI agents using this project.
-Keep the existing human-readable docs below it.
-You can ask me which theme to use or just pick one you like!
+Using https://github.com/Open330/quickstart-for-agents, add a "Quickstart for Agents"
+section above the existing installation guide in README.md. Inspect this repository
+and write a short, project-specific setup prompt that lets a coding agent discover
+the required steps and verify the setup. Wrap it with the header/footer SVG API,
+choose a suitable theme, and preserve the existing human-readable documentation.
 ```
-<div><img src="https://quickstart-for-agents.vercel.app/api/footer.svg?theme=opencode&text=copy+this+prompt+%C2%B7+paste+into+your+agent+%C2%B7+get+a+styled+README&font=inter" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/footer.svg?theme=opencode&text=copy+prompt+%C2%B7+paste+into+your+coding+agent+%C2%B7+verify+the+setup&font=inter" width="100%" /></div>
 
 <br />
 
-**Give your README an agent-first section above the human install guide.**<br />
-Copy the prompt above, paste it into your AI agent, and get a styled terminal UI with a native copy button.
+**Give your README a concise agent-first setup section above the human install guide.**<br />
+Copy the prompt above and let your coding agent inspect the repository, add the section, and preserve the existing docs.
 
 <br />
 
@@ -27,19 +26,17 @@ Copy the prompt above, paste it into your AI agent, and get a styled terminal UI
 
 <br /><br />
 
-</div>
-
 ## Themes
 
 ### Claude Code
 
-<div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=claude-code&title=Fix+the+auth+middleware" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=claude-code&title=Set+up+this+project&lang=prompt" width="100%" /></div>
 
+```prompt
+Set up this project in the current workspace. Read the repository instructions
+and documentation, use the existing toolchain, and verify the setup works.
 ```
-Design retry and dead-letter handling for asynchronous workers
-with clear failure budgets.
-```
-<div><img src="https://quickstart-for-agents.vercel.app/api/footer.svg?theme=claude-code&tokens=12.4k&model=Opus+4.6" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/footer.svg?theme=claude-code&text=copy+prompt+%C2%B7+inspect+the+repository+%C2%B7+verify+the+result" width="100%" /></div>
 
 <br />
 
@@ -58,38 +55,39 @@ Pixel art mascot based on [Clawd](https://github.com/anthropics/claude-code), th
 
 ### OpenCode
 
-<div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=opencode&title=Design+retry+and+dead-letter+handling" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=opencode&title=Set+up+this+project&lang=prompt" width="100%" /></div>
 
+```prompt
+Set up this project in the current workspace. Read the repository instructions
+and documentation, use the existing toolchain, and verify the setup works.
 ```
-Design retry and dead-letter handling for asynchronous workers
-with clear failure budgets.
-```
-<div><img src="https://quickstart-for-agents.vercel.app/api/footer.svg?theme=opencode&tokens=8.2k&model=Claude+Opus+4.6" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/footer.svg?theme=opencode&text=copy+prompt+%C2%B7+inspect+the+repository+%C2%B7+verify+the+result" width="100%" /></div>
 
 ### Codex CLI
 
-<div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=codex&title=Set+up+the+project+scaffolding" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=codex&title=Set+up+this+project&lang=prompt" width="100%" /></div>
 
+```prompt
+Set up this project in the current workspace. Read the repository instructions
+and documentation, use the existing toolchain, and verify the setup works.
 ```
-Design retry and dead-letter handling for asynchronous workers
-with clear failure budgets.
-```
-<div><img src="https://quickstart-for-agents.vercel.app/api/footer.svg?theme=codex&tokens=5.1k&model=GPT-4.1" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/footer.svg?theme=codex&text=copy+prompt+%C2%B7+inspect+the+repository+%C2%B7+verify+the+result" width="100%" /></div>
 
 ---
 
 ## How It Works
 
-헤더 SVG + 코드 블록을 README에 붙여넣으세요. GitHub이 SVG를 이미지로 렌더링하고, 코드 블록의 **복사 버튼**은 그대로 유지됩니다. 푸터는 선택 사항입니다.
+헤더 SVG + 짧은 에이전트 프롬프트를 README에 붙여넣으세요. 프롬프트는 모든 설치 단계를 나열하기보다 에이전트가 저장소 지침과 문서를 확인하고 설정을 검증하도록 안내하면 됩니다. GitHub이 SVG를 이미지로 렌더링하고, 코드 블록의 **복사 버튼**은 그대로 유지됩니다. 푸터는 선택 사항입니다.
 
 ```md
-<div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=claude-code&title=My+Agent&lang=Agents" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/header.svg?theme=claude-code&title=Set+up+this+project&lang=prompt" width="100%" /></div>
 
-​```
-Your prompt for the LLM agent here.
+​```prompt
+Set up this project in the current workspace. Read the repository instructions
+and documentation, use the existing toolchain, and verify the setup works.
 ​```
 <!-- footer is optional -->
-<div><img src="https://quickstart-for-agents.vercel.app/api/footer.svg?theme=claude-code&tokens=42&model=Opus+4.6" width="100%" /></div>
+<div><img src="https://quickstart-for-agents.vercel.app/api/footer.svg?theme=claude-code&text=copy+prompt+%C2%B7+paste+into+your+coding+agent+%C2%B7+verify+the+setup" width="100%" /></div>
 ```
 
 > [!TIP]
@@ -116,7 +114,7 @@ SVG 이미지 안에 두 가지 텍스트 영역이 렌더링됩니다:
 | Param | 위치 | 설명 |
 |-------|------|------|
 | `logo` | 상단 (큰 글씨) | 로고/앱 이름. opencode 테마에서 사용 (최대 30자) |
-| `title` | 하단 (작은 글씨) | 프롬프트 텍스트. 구분선 아래 렌더링 (최대 60자) |
+| `title` | 하단 (작은 글씨) | 프롬프트 텍스트. 구분선 아래 렌더링 (최대 120자) |
 
 ### Header params
 
@@ -137,7 +135,7 @@ SVG 이미지 안에 두 가지 텍스트 영역이 렌더링됩니다:
 | `theme` | `opencode` | 테마 (헤더와 동일하게) |
 | `text` | — | 커스텀 텍스트 (설정 시 다른 옵션 무시) |
 | `tokens` | `—` | 토큰 수 (예: `12.4k`) |
-| `model` | `Opus 4.6` | 모델 이름 |
+| `model` | `Agent` | 모델 또는 에이전트 이름 |
 | `project` | `quickstart-for-agents` | 프로젝트 이름 (claude-code 테마) |
 | `agent` | `Agents` | 에이전트 이름 (opencode/codex 테마) |
 | `font` | `mono` | 폰트 (헤더와 동일 권장) |

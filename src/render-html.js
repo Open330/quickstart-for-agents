@@ -22,7 +22,7 @@ export function renderPromptHtml(options = {}) {
   const prompt = normalizePrompt(options.prompt);
   const width = clamp(Number.parseInt(options.width, 10) || 820, 460, 1280);
   const autoCopy = options.autoCopy === true || options.autoCopy === "1";
-  const modelChip = themeName === "claude-code" ? "claude-3.7" : themeName === "github-dark" ? "gpt-4.1" : "opencode";
+  const modelChip = themeName === "claude-code" ? "Claude Code" : themeName === "github-dark" ? "Coding Agent" : "OpenCode";
   const subtitle = themeName === "claude-code" ? "Message Composer" : "Prompt Composer";
 
   return `<!doctype html>

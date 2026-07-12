@@ -1,6 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { renderPromptSvg } from "../src/render.js";
+import { normalizePrompt, renderPromptSvg } from "../src/render.js";
+import { DEFAULT_AGENT_PROMPT } from "../src/prompt-defaults.js";
+
+test("uses the shared setup prompt when no prompt is provided", () => {
+  assert.equal(normalizePrompt(), DEFAULT_AGENT_PROMPT);
+});
 
 test("renders default theme and title", () => {
   const svg = renderPromptSvg({

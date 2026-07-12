@@ -1,6 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { renderHeaderSvg, renderFooterSvg, renderSnippet, MASCOT_VARIANTS } from "../src/render-parts.js";
+import {
+  DEFAULT_AGENT_LANGUAGE,
+  DEFAULT_AGENT_PROMPT,
+  DEFAULT_AGENT_TITLE,
+} from "../src/prompt-defaults.js";
 
 test("claude-code header: tall with pixel art mascot, title bar, prompt area", () => {
   const svg = renderHeaderSvg({ theme: "claude-code", title: "My Agent", language: "Agents" });
@@ -52,10 +57,10 @@ test("opencode header: default logo when no logo param", () => {
 });
 
 test("opencode footer: cyan bar + token info", () => {
-  const svg = renderFooterSvg({ theme: "opencode", tokens: "256", model: "Opus 4.6" });
+  const svg = renderFooterSvg({ theme: "opencode", tokens: "256", model: "Agent Model" });
   assert.match(svg, /#22d3ee/);
   assert.match(svg, /256 tokens/);
-  assert.match(svg, /Opus 4.6/);
+  assert.match(svg, /Agent Model/);
 });
 
 test("opencode footer: custom text overrides", () => {
@@ -75,10 +80,10 @@ test("codex header: terminal prompt style", () => {
 });
 
 test("codex footer: green bar + token info", () => {
-  const svg = renderFooterSvg({ theme: "codex", tokens: "512", model: "GPT-4.1" });
+  const svg = renderFooterSvg({ theme: "codex", tokens: "512", model: "Agent Model" });
   assert.match(svg, /#10a37f/);
   assert.match(svg, /512 tokens/);
-  assert.match(svg, /GPT-4.1/);
+  assert.match(svg, /Agent Model/);
 });
 
 test("codex footer: custom text overrides", () => {
@@ -162,4 +167,18 @@ test("snippet generates valid markdown", () => {
   assert.match(snippet, /footer\.svg/);
   assert.match(snippet, /do stuff/);
   assert.match(snippet, /width="100%"/);
+});
+
+test("snippet defaults to a concise repository-aware setup prompt", () => {
+  const snippet = renderSnippet();
+  assert.match(snippet, new RegExp(DEFAULT_AGENT_TITLE));
+  assert.ok(snippet.includes("```" + DEFAULT_AGENT_LANGUAGE));
+  assert.ok(snippet.includes(DEFAULT_AGENT_PROMPT));
+  assert.match(snippet, /width=800/);
+  assert.doesNotMatch(snippet, /npm install -g @anthropic-ai\/claude-code/);
+});
+
+test("snippet applies width to both generated SVG URLs", () => {
+  const snippet = renderSnippet({ width: "900" });
+  assert.equal((snippet.match(/width=900/g) || []).length, 2);
 });

@@ -1,4 +1,10 @@
 import { THEMES } from "./themes.js";
+import {
+  DEFAULT_AGENT_LANGUAGE,
+  DEFAULT_AGENT_PROMPT,
+  DEFAULT_AGENT_TITLE,
+  DEFAULT_FOOTER_TEXT,
+} from "./prompt-defaults.js";
 
 export function renderGeneratorHtml() {
   const themeOptions = Object.keys(THEMES).map(key =>
@@ -157,7 +163,7 @@ export function renderGeneratorHtml() {
     <div class="container">
       <header>
         <h1>Quickstart For Agents</h1>
-        <p>Create beautiful, copy-paste ready prompts for your READMEs.</p>
+        <p>Create a concise, copy-ready setup prompt for your README.</p>
       </header>
 
       <div class="card">
@@ -170,15 +176,15 @@ export function renderGeneratorHtml() {
           </div>
           <div>
             <label for="title">Title</label>
-            <input type="text" id="title" value="Quickstart For Agents" placeholder="Header title">
+            <input type="text" id="title" value="${DEFAULT_AGENT_TITLE}" placeholder="Short setup goal">
           </div>
           <div class="full-width">
-            <label for="code-input">Code (for codeblock)</label>
-            <textarea id="code-input" placeholder="npm install -g @anthropic-ai/claude-code" style="min-height:80px">npm install -g @anthropic-ai/claude-code</textarea>
+            <label for="code-input">Agent Prompt</label>
+            <textarea id="code-input" placeholder="Tell the agent what outcome to achieve" style="min-height:100px">${DEFAULT_AGENT_PROMPT}</textarea>
           </div>
           <div>
-            <label for="lang-input">Language</label>
-            <input type="text" id="lang-input" value="bash" placeholder="bash, python, js...">
+            <label for="lang-input">Code Block Language</label>
+            <input type="text" id="lang-input" value="${DEFAULT_AGENT_LANGUAGE}" placeholder="prompt, text, bash...">
           </div>
           <div>
             <label for="width-input">Width (px)</label>
@@ -186,15 +192,15 @@ export function renderGeneratorHtml() {
           </div>
           <div class="full-width">
             <label for="footer-text">Footer Text <span style="color:var(--border);font-weight:400">(overrides tokens/model if set)</span></label>
-            <input type="text" id="footer-text" placeholder="copy this prompt · paste into your agent · get a styled README">
+            <input type="text" id="footer-text" value="${DEFAULT_FOOTER_TEXT}" placeholder="Optional call to action">
           </div>
           <div>
-            <label for="tokens-input">Tokens</label>
+            <label for="tokens-input">Tokens <span style="color:var(--border);font-weight:400">(optional decoration)</span></label>
             <input type="text" id="tokens-input" placeholder="12.4k">
           </div>
           <div>
-            <label for="model-input">Model</label>
-            <input type="text" id="model-input" placeholder="Opus 4.6">
+            <label for="model-input">Model <span style="color:var(--border);font-weight:400">(optional decoration)</span></label>
+            <input type="text" id="model-input" placeholder="Model name">
           </div>
         </div>
       </div>
@@ -231,9 +237,12 @@ export function renderGeneratorHtml() {
       function update() {
         const host = window.location.origin;
         const theme = themeInput.value;
-        const title = encodeURIComponent(titleInput.value.trim() || "Quickstart For Agents");
-        const lang = langInput.value.trim() || "bash";
-        const code = codeInput.value.trim() || "# your command here";
+        const defaultTitle = ${JSON.stringify(DEFAULT_AGENT_TITLE)};
+        const defaultLanguage = ${JSON.stringify(DEFAULT_AGENT_LANGUAGE)};
+        const defaultPrompt = ${JSON.stringify(DEFAULT_AGENT_PROMPT)};
+        const title = encodeURIComponent(titleInput.value.trim() || defaultTitle);
+        const lang = langInput.value.trim() || defaultLanguage;
+        const code = codeInput.value.trim() || defaultPrompt;
         const width = Math.min(1280, Math.max(300, parseInt(widthInput.value) || 600));
         const langParam = encodeURIComponent(lang);
         const footerText = footerTextInput.value.trim();
