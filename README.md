@@ -190,3 +190,6 @@ SVG 이미지 안에 두 가지 텍스트 영역이 렌더링됩니다:
 <div align="center">
 <sub>Built with zero dependencies &middot; SVG generated on the fly &middot; Works on any GitHub README</sub>
 </div>
+
+---
+<p align="center"><sub>Part of <a href="https://github.com/Open330">Open330</a> · open source tools for AI-agent workflows · <a href="https://open330.github.io">open330.github.io</a></sub></p>
