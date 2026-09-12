@@ -1,6 +1,5 @@
 import { THEMES } from "./themes.js";
 import {
-
   DEFAULT_AGENT_LANGUAGE,
   DEFAULT_AGENT_PROMPT,
   DEFAULT_AGENT_TITLE,
