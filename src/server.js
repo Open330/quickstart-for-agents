@@ -5,6 +5,16 @@ import { renderPromptHtml } from "./render-html.js";
 import { renderGeneratorHtml } from "./generator-html.js";
 import { renderHeaderSvg, renderFooterSvg, renderSnippet } from "./render-parts.js";
 import { THEMES } from "./themes.js";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+
+const PUBLIC_DIR = join(dirname(fileURLToPath(import.meta.url)), "..", "public");
+// Only these files are served from public/: no directory traversal, no surprises.
+const STATIC_FILES = {
+  "/robots.txt": { file: "robots.txt", type: "text/plain; charset=utf-8" },
+  "/sitemap.xml": { file: "sitemap.xml", type: "application/xml; charset=utf-8" }
+};
 
 const port = Number.parseInt(process.env.PORT || "3000", 10);
 
@@ -133,6 +143,15 @@ function handler(req, res) {
 
   if (url.pathname === "/") {
     return sendHtml(res, renderGeneratorHtml());
+  }
+
+  const staticFile = STATIC_FILES[url.pathname];
+  if (staticFile) {
+    res.writeHead(200, {
+      "Content-Type": staticFile.type,
+      "Cache-Control": "public, max-age=3600"
+    });
+    return res.end(readFileSync(join(PUBLIC_DIR, staticFile.file)));
   }
 
   return sendJson(res, 404, { message: "Not found" });

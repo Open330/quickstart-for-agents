@@ -1,10 +1,14 @@
 import { THEMES } from "./themes.js";
 import {
+
   DEFAULT_AGENT_LANGUAGE,
   DEFAULT_AGENT_PROMPT,
   DEFAULT_AGENT_TITLE,
   DEFAULT_FOOTER_TEXT,
 } from "./prompt-defaults.js";
+
+export const SITE_URL = "https://quickstart-for-agents.vercel.app";
+export const SITE_DESCRIPTION = "Generate Quickstart-for-Agents README sections with styled preview";
 
 export function renderGeneratorHtml() {
   const themeOptions = Object.keys(THEMES).map(key =>
@@ -17,6 +21,16 @@ export function renderGeneratorHtml() {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Quickstart For Agents - Generator</title>
+    <meta name="description" content="${SITE_DESCRIPTION}" />
+    <link rel="canonical" href="${SITE_URL}/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Quickstart for Agents" />
+    <meta property="og:title" content="Quickstart For Agents - Generator" />
+    <meta property="og:description" content="${SITE_DESCRIPTION}" />
+    <meta property="og:url" content="${SITE_URL}/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Quickstart For Agents - Generator" />
+    <meta name="twitter:description" content="${SITE_DESCRIPTION}" />
     <style>
       :root {
         --bg: #0f172a;
@@ -158,6 +172,7 @@ export function renderGeneratorHtml() {
         color: #fff;
       }
     </style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5X5MMTELJS"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-5X5MMTELJS');</script>
   </head>
   <body>
     <div class="container">
